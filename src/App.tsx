@@ -1,53 +1,55 @@
 import React, { Component } from 'react';
-import { fetchPokemons } from './api/api';
+import ErrorBoundary from './components/ErrorBoundary';
 import SearchComponent from './components/SearchComponent';
 import ResultsComponent from './components/ResultsComponent';
-import ErrorBoundary from './components/ErrorBoundary';
+import { fetchPokemons } from './api/api';
 
-interface State {
-  results: { name: string; description: string }[];
+interface AppState {
+  pokemons: { name: string; description: string }[];
+  error: string | null;
   loading: boolean;
 }
 
-class App extends Component<{}, State> {
-  constructor(props: {}) {
-    super(props);
-    this.state = {
-      results: [],
-      loading: true,
-    };
+class App extends Component<{}, AppState> {
+  state: AppState = {
+    pokemons: [],
+    error: null,
+    loading: false,
+  };
+
+  async componentDidMount() {
+    this.fetchData();
   }
 
-  componentDidMount() {
-    const savedTerm = localStorage.getItem('searchTerm') || '';
-    this.searchPokemons(savedTerm);
-  }
+  fetchData = async (searchTerm: string = '') => {
+    this.setState({ loading: true, error: null });
 
-  searchPokemons = async (searchTerm: string) => {
-    this.setState({ loading: true });
     try {
-      const results = await fetchPokemons(searchTerm);
-      this.setState({ results, loading: false });
+      const pokemons = await fetchPokemons(searchTerm);
+      this.setState({ pokemons, loading: false });
     } catch (error) {
-      this.setState({ loading: false });
+      this.setState({ error: error.message, pokemons: [], loading: false });
+    }
+  };
+
+  handleSearch = (searchTerm: string) => {
+    if (searchTerm.trim() === '') {
+      this.setState({ error: 'No Pokémon found', pokemons: [], loading: false });
+    } else {
+      this.fetchData(searchTerm);
     }
   };
 
   render() {
-    const { results, loading } = this.state;
+    const { pokemons, error, loading } = this.state;
+
     return (
-      <ErrorBoundary>
-        <div>
-          <div style={{ height: '20%' }}>
-            <SearchComponent onSearch={this.searchPokemons} />
-          </div>
-          <div style={{ height: '80%' }}>
-            {loading ? (
-              <p>Loading...</p>
-            ) : (
-              <ResultsComponent results={results} />
-            )}
-          </div>
+      <ErrorBoundary fallback={<div>Something went wrong</div>}>
+        <div className="app">
+          <SearchComponent onSearch={this.handleSearch} />
+          {loading && <p>Loading...</p>}
+          {error && <p>{error}</p>}
+          {!loading && !error && <ResultsComponent pokemons={pokemons} />}
         </div>
       </ErrorBoundary>
     );
