@@ -17,8 +17,12 @@ class App extends Component<{}, AppState> {
     loading: false,
   };
 
+  // async componentDidMount() {
+  //   this.fetchData();
+  // }
   async componentDidMount() {
-    this.fetchData();
+    const savedSearchTerm = localStorage.getItem('searchTerm') || '';
+    this.fetchData(savedSearchTerm);
   }
 
   fetchData = async (searchTerm: string = '') => {
@@ -33,11 +37,7 @@ class App extends Component<{}, AppState> {
   };
 
   handleSearch = (searchTerm: string) => {
-    if (searchTerm.trim() === '') {
-      this.setState({ error: 'No Pokémon found', pokemons: [], loading: false });
-    } else {
-      this.fetchData(searchTerm);
-    }
+    this.fetchData(searchTerm);
   };
 
   render() {

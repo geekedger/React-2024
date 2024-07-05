@@ -6,12 +6,24 @@ interface SearchComponentProps {
 
 interface SearchComponentState {
   searchTerm: string;
+  error: string | null;
 }
 
-class SearchComponent extends Component<SearchComponentProps, SearchComponentState> {
+class SearchComponent extends Component<
+  SearchComponentProps,
+  SearchComponentState
+> {
   state: SearchComponentState = {
     searchTerm: '',
+    error: null,
   };
+
+  componentDidMount() {
+    const savedSearchTerm = localStorage.getItem('searchTerm');
+    if (savedSearchTerm) {
+      this.setState({ searchTerm: savedSearchTerm });
+    }
+  }
 
   handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ searchTerm: event.target.value });
@@ -19,12 +31,19 @@ class SearchComponent extends Component<SearchComponentProps, SearchComponentSta
 
   handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    localStorage.setItem('searchTerm', this.state.searchTerm);
     this.props.onSearch(this.state.searchTerm);
   };
 
   throwError = () => {
-    throw new Error('Test error');
+    this.setState({ error: 'My test error' });
   };
+
+  componentDidUpdate(_: SearchComponentProps, prevState: SearchComponentState) {
+    if (prevState.error !== this.state.error && this.state.error) {
+      throw new Error(this.state.error);
+    }
+  }
 
   render() {
     return (
