@@ -4,7 +4,11 @@ interface PokemonResponse {
   results: { name: string; url: string }[];
 }
 
-interface PokemonDetailResponse {
+interface PokemonSpecies {
+  flavor_text_entries: { flavor_text: string; language: { name: string } }[];
+}
+
+interface PokemonData {
   name: string;
   species: { url: string };
 }
@@ -14,46 +18,77 @@ export const fetchPokemons = async (
 ): Promise<{ name: string; description: string }[]> => {
   try {
     if (searchTerm) {
-      // Фильтр по имени покемона
+      // Запрос покемона по имени
       const searchUrl = new URL(
         `${BASE_URL}/pokemon/${searchTerm.trim().toLowerCase()}`
       );
       const response = await fetch(searchUrl.toString());
-
       if (!response.ok) {
         if (response.status === 404) {
-          throw new Error('No Pokémon found'); // Сообщение об ошибке для невалидного запроса
+          throw new Error('No Pokémon found');
         } else {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
       }
-
-      // Получаем данные покемона
-      const pokemon: PokemonDetailResponse = await response.json();
-      return [{ name: pokemon.name, description: pokemon.species.url }];
+      const pokemon: PokemonData = await response.json();
+      const speciesResponse = await fetch(pokemon.species.url);
+      if (!speciesResponse.ok) {
+        throw new Error(`HTTP error! Status: ${speciesResponse.status}`);
+      }
+      const speciesData: PokemonSpecies = await speciesResponse.json();
+      const flavorTextEntry = speciesData.flavor_text_entries.find(
+        (entry) => entry.language.name === 'en'
+      );
+      const description = flavorTextEntry
+        ? flavorTextEntry.flavor_text
+        : 'No description available';
+      return [{ name: pokemon.name, description }];
     } else {
       // Запрос всех покемонов с `limit`
       const url = new URL(`${BASE_URL}/pokemon`);
-      url.searchParams.append('limit', '20'); // Устанавливаем лимит на количество возвращаемых покемонов
-
+      url.searchParams.append('limit', '20');
       const response = await fetch(url.toString());
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-
       const data: PokemonResponse = await response.json();
       if (data.results.length === 0) {
-        throw new Error('No Pokémon found'); // Ошибка, если нет покемонов
+        throw new Error('No Pokémon found');
       }
-
-      // Возвращаем список покемонов
-      return data.results.map((pokemon) => ({
-        name: pokemon.name,
-        description: pokemon.url,
-      }));
+      const pokemons = await Promise.all(
+        data.results.map(async (pokemon) => {
+          const pokemonResponse = await fetch(pokemon.url);
+          if (!pokemonResponse.ok) {
+            throw new Error(`HTTP error! Status: ${pokemonResponse.status}`);
+          }
+          const pokemonData: PokemonData = await pokemonResponse.json();
+          const speciesResponse = await fetch(pokemonData.species.url);
+          if (!speciesResponse.ok) {
+            throw new Error(`HTTP error! Status: ${speciesResponse.status}`);
+          }
+          const speciesData: PokemonSpecies = await speciesResponse.json();
+          const flavorTextEntry = speciesData.flavor_text_entries.find(
+            (entry) => entry.language.name === 'en'
+          );
+          const description = flavorTextEntry
+            ? flavorTextEntry.flavor_text
+            : 'No description available';
+          return { name: pokemon.name, description };
+        })
+      );
+      return pokemons;
     }
   } catch (error) {
-    console.error('Error fetching data:', error);
-    throw error;
+    if (error instanceof Error) {
+      console.error('Error fetching data:', error.message);
+      if (error.message === 'No Pokémon found') {
+        throw new Error('No Pokémon found');
+      } else {
+        throw new Error('An unexpected error occurred.');
+      }
+    } else {
+      console.error('Unexpected error:', error);
+      throw new Error('An unexpected error occurred.');
+    }
   }
 };

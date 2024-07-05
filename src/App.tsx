@@ -2,24 +2,27 @@ import React, { Component } from 'react';
 import ErrorBoundary from './components/ErrorBoundary';
 import SearchComponent from './components/SearchComponent';
 import ResultsComponent from './components/ResultsComponent';
+import FallbackComponent from './components/FallbackComponent';
 import { fetchPokemons } from './api/api';
 
+interface Pokemon {
+  name: string;
+  description: string;
+}
+
 interface AppState {
-  pokemons: { name: string; description: string }[];
+  pokemons: Pokemon[];
   error: string | null;
   loading: boolean;
 }
 
-class App extends Component<{}, AppState> {
+class App extends Component<Record<string, never>, AppState> {
   state: AppState = {
     pokemons: [],
     error: null,
     loading: false,
   };
 
-  // async componentDidMount() {
-  //   this.fetchData();
-  // }
   async componentDidMount() {
     const savedSearchTerm = localStorage.getItem('searchTerm') || '';
     this.fetchData(savedSearchTerm);
@@ -31,8 +34,16 @@ class App extends Component<{}, AppState> {
     try {
       const pokemons = await fetchPokemons(searchTerm);
       this.setState({ pokemons, loading: false });
-    } catch (error) {
-      this.setState({ error: error.message, pokemons: [], loading: false });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        this.setState({ error: error.message, pokemons: [], loading: false });
+      } else {
+        this.setState({
+          error: 'An unknown error occurred.',
+          pokemons: [],
+          loading: false,
+        });
+      }
     }
   };
 
@@ -40,15 +51,23 @@ class App extends Component<{}, AppState> {
     this.fetchData(searchTerm);
   };
 
+  handleRetry = () => {
+    this.setState({ error: null });
+    const savedSearchTerm = localStorage.getItem('searchTerm') || '';
+    this.fetchData(savedSearchTerm);
+  };
+
   render() {
     const { pokemons, error, loading } = this.state;
 
     return (
-      <ErrorBoundary fallback={<div>Something went wrong</div>}>
+      <ErrorBoundary
+        fallback={<FallbackComponent onRetry={this.handleRetry} />}
+      >
         <div className="app">
           <SearchComponent onSearch={this.handleSearch} />
           {loading && <p>Loading...</p>}
-          {error && <p>{error}</p>}
+          {error && !loading && <p>{error}</p>}
           {!loading && !error && <ResultsComponent pokemons={pokemons} />}
         </div>
       </ErrorBoundary>

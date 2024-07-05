@@ -6,7 +6,7 @@ interface State {
 
 interface Props {
   children: ReactNode;
-  fallback: ReactNode;
+  fallback: React.ReactElement<{ onRetry: () => void }>;
 }
 
 class ErrorBoundary extends Component<Props, State> {
@@ -15,7 +15,7 @@ class ErrorBoundary extends Component<Props, State> {
     this.state = { hasError: false };
   }
 
-  static getDerivedStateFromError(error: Error): State {
+  static getDerivedStateFromError(): State {
     return { hasError: true };
   }
 
@@ -23,12 +23,20 @@ class ErrorBoundary extends Component<Props, State> {
     console.error('ErrorBoundary caught an error', error, errorInfo);
   }
 
+  handleRetry = () => {
+    this.setState({ hasError: false });
+  };
+
   render() {
-    if (this.state.hasError) {
-      return this.props.fallback;
+    const { hasError } = this.state;
+    const { fallback, children } = this.props;
+
+    if (hasError) {
+      // Используем `React.cloneElement` для добавления `onRetry` в `fallback`
+      return React.cloneElement(fallback, { onRetry: this.handleRetry });
     }
 
-    return this.props.children;
+    return children;
   }
 }
 
