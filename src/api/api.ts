@@ -18,14 +18,13 @@ export const fetchPokemons = async (
 ): Promise<{ name: string; description: string }[]> => {
   try {
     if (searchTerm) {
-      // Запрос покемона по имени
       const searchUrl = new URL(
         `${BASE_URL}/pokemon/${searchTerm.trim().toLowerCase()}`
       );
       const response = await fetch(searchUrl.toString());
       if (!response.ok) {
         if (response.status === 404) {
-          throw new Error('No Pokémon found');
+          throw new Error('No Pokémon found');  // Сообщение об ошибке
         } else {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -44,7 +43,6 @@ export const fetchPokemons = async (
         : 'No description available';
       return [{ name: pokemon.name, description }];
     } else {
-      // Запрос всех покемонов с `limit`
       const url = new URL(`${BASE_URL}/pokemon`);
       url.searchParams.append('limit', '20');
       const response = await fetch(url.toString());
@@ -53,7 +51,7 @@ export const fetchPokemons = async (
       }
       const data: PokemonResponse = await response.json();
       if (data.results.length === 0) {
-        throw new Error('No Pokémon found');
+        throw new Error('No Pokémon found');  // Сообщение об ошибке
       }
       const pokemons = await Promise.all(
         data.results.map(async (pokemon) => {
@@ -82,7 +80,7 @@ export const fetchPokemons = async (
     if (error instanceof Error) {
       console.error('Error fetching data:', error.message);
       if (error.message === 'No Pokémon found') {
-        throw new Error('No Pokémon found');
+        throw new Error('No Pokémon found');  // Сообщение об ошибке
       } else {
         throw new Error('An unexpected error occurred.');
       }
@@ -92,3 +90,4 @@ export const fetchPokemons = async (
     }
   }
 };
+
