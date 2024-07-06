@@ -9,7 +9,7 @@ if (container) {
   root.render(
     <React.StrictMode>
       <App />
-    </React.StrictMode>
+    </React.StrictMode>,
   );
 } else {
   console.error('Root container not found');

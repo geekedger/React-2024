@@ -1,5 +1,3 @@
-module.exports = {
-    semi: true,
-    singleQuote: true,
-    trailingComma: 'all',
-};
+export const semi = true;
+export const singleQuote = true;
+export const trailingComma = 'all';

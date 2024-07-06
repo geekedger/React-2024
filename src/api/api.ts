@@ -1,30 +1,26 @@
 const BASE_URL = 'https://pokeapi.co/api/v2';
-
 interface PokemonResponse {
   results: { name: string; url: string }[];
 }
-
 interface PokemonSpecies {
   flavor_text_entries: { flavor_text: string; language: { name: string } }[];
 }
-
 interface PokemonData {
   name: string;
   species: { url: string };
 }
-
 export const fetchPokemons = async (
-  searchTerm: string = ''
+  searchTerm: string = '',
 ): Promise<{ name: string; description: string }[]> => {
   try {
     if (searchTerm) {
       const searchUrl = new URL(
-        `${BASE_URL}/pokemon/${searchTerm.trim().toLowerCase()}`
+        `${BASE_URL}/pokemon/${searchTerm.trim().toLowerCase()}`,
       );
       const response = await fetch(searchUrl.toString());
       if (!response.ok) {
         if (response.status === 404) {
-          throw new Error('No Pokémon found');  // Сообщение об ошибке
+          throw new Error('No Pokémon found');
         } else {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -36,7 +32,7 @@ export const fetchPokemons = async (
       }
       const speciesData: PokemonSpecies = await speciesResponse.json();
       const flavorTextEntry = speciesData.flavor_text_entries.find(
-        (entry) => entry.language.name === 'en'
+        (entry) => entry.language.name === 'en',
       );
       const description = flavorTextEntry
         ? flavorTextEntry.flavor_text
@@ -51,7 +47,7 @@ export const fetchPokemons = async (
       }
       const data: PokemonResponse = await response.json();
       if (data.results.length === 0) {
-        throw new Error('No Pokémon found');  // Сообщение об ошибке
+        throw new Error('No Pokémon found');
       }
       const pokemons = await Promise.all(
         data.results.map(async (pokemon) => {
@@ -66,13 +62,13 @@ export const fetchPokemons = async (
           }
           const speciesData: PokemonSpecies = await speciesResponse.json();
           const flavorTextEntry = speciesData.flavor_text_entries.find(
-            (entry) => entry.language.name === 'en'
+            (entry) => entry.language.name === 'en',
           );
           const description = flavorTextEntry
             ? flavorTextEntry.flavor_text
             : 'No description available';
           return { name: pokemon.name, description };
-        })
+        }),
       );
       return pokemons;
     }
@@ -80,7 +76,7 @@ export const fetchPokemons = async (
     if (error instanceof Error) {
       console.error('Error fetching data:', error.message);
       if (error.message === 'No Pokémon found') {
-        throw new Error('No Pokémon found');  // Сообщение об ошибке
+        throw new Error('No Pokémon found');
       } else {
         throw new Error('An unexpected error occurred.');
       }
@@ -90,4 +86,3 @@ export const fetchPokemons = async (
     }
   }
 };
-

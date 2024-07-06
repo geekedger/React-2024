@@ -1,11 +1,9 @@
 import React from 'react';
 import './ResultsComponent.css';
 import PokemonCard from '../PokemonCard/PokemonCard';
-
 interface ResultsComponentProps {
   pokemons: { name: string; description: string }[];
 }
-
 const ResultsComponent: React.FC<ResultsComponentProps> = ({ pokemons }) => (
   <div className="results">
     {pokemons.length > 0 ? (
@@ -17,9 +15,8 @@ const ResultsComponent: React.FC<ResultsComponentProps> = ({ pokemons }) => (
         />
       ))
     ) : (
-      <p className="no-results">нет покемонов</p>
+      <p className="no-results">Pokémon list is empty</p>
     )}
   </div>
 );
-
 export default ResultsComponent;
