@@ -23,7 +23,9 @@
   border-radius: 8px;
   cursor: pointer;
   font-size: 18px;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    transform 0.3s ease;
 }
 
 .search-button:hover {
@@ -44,7 +46,9 @@
   border-radius: 8px;
   cursor: pointer;
   font-size: 18px;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    transform 0.3s ease;
   margin-top: 10px;
 }
 

@@ -10,12 +10,12 @@ interface PokemonData {
   species: { url: string };
 }
 export const fetchPokemons = async (
-  searchTerm: string = '',
+  searchTerm: string = ''
 ): Promise<{ name: string; description: string }[]> => {
   try {
     if (searchTerm) {
       const searchUrl = new URL(
-        `${BASE_URL}/pokemon/${searchTerm.trim().toLowerCase()}`,
+        `${BASE_URL}/pokemon/${searchTerm.trim().toLowerCase()}`
       );
       const response = await fetch(searchUrl.toString());
       if (!response.ok) {
@@ -32,7 +32,7 @@ export const fetchPokemons = async (
       }
       const speciesData: PokemonSpecies = await speciesResponse.json();
       const flavorTextEntry = speciesData.flavor_text_entries.find(
-        (entry) => entry.language.name === 'en',
+        (entry) => entry.language.name === 'en'
       );
       const description = flavorTextEntry
         ? flavorTextEntry.flavor_text
@@ -62,13 +62,13 @@ export const fetchPokemons = async (
           }
           const speciesData: PokemonSpecies = await speciesResponse.json();
           const flavorTextEntry = speciesData.flavor_text_entries.find(
-            (entry) => entry.language.name === 'en',
+            (entry) => entry.language.name === 'en'
           );
           const description = flavorTextEntry
             ? flavorTextEntry.flavor_text
             : 'No description available';
           return { name: pokemon.name, description };
-        }),
+        })
       );
       return pokemons;
     }

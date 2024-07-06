@@ -21,7 +21,7 @@
   padding: 20px;
 }
 
-.app-bottom:empty {
+.app-bottom.empty {
   background-color: transparent;
 }
 
