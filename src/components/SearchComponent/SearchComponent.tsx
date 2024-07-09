@@ -1,65 +1,61 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import './SearchComponent.css';
+
 interface SearchComponentProps {
   onSearch: (searchTerm: string) => void;
 }
-interface SearchComponentState {
-  searchTerm: string;
-  error: string | null;
-}
-class SearchComponent extends Component<
-  SearchComponentProps,
-  SearchComponentState
-> {
-  state: SearchComponentState = {
-    searchTerm: '',
-    error: null,
-  };
-  componentDidMount() {
+
+const SearchComponent: React.FC<SearchComponentProps> = ({ onSearch }) => {
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [error, setError] = useState<string | null>(null);
+
+  // Загружаем сохраненный searchTerm из localStorage при монтировании компонента
+  useEffect(() => {
     const savedSearchTerm = localStorage.getItem('searchTerm');
     if (savedSearchTerm) {
-      this.setState({ searchTerm: savedSearchTerm });
+      setSearchTerm(savedSearchTerm);
     }
-  }
-  handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ searchTerm: event.target.value });
+  }, []);
+
+  // Обработка ошибок: выбрасываем ошибку, если есть ошибка в состоянии
+  useEffect(() => {
+    if (error) {
+      throw new Error(error);
+    }
+  }, [error]);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
   };
-  handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    localStorage.setItem('searchTerm', this.state.searchTerm);
-    this.props.onSearch(this.state.searchTerm);
+    localStorage.setItem('searchTerm', searchTerm);
+    onSearch(searchTerm);
   };
-  throwError = () => {
-    this.setState({ error: 'My test error' });
+
+  // Метод для тестирования обработки ошибок
+  const throwError = () => {
+    setError('My test error');
   };
-  componentDidUpdate(_: SearchComponentProps, prevState: SearchComponentState) {
-    if (prevState.error !== this.state.error && this.state.error) {
-      throw new Error(this.state.error);
-    }
-  }
-  render() {
-    return (
-      <form onSubmit={this.handleSubmit} className="search-form">
-        <input
-          type="text"
-          value={this.state.searchTerm}
-          onChange={this.handleChange}
-          placeholder="Search Pokémon"
-          className="search-input"
-        />
-        <button type="submit" className="search-button">
-          Search
-        </button>
-        <button
-          type="button"
-          onClick={this.throwError}
-          className="throw-error-button"
-        >
-          Throw Error
-        </button>
-      </form>
-    );
-  }
-}
+
+  return (
+    <form onSubmit={handleSubmit} className="search-form">
+      <input
+        type="text"
+        value={searchTerm}
+        onChange={handleChange}
+        placeholder="Search Pokémon"
+        className="search-input"
+      />
+      <button type="submit" className="search-button">
+        Search
+      </button>
+      <button type="button" onClick={throwError} className="throw-error-button">
+        Throw Error
+      </button>
+    </form>
+  );
+};
 
 export default SearchComponent;

@@ -1,30 +1,41 @@
 const BASE_URL = 'https://pokeapi.co/api/v2';
+
 interface PokemonResponse {
   results: { name: string; url: string }[];
+  next: string | null;
+  previous: string | null;
 }
+
 interface PokemonSpecies {
   flavor_text_entries: { flavor_text: string; language: { name: string } }[];
 }
+
 interface PokemonData {
   name: string;
   species: { url: string };
 }
+
 export const fetchPokemons = async (
-  searchTerm: string = ''
+  searchTerm: string = '',
+  page: number = 1
 ): Promise<{ name: string; description: string }[]> => {
   try {
+    let url = `${BASE_URL}/pokemon?limit=20&offset=${(page - 1) * 20}`;
+
     if (searchTerm) {
-      const searchUrl = new URL(
-        `${BASE_URL}/pokemon/${searchTerm.trim().toLowerCase()}`
-      );
-      const response = await fetch(searchUrl.toString());
-      if (!response.ok) {
-        if (response.status === 404) {
-          throw new Error('No Pokémon found');
-        } else {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+      url = `${BASE_URL}/pokemon/${searchTerm.trim().toLowerCase()}`;
+    }
+
+    const response = await fetch(url);
+    if (!response.ok) {
+      if (response.status === 404) {
+        throw new Error('No Pokémon found');
+      } else {
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
+    }
+
+    if (searchTerm) {
       const pokemon: PokemonData = await response.json();
       const speciesResponse = await fetch(pokemon.species.url);
       if (!speciesResponse.ok) {
@@ -39,12 +50,6 @@ export const fetchPokemons = async (
         : 'No description available';
       return [{ name: pokemon.name, description }];
     } else {
-      const url = new URL(`${BASE_URL}/pokemon`);
-      url.searchParams.append('limit', '20');
-      const response = await fetch(url.toString());
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
       const data: PokemonResponse = await response.json();
       if (data.results.length === 0) {
         throw new Error('No Pokémon found');

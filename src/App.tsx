@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { Outlet, useSearchParams, useNavigate } from 'react-router-dom';
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 import SearchComponent from './components/SearchComponent/SearchComponent';
 import ResultsComponent from './components/ResultsComponent/ResultsComponent';
 import FallbackComponent from './components/FallbackComponent/FallbackComponent';
+import Pagination from './components/Pagination/Pagination';
 import Loader from './components/Loader/Loader';
 import { fetchPokemons } from './api/api';
 import './App.css';
@@ -12,71 +14,75 @@ interface Pokemon {
   description: string;
 }
 
-interface AppState {
-  pokemons: Pokemon[];
-  error: string | null;
-  loading: boolean;
-}
+const App: React.FC = () => {
+  const [pokemons, setPokemons] = useState<Pokemon[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
 
-class App extends React.Component<Record<string, never>, AppState> {
-  state: AppState = {
-    pokemons: [],
-    error: null,
-    loading: false,
-  };
-
-  async componentDidMount() {
-    const savedSearchTerm = localStorage.getItem('searchTerm') || '';
-    this.fetchData(savedSearchTerm);
-  }
-
-  fetchData = async (searchTerm: string = '') => {
-    this.setState({ loading: true, error: null });
+  const fetchData = async (searchTerm: string = '', page: number = 1) => {
+    setLoading(true);
+    setError(null);
     try {
-      const pokemons = await fetchPokemons(searchTerm);
-      this.setState({ pokemons, loading: false, error: null });
-    } catch (error: unknown) {
+      const pokemons = await fetchPokemons(searchTerm, page);
+      setPokemons(pokemons);
+    } catch (error) {
       if (error instanceof Error) {
-        this.setState({ error: error.message, pokemons: [], loading: false });
+        setError(error.message);
       } else {
-        this.setState({
-          error: 'An unknown error occurred.',
-          pokemons: [],
-          loading: false,
-        });
+        setError('An unknown error occurred.');
       }
+    } finally {
+      setLoading(false);
     }
   };
 
-  handleSearch = (searchTerm: string) => {
-    this.fetchData(searchTerm);
+  useEffect(() => {
+    const savedSearchTerm = searchParams.get('search') || '';
+    const page = searchParams.get('page')
+      ? parseInt(searchParams.get('page')!)
+      : 1;
+    fetchData(savedSearchTerm, page);
+  }, [searchParams]);
+
+  const handleSearch = (searchTerm: string) => {
+    fetchData(searchTerm);
+    navigate(`/?search=${searchTerm}&page=1`);
   };
 
-  handleRetry = () => {
-    this.setState({ error: null });
-    const savedSearchTerm = localStorage.getItem('searchTerm') || '';
-    this.fetchData(savedSearchTerm);
+  const handleRetry = () => {
+    setError(null);
+    const savedSearchTerm = searchParams.get('search') || '';
+    fetchData(savedSearchTerm);
   };
 
-  render() {
-    const { pokemons, error, loading } = this.state;
-    return (
-      <ErrorBoundary
-        fallback={<FallbackComponent onRetry={this.handleRetry} />}
-      >
-        <div className="app">
-          <div className="app-top">
-            <SearchComponent onSearch={this.handleSearch} />
-            {loading && <Loader />}
-            {error && !loading && <p className="error-message">{error}</p>}
-          </div>
-          <div className={`app-bottom ${pokemons.length === 0 ? 'empty' : ''}`}>
-            {!loading && !error && <ResultsComponent pokemons={pokemons} />}
-          </div>
+  const handlePageChange = (page: number) => {
+    const searchTerm = searchParams.get('search') || '';
+    fetchData(searchTerm, page);
+    navigate(`/?search=${searchTerm}&page=${page}`);
+  };
+
+  return (
+    <ErrorBoundary fallback={<FallbackComponent onRetry={handleRetry} />}>
+      <div className="app">
+        <div className="app-top">
+          <SearchComponent onSearch={handleSearch} />
+          {loading && <Loader />}
+          {error && !loading && <p className="error-message">{error}</p>}
         </div>
-      </ErrorBoundary>
-    );
-  }
-}
+        <div className="app-bottom">
+          {!loading && !error && (
+            <>
+              <ResultsComponent pokemons={pokemons} />
+              <Pagination onPageChange={handlePageChange} />
+              <Outlet />
+            </>
+          )}
+        </div>
+      </div>
+    </ErrorBoundary>
+  );
+};
 
 export default App;
