@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import useSearchQuery from '../../hooks/useSearchQuery';
 import './SearchComponent.css';
 
 interface SearchComponentProps {
@@ -6,18 +7,9 @@ interface SearchComponentProps {
 }
 
 const SearchComponent: React.FC<SearchComponentProps> = ({ onSearch }) => {
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useSearchQuery('searchTerm', '');
   const [error, setError] = useState<string | null>(null);
 
-  // Загружаем сохраненный searchTerm из localStorage при монтировании компонента
-  useEffect(() => {
-    const savedSearchTerm = localStorage.getItem('searchTerm');
-    if (savedSearchTerm) {
-      setSearchTerm(savedSearchTerm);
-    }
-  }, []);
-
-  // Обработка ошибок: выбрасываем ошибку, если есть ошибка в состоянии
   useEffect(() => {
     if (error) {
       throw new Error(error);
@@ -30,11 +22,9 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ onSearch }) => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    localStorage.setItem('searchTerm', searchTerm);
     onSearch(searchTerm);
   };
 
-  // Метод для тестирования обработки ошибок
   const throwError = () => {
     setError('My test error');
   };
