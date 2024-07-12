@@ -1,10 +1,12 @@
+// ResultsComponent.tsx
+
 import React from 'react';
 import './ResultsComponent.css';
 import PokemonCard from '../PokemonCard/PokemonCard';
 
 interface ResultsComponentProps {
   pokemons: { name: string; description: string }[];
-  error: string | null;
+  error: string | null; // Сообщение об ошибке
   onCardClick: (name: string) => void;
 }
 
@@ -15,7 +17,7 @@ const ResultsComponent: React.FC<ResultsComponentProps> = ({
 }) => (
   <div className="results">
     {error ? (
-      <p className="error-message">{error}</p>
+      <p className="error-message">{error}</p> // Отображаем сообщение об ошибке
     ) : pokemons.length > 0 ? (
       pokemons.map((pokemon, index) => (
         <div key={index} onClick={() => onCardClick(pokemon.name)}>
@@ -23,7 +25,7 @@ const ResultsComponent: React.FC<ResultsComponentProps> = ({
         </div>
       ))
     ) : (
-      <p className="no-results">Pokémon list is empty</p>
+      <p className="no-results">No Pokémon found</p> // Сообщение, если покемоны не найдены
     )}
   </div>
 );

@@ -2,6 +2,7 @@
 .app {
   display: flex; /* Flexbox для основного макета */
   height: 100vh; /* Высота на весь экран */
+  width: 100vw;
 }
 
 /* Левая часть макета */
@@ -35,38 +36,8 @@
   transition:
     opacity 0.3s ease,
     visibility 0.3s ease; /* Плавное появление/скрытие */
+  max-width: 20vw;
 }
-
-/* Скрытие app-right, когда он пустой */
-/* .app-right.hidden {
-  opacity: 0;
-  visibility: hidden;
-  width: 0; 
-  flex: none; 
-} */
-
-/* .app {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-  min-height: 100vh;
-  gap: 20px;
-}
-
-.app-top {
-  width: 100%;
-  background-color: #ffffff;
-  padding: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-}
-
-.app-bottom {
-  width: 100%;
-  background-color: #e0f7fa;
-  padding: 20px;
-} */
 
 .app-bottom.empty {
   background-color: transparent;

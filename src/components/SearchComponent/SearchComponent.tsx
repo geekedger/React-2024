@@ -1,16 +1,20 @@
-// components/SearchComponent/SearchComponent.tsx
-
-import React, { useState } from 'react';
-import useSearchQuery from '../../hooks/useSearchQuery';
+import React, { useState, useEffect } from 'react';
 import './SearchComponent.css';
 
 interface SearchComponentProps {
+  searchTerm: string;
   onSearch: (searchTerm: string) => void;
 }
 
-const SearchComponent: React.FC<SearchComponentProps> = ({ onSearch }) => {
-  const [searchTerm, setSearchTerm] = useSearchQuery('searchTerm', '');
-  const [error, setError] = useState<string | null>(null);
+const SearchComponent: React.FC<SearchComponentProps> = ({
+  searchTerm: initialSearchTerm,
+  onSearch,
+}) => {
+  const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
+
+  useEffect(() => {
+    setSearchTerm(initialSearchTerm);
+  }, [initialSearchTerm]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -18,17 +22,9 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ onSearch }) => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    console.log('Search term:', searchTerm);
     onSearch(searchTerm);
   };
-
-  const throwError = () => {
-    // Устанавливаем ошибку и также передаем её родителю, если нужно.
-    setError('My test error');
-  };
-
-  if (error) {
-    throw new Error(error); // Позволяет ErrorBoundary перехватить ошибку
-  }
 
   return (
     <form onSubmit={handleSubmit} className="search-form">
@@ -41,9 +37,6 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ onSearch }) => {
       />
       <button type="submit" className="search-button">
         Search
-      </button>
-      <button type="button" onClick={throwError} className="throw-error-button">
-        Throw Error
       </button>
     </form>
   );

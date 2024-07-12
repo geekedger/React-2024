@@ -1,0 +1,17 @@
+/* NotFound.css */
+.not-found-container {
+  display: flex;
+  justify-content: center; /* Горизонтальное центрирование */
+  align-items: center; /* Вертикальное центрирование */
+  height: 100vh; /* Занимает 100% высоты экрана */
+  width: 100vw; /* Занимает 100% ширины экрана */
+  background-color: #f8f9fa; /* Цвет фона страницы */
+  color: #343a40; /* Цвет текста */
+  text-align: center; /* Выравнивание текста по центру */
+  padding: 0 20px; /* Отступы по бокам */
+}
+
+.not-found-text {
+  font-size: 4rem; /* Размер шрифта */
+  font-weight: bold; /* Жирный шрифт */
+}

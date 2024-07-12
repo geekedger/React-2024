@@ -29,6 +29,9 @@ const App: React.FC = () => {
       setLoading(true);
       setError(null);
       try {
+        console.log(
+          `Fetching data with searchTerm: ${searchTerm}, page: ${page}`
+        );
         const pokemons = await fetchPokemons(searchTerm, page);
         setPokemons(pokemons);
       } catch (error) {
@@ -64,10 +67,10 @@ const App: React.FC = () => {
   ]);
 
   const handleSearch = (newSearchTerm: string) => {
+    console.log('Handling search with term:', newSearchTerm);
     setSearchTerm(newSearchTerm);
     setCurrentPage('1');
-    setPokemons([]); // Очистить список покемонов перед новым поиском
-    navigate(`/?search=${newSearchTerm}&page=1`); // Убираем параметр details
+    navigate(`/?search=${newSearchTerm}&page=1`);
   };
 
   const handleRetry = () => {
@@ -77,7 +80,7 @@ const App: React.FC = () => {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page.toString());
-    navigate(`/?search=${searchTerm}&page=${page}`); // Убираем параметр details
+    navigate(`/?search=${searchTerm}&page=${page}`);
   };
 
   const handleCardClick = (name: string) => {
@@ -89,7 +92,7 @@ const App: React.FC = () => {
       <div className="app">
         <div className="app-left">
           <div className="app-top">
-            <SearchComponent onSearch={handleSearch} />
+            <SearchComponent searchTerm={searchTerm} onSearch={handleSearch} />
             {loading && <Loader />}
             {error && !loading && <p className="error-message">{error}</p>}
           </div>

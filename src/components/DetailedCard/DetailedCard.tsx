@@ -1,8 +1,11 @@
+// DetailedCard.tsx
+
 import React, { useRef, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { fetchPokemonDetails } from '../../api/api';
 import Loader from '../Loader/Loader';
 import useOutsideAlerter from '../../hooks/useOutsideAlerter'; // Импортируйте ваш хук
+import sanitizeDescription from '../../utility/sanitizeText'; // Импортируем утилиту
 import './DetailedCard.css';
 
 const DetailedCard: React.FC = () => {
@@ -17,16 +20,21 @@ const DetailedCard: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const cardRef = useRef<HTMLDivElement>(null); // Создайте реф для карточки
 
-  useOutsideAlerter(cardRef, () => {
-    navigate(-1); // Навигация назад при клике вне карточки
-  });
+  const handleClose = () => {
+    navigate(-1); // Навигация назад
+  };
+
+  useOutsideAlerter(cardRef, handleClose);
 
   useEffect(() => {
     const fetchPokemon = async () => {
       try {
         setLoading(true);
         const pokemonDetails = await fetchPokemonDetails(id || '');
-        setPokemon(pokemonDetails);
+        const sanitizedDescription = sanitizeDescription(
+          pokemonDetails.description
+        ); // Применяем утилиту
+        setPokemon({ ...pokemonDetails, description: sanitizedDescription });
       } catch (error) {
         if (error instanceof Error) {
           setError(error.message);
@@ -40,10 +48,6 @@ const DetailedCard: React.FC = () => {
 
     fetchPokemon();
   }, [id]);
-
-  const handleClose = () => {
-    navigate('/');
-  };
 
   return (
     <div ref={cardRef} className="detailed-card">
