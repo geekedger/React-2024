@@ -1,0 +1,62 @@
+/* Стили для компонента DetailedCard */
+.detailed-card {
+  background-color: #ffffff; /* Фон для детализированного покемона */
+  padding: 16px; /* Отступы внутри компонента */
+  border-radius: 8px; /* Скругленные углы */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Легкая тень для компонента */
+  overflow-y: auto; /* Прокрутка для длинного содержимого */
+  max-height: calc(
+    100vh - 32px
+  ); /* Установим максимальную высоту с учетом отступов */
+  /* Переход для плавного появления/скрытия */
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+/* Кнопка закрытия в DetailedCard */
+.close-button {
+  background: #ff0000;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  /* Плавный переход для кнопки */
+  transition: background-color 0.3s ease;
+}
+
+/* Стили для кнопки закрытия при наведении */
+.close-button:hover {
+  background: #cc0000;
+}
+
+/* Заголовок детализированного покемона */
+.detailed-card h2 {
+  margin: 0 0 10px;
+  font-size: 24px;
+  color: #333;
+}
+
+/* Описание детализированного покемона */
+.detailed-card p {
+  margin: 0;
+  font-size: 16px;
+  color: #666;
+}
+.pokemon-image {
+  max-width: 200px; /* Увеличьте размер изображения по необходимости */
+  height: auto;
+  display: block;
+  margin: 10px 0;
+}
+
+.close-button {
+  /* Ваши существующие стили */
+}
+
+.error-message {
+  color: red;
+  font-weight: bold;
+}

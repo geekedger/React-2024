@@ -13,6 +13,17 @@ interface PokemonSpecies {
 interface PokemonData {
   name: string;
   species: { url: string };
+  sprites: {
+    other: {
+      'official-artwork': { front_default: string };
+    };
+  };
+}
+
+interface PokemonDetails {
+  name: string;
+  description: string;
+  imageUrl: string;
 }
 
 export const fetchPokemons = async (
@@ -90,4 +101,32 @@ export const fetchPokemons = async (
       throw new Error('An unexpected error occurred.');
     }
   }
+};
+
+export const fetchPokemonDetails = async (
+  name: string
+): Promise<PokemonDetails> => {
+  const url = `${BASE_URL}/pokemon/${name}`;
+
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+
+  const pokemon: PokemonData = await response.json();
+  const speciesResponse = await fetch(pokemon.species.url);
+  if (!speciesResponse.ok) {
+    throw new Error(`HTTP error! Status: ${speciesResponse.status}`);
+  }
+
+  const speciesData: PokemonSpecies = await speciesResponse.json();
+  const flavorTextEntry = speciesData.flavor_text_entries.find(
+    (entry) => entry.language.name === 'en'
+  );
+  const description = flavorTextEntry
+    ? flavorTextEntry.flavor_text
+    : 'No description available';
+
+  const imageUrl = pokemon.sprites.other['official-artwork'].front_default;
+  return { name: pokemon.name, description, imageUrl };
 };

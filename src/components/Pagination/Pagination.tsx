@@ -1,5 +1,7 @@
+// components/Pagination/Pagination.tsx
+
 import React from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import './Pagination.css';
 
 interface PaginationProps {
@@ -8,7 +10,6 @@ interface PaginationProps {
 
 const Pagination: React.FC<PaginationProps> = ({ onPageChange }) => {
   const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
   const page = searchParams.get('page')
     ? parseInt(searchParams.get('page')!)
     : 1;
@@ -16,7 +17,6 @@ const Pagination: React.FC<PaginationProps> = ({ onPageChange }) => {
   const handlePageChange = (newPage: number) => {
     if (newPage > 0) {
       onPageChange(newPage);
-      navigate(`/?search=${searchParams.get('search') || ''}&page=${newPage}`);
     }
   };
 

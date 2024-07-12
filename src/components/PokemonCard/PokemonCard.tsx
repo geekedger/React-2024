@@ -1,10 +1,14 @@
+// PokemonCard.tsx
+
 import React from 'react';
 import './PokemonCard.css';
 import sanitizeDescription from '../../utility/sanitizeText';
+
 interface PokemonCardProps {
   name: string;
   description: string;
 }
+
 const PokemonCard: React.FC<PokemonCardProps> = ({ name, description }) => {
   const sanitizedDescription = sanitizeDescription(description);
   return (
@@ -14,4 +18,5 @@ const PokemonCard: React.FC<PokemonCardProps> = ({ name, description }) => {
     </div>
   );
 };
+
 export default PokemonCard;

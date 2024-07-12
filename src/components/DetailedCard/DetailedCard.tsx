@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { fetchPokemons } from '../../api/api';
+import { fetchPokemonDetails } from '../../api/api';
 import Loader from '../Loader/Loader';
+import useOutsideAlerter from '../../hooks/useOutsideAlerter'; // Импортируйте ваш хук
 import './DetailedCard.css';
 
 const DetailedCard: React.FC = () => {
@@ -10,15 +11,22 @@ const DetailedCard: React.FC = () => {
   const [pokemon, setPokemon] = useState<{
     name: string;
     description: string;
+    imageUrl: string;
   } | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const cardRef = useRef<HTMLDivElement>(null); // Создайте реф для карточки
+
+  useOutsideAlerter(cardRef, () => {
+    navigate(-1); // Навигация назад при клике вне карточки
+  });
 
   useEffect(() => {
     const fetchPokemon = async () => {
       try {
-        const pokemons = await fetchPokemons(id || '');
-        setPokemon(pokemons[0]);
+        setLoading(true);
+        const pokemonDetails = await fetchPokemonDetails(id || '');
+        setPokemon(pokemonDetails);
       } catch (error) {
         if (error instanceof Error) {
           setError(error.message);
@@ -38,14 +46,21 @@ const DetailedCard: React.FC = () => {
   };
 
   return (
-    <div className="detailed-card">
+    <div ref={cardRef} className="detailed-card">
       {loading && <Loader />}
-      {error && <p className="error-message">{error}</p>}
-      {pokemon && (
+      {error && !loading && <p className="error-message">{error}</p>}
+      {pokemon && !loading && !error && (
         <div>
           <h2>{pokemon.name}</h2>
+          <img
+            src={pokemon.imageUrl}
+            alt={pokemon.name}
+            className="pokemon-image"
+          />
           <p>{pokemon.description}</p>
-          <button onClick={handleClose}>Close</button>
+          <button className="close-button" onClick={handleClose}>
+            Close
+          </button>
         </div>
       )}
     </div>

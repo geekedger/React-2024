@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react';
+// components/SearchComponent/SearchComponent.tsx
+
+import React, { useState } from 'react';
 import useSearchQuery from '../../hooks/useSearchQuery';
 import './SearchComponent.css';
 
@@ -10,12 +12,6 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useSearchQuery('searchTerm', '');
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (error) {
-      throw new Error(error);
-    }
-  }, [error]);
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
@@ -26,8 +22,13 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ onSearch }) => {
   };
 
   const throwError = () => {
+    // Устанавливаем ошибку и также передаем её родителю, если нужно.
     setError('My test error');
   };
+
+  if (error) {
+    throw new Error(error); // Позволяет ErrorBoundary перехватить ошибку
+  }
 
   return (
     <form onSubmit={handleSubmit} className="search-form">
