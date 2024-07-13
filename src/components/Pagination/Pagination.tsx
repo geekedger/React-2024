@@ -1,6 +1,4 @@
-// components/Pagination/Pagination.tsx
 import React from 'react';
-// import '@testing-library/jest-dom'
 import { useSearchParams } from 'react-router-dom';
 import './Pagination.css';
 

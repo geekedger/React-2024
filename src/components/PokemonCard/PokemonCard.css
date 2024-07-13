@@ -13,34 +13,29 @@
     background-color 0.3s ease;
 }
 
-/* Эффект ховера */
 .pokemon-card:hover {
-  transform: scale(1.05); /* Увеличивает размер карточки при наведении */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Увеличивает тень при наведении */
-  background-color: #f0f0f0; /* Меняет цвет фона при наведении */
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  background-color: #f0f0f0;
 }
 
-/* Эффект при ховере на заголовке */
 .pokemon-card h2 {
   font-size: 20px;
   color: #333;
   margin-bottom: 10px;
-  transition: color 0.3s ease; /* Плавный переход цвета текста */
+  transition: color 0.3s ease;
 }
 
-/* Эффект ховера на заголовке */
 .pokemon-card:hover h2 {
-  color: #007bff; /* Меняет цвет текста заголовка при наведении */
+  color: #007bff;
 }
 
-/* Эффект при ховере на параграфе */
 .pokemon-card p {
   font-size: 14px;
   color: #666;
-  transition: color 0.3s ease; /* Плавный переход цвета текста */
+  transition: color 0.3s ease;
 }
 
-/* Эффект ховера на параграфе */
 .pokemon-card:hover p {
-  color: #333; /* Меняет цвет текста параграфа при наведении */
+  color: #333;
 }

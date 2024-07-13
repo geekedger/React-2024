@@ -1,41 +1,36 @@
-/* Основной контейнер приложения */
 .app {
-  display: flex; /* Flexbox для основного макета */
-  height: 100vh; /* Высота на весь экран */
+  display: flex;
+  height: 100vh;
   width: 100vw;
 }
 
-/* Левая часть макета */
 .app-left {
-  flex: 1; /* Занимает все доступное пространство */
+  flex: 1;
   display: flex;
   flex-direction: column;
-  background-color: #f0f0f0; /* Примерный фон для app-left */
+  background-color: #f0f0f0;
 }
 
-/* Верхняя часть левой части */
 .app-top {
   padding: 16px;
 }
 
-/* Нижняя часть левой части */
 .app-bottom {
-  flex: 1; /* Занимает все доступное пространство */
-  overflow-y: auto; /* Прокрутка для длинного списка результатов */
+  flex: 1;
+  overflow-y: auto;
   padding: 16px;
 }
 
-/* Правая часть макета, где будет отображаться Outlet */
 .app-right {
-  flex: 0 0 auto; /* Не растягивается и не сжимается, занимает столько, сколько нужно */
-  background-color: #ffffff; /* Примерный фон для app-right */
-  border-left: 1px solid #ddd; /* Разделительная линия между левым и правым блоком */
+  flex: 0 0 auto;
+  background-color: #ffffff;
+  border-left: 1px solid #ddd;
   padding: 0;
-  box-sizing: border-box; /* Учитываем паддинги и границы в ширине */
-  overflow-y: auto; /* Прокрутка для длинного содержимого */
+  box-sizing: border-box;
+  overflow-y: auto;
   transition:
     opacity 0.3s ease,
-    visibility 0.3s ease; /* Плавное появление/скрытие */
+    visibility 0.3s ease;
   max-width: 20vw;
 }
 

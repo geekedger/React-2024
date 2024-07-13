@@ -1,30 +1,28 @@
-/* DetailedCard.css */
-
 .detailed-card {
-  background-color: #ffffff; /* Фон для детализированного покемона */
-  padding: 20px; /* Отступы внутри компонента */
-  border-radius: 10px; /* Скругленные углы */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Легкая тень для компонента */
-  overflow-y: auto; /* Прокрутка для длинного содержимого */
-  max-height: calc(100vh - 40px); /* Максимальная высота с учетом отступов */
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
+  max-height: calc(100vh - 40px);
   transition:
     opacity 0.3s ease,
-    transform 0.3s ease; /* Переход для плавного появления/скрытия */
-  display: flex; /* Используем Flexbox */
-  flex-direction: column; /* Вертикальное направление элементов */
-  align-items: center; /* Центрируем по горизонтали */
-  justify-content: center; /* Центрируем по вертикали */
-  gap: 16px; /* Расстояние между элементами */
+    transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
 }
 
 .detailed-card h2 {
   margin: 0;
-  font-size: 28px; /* Размер шрифта заголовка */
-  color: #333333; /* Цвет текста заголовка */
+  font-size: 28px;
+  color: #333333;
 }
 
 .pokemon-image {
-  max-width: 250px; /* Максимальная ширина изображения */
+  max-width: 250px;
   height: auto;
   display: block;
   margin: 10px 0;
@@ -32,29 +30,29 @@
 
 .detailed-card p {
   margin: 0;
-  font-size: 18px; /* Размер шрифта описания */
-  color: #666666; /* Цвет текста описания */
-  text-align: center; /* Центрируем текст описания */
+  font-size: 18px;
+  color: #666666;
+  text-align: center;
 }
 
 .close-button {
-  background: #ff0000; /* Цвет фона кнопки */
-  color: #ffffff; /* Цвет текста кнопки */
+  background: #ff0000;
+  color: #ffffff;
   border: none;
   padding: 10px 15px;
   cursor: pointer;
   border-radius: 5px;
-  margin-top: 10px; /* Отступ сверху */
+  margin-top: 10px;
   transition: background-color 0.3s ease;
 }
 
 .close-button:hover {
-  background: #cc0000; /* Цвет кнопки при наведении */
+  background: #cc0000;
 }
 
 .error-message {
-  color: #ff0000; /* Цвет сообщения об ошибке */
+  color: #ff0000;
   font-weight: bold;
-  text-align: center; /* Центрируем текст сообщения об ошибке */
+  text-align: center;
   margin: 0 0 10px;
 }
