@@ -3,15 +3,15 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for components/PokemonCard/PokemonCard.tsx</title>
+    <title>Code coverage report for src/components/ResultsComponent/ResultsComponent.tsx</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../../prettify.css" />
-    <link rel="stylesheet" href="../../base.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="../../favicon.png" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../../sort-arrow-sprite.png);
+            background-image: url(../../../sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">components/PokemonCard</a> PokemonCard.tsx</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/ResultsComponent</a> ResultsComponent.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">71.42% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>6/6</span>
+                <span class='fraction'>5/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>2/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">33.33% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>1/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">83.33% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/6</span>
+                <span class='fraction'>5/6</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -93,7 +93,10 @@
 <a name='L28'></a><a href='#L28'>28</a>
 <a name='L29'></a><a href='#L29'>29</a>
 <a name='L30'></a><a href='#L30'>30</a>
-<a name='L31'></a><a href='#L31'>31</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -110,9 +113,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -123,36 +129,39 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// PokemonCard.tsx
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// ResultsComponent.tsx
 &nbsp;
 import React from 'react';
-import './PokemonCard.css';
-import sanitizeDescription from '../../utility/sanitizeText';
+import './ResultsComponent.css';
+import PokemonCard from '../PokemonCard/PokemonCard';
 &nbsp;
-interface PokemonCardProps {
-  name: string;
-  description: string;
-  onClick?: () =&gt; void; // Add the onClick prop as optional
+interface ResultsComponentProps {
+  pokemons: { name: string; description: string }[];
+  error: string | null; // Сообщение об ошибке
+  onCardClick: (name: string) =&gt; void;
 }
 &nbsp;
-const PokemonCard: React.FC&lt;PokemonCardProps&gt; = ({
-  name,
-  description,
-  onClick,
-}) =&gt; {
-  const sanitizedDescription = sanitizeDescription(description);
+const ResultsComponent: React.FC&lt;ResultsComponentProps&gt; = ({
+  pokemons,
+  error,
+  onCardClick,
+}) =&gt; (
+  &lt;div className="results"&gt;
+    {error ? (
+<span class="branch-0 cbranch-no" title="branch not covered" >      &lt;p className="error-message"&gt;{error}&lt;/p&gt; </span>// Отображаем сообщение об ошибке
+    ) : pokemons.length &gt; 0 ? (
+<span class="branch-0 cbranch-no" title="branch not covered" >      pokemons.map(<span class="fstat-no" title="function not covered" >(p</span>okemon, index) =&gt; (</span>
+<span class="cstat-no" title="statement not covered" >        &lt;div key={index} o</span>nClick={<span class="fstat-no" title="function not covered" >() =</span>&gt; <span class="cstat-no" title="statement not covered" >onCardClick(pokemon.name)}</span>&gt;
+          &lt;PokemonCard name={pokemon.name} description={pokemon.description} /&gt;
+        &lt;/div&gt;
+      ))
+    ) : (
+      &lt;p className="no-results"&gt;No Pokémon found&lt;/p&gt; // Сообщение, если покемоны не найдены
+    )}
+  &lt;/div&gt;
+);
 &nbsp;
-  return (
-    &lt;div className="pokemon-card" onClick={onClick}&gt;
-      {' '}
-      {/* Add onClick handler */}
-      &lt;h2&gt;{name}&lt;/h2&gt;
-      &lt;p&gt;{sanitizedDescription}&lt;/p&gt;
-    &lt;/div&gt;
-  );
-};
-&nbsp;
-export default PokemonCard;
+export default ResultsComponent;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -160,16 +169,16 @@ export default PokemonCard;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-07-13T03:22:50.498Z
+                at 2024-07-13T01:37:10.000Z
             </div>
-        <script src="../../prettify.js"></script>
+        <script src="../../../prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="../../sorter.js"></script>
-        <script src="../../block-navigation.js"></script>
+        <script src="../../../sorter.js"></script>
+        <script src="../../../block-navigation.js"></script>
     </body>
 </html>
     

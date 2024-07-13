@@ -2,7 +2,7 @@
   "compilerOptions": {
     "esModuleInterop": true,
     "jsx": "react-jsx",
-    "types": ["@testing-library/jest-dom"]
+    "types": ["jest", "@testing-library/jest-dom"]
   },
   "files": [],
   "references": [
@@ -12,5 +12,6 @@
     {
       "path": "./tsconfig.node.json"
     }
-  ]
+  ],
+  "exclude": ["src/**/__ mocks __/*.mock.tsx"]
 }
