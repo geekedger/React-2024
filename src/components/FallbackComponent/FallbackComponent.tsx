@@ -1,17 +1,12 @@
-import React from 'react';
-import './FallbackComponent.css';
-interface FallbackComponentProps {
-  onRetry: () => void;
-}
-const FallbackComponent: React.FC<FallbackComponentProps> = ({ onRetry }) => (
+import React from "react";
+import "./FallbackComponent.css";
+interface FallbackComponentProps {}
+const FallbackComponent: React.FC<FallbackComponentProps> = () => (
   <div className="fallback">
     <p>
       🚀 Ta-da! This error was deliberately crafted just for you! Thanks for
       testing!🎭
     </p>
-    <button onClick={onRetry} className="retry-button">
-      Retry
-    </button>
   </div>
 );
 

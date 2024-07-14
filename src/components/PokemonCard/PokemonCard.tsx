@@ -1,29 +1,26 @@
 // PokemonCard.tsx
 
-import React from 'react';
-import './PokemonCard.css';
-import sanitizeDescription from '../../utility/sanitizeText';
+import React from "react";
+import { NavLink, useSearchParams } from "react-router-dom";
+import { Pokemon } from "../../api/api";
+import "./PokemonCard.css";
 
 interface PokemonCardProps {
-  name: string;
-  description: string;
-  onClick?: () => void; // Add the onClick prop as optional
+  pokemon: Pokemon;
 }
 
-const PokemonCard: React.FC<PokemonCardProps> = ({
-  name,
-  description,
-  onClick,
-}) => {
-  const sanitizedDescription = sanitizeDescription(description);
+const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
+  const [params] = useSearchParams();
+  const page = params.get("page") || 1;
+
+  const id = pokemon.url.replace("https://pokeapi.co/api/v2/pokemon/", "");
 
   return (
-    <div className="pokemon-card" onClick={onClick}>
-      {' '}
-      {/* Add onClick handler */}
-      <h2>{name}</h2>
-      <p>{sanitizedDescription}</p>
-    </div>
+    <NavLink to={`/details/${id}?page=${page}`} className="pokemon-card-link">
+      <div className="pokemon-card">
+        <h2>{pokemon.name}</h2>
+      </div>
+    </NavLink>
   );
 };
 

@@ -1,59 +1,65 @@
-// PokemonCard.test.tsx
+import "@testing-library/jest-dom";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
+import PokemonCard from "../components/PokemonCard/PokemonCard";
+import { pokemonMock } from "./__ mocks __/Pokemon";
+import DetailedCard from "../components/DetailedCard/DetailedCard";
 
-// import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import PokemonCard from '../components/PokemonCard/PokemonCard';
-import sanitizeDescription from '../utility/sanitizeText';
-// import DetailedCard from '../components/DetailedCard/DetailedCard';
-// import { BrowserRouter, Route, Routes } from 'react-router-dom';
-// import App from '../App';
-// import * as api from '../api/api'
+export function mockFetch(data: unknown) {
+  return jest.fn(() =>
+    Promise.resolve({
+      json: () => Promise.resolve(data),
+      ok: true,
+    }),
+  );
+}
 
-// Mock the sanitizeDescription function
-jest.mock('../utility/sanitizeText', () => ({
-  __esModule: true,
-  default: jest.fn((description) => description), // Pass through for simple tests
-}));
-
-describe('PokemonCard', () => {
-  test('renders card with name and description', () => {
-    const name = 'Pikachu';
-    const description = 'Electric-type Pokémon';
-
-    render(<PokemonCard name={name} description={description} />);
-
-    // Check if the name is rendered
-    expect(screen.getByText(name)).toBeInTheDocument();
-
-    // Check if the description is rendered
-    expect(screen.getByText(description)).toBeInTheDocument();
+describe("Pokemon component", () => {
+  beforeEach(() => {
+    window.fetch = mockFetch(pokemonMock) as jest.Mock;
   });
-});
 
-test('sanitizes the description', () => {
-  const name = 'Pikachu';
-  const description = 'Electric-type Pokémon';
-
-  render(<PokemonCard name={name} description={description} />);
-
-  expect(sanitizeDescription).toHaveBeenCalledWith(description);
-});
-
-describe('PokemonCard Interactions', () => {
-  test('clicking the card triggers a function (assuming we add onClick prop)', () => {
-    const name = 'Pikachu';
-    const description = 'Electric-type Pokémon';
-    const onClick = jest.fn(); // Mock function for testing
-
+  test("Ensure that the card component renders the relevant card data", () => {
     render(
-      <PokemonCard name={name} description={description} onClick={onClick} />
+      <MemoryRouter>
+        <PokemonCard pokemon={pokemonMock} />
+      </MemoryRouter>,
     );
+    const titleElement = screen.getByText(pokemonMock.name);
+    expect(titleElement).toBeInTheDocument();
+  });
 
-    // Simulate a click event
-    fireEvent.click(screen.getByText(name));
+  test("Validate that clicking on a card opens a detailed card component", async () => {
+    render(
+      <MemoryRouter>
+        <Routes>
+          <Route path="/" element={<PokemonCard pokemon={pokemonMock} />} />
+          <Route path="/details/:id" element={<DetailedCard />} />
+        </Routes>
+      </MemoryRouter>,
+    );
+    const pokemonLinkElement = document.querySelector(".pokemon-card-link");
+    expect(pokemonLinkElement).toBeInTheDocument();
+    fireEvent.click(pokemonLinkElement as HTMLElement);
+    await waitFor(() => {
+      expect(document.querySelector(".detailed-card")).toBeInTheDocument();
+    });
+  });
 
-    // Check if the mock function is called
-    expect(onClick).toHaveBeenCalledTimes(1);
+  test("Check that clicking on the card triggers an additional API call to fetch detailed information.", async () => {
+    render(
+      <MemoryRouter>
+        <Routes>
+          <Route path="/" element={<PokemonCard pokemon={pokemonMock} />} />
+          <Route path="/details/:id" element={<DetailedCard />} />
+        </Routes>
+      </MemoryRouter>,
+    );
+    const pokemonCardElement = document.querySelector(".pokemon-card-link");
+    expect(pokemonCardElement).toBeInTheDocument();
+    fireEvent.click(pokemonCardElement as HTMLElement);
+    await waitFor(() => {
+      expect(window.fetch).toHaveBeenCalledTimes(1);
+    });
   });
 });

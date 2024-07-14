@@ -1,22 +1,23 @@
 // api/api.ts
 
-const BASE_URL = 'https://pokeapi.co/api/v2';
+const BASE_URL = "https://pokeapi.co/api/v2";
+
+export interface Pokemon {
+  name: string;
+  url: string;
+}
 
 // Определение интерфейсов для данных API
 interface PokemonResponse {
-  results: { name: string; url: string }[];
-}
-
-interface PokemonSpecies {
-  flavor_text_entries: { flavor_text: string; language: { name: string } }[];
+  results: Pokemon[];
 }
 
 interface PokemonData {
   name: string;
-  species: { url: string };
+  flavor_text_entries: { flavor_text: string; language: { name: string } }[];
   sprites: {
     other: {
-      'official-artwork': { front_default: string };
+      "official-artwork": { front_default: string };
     };
   };
 }
@@ -29,9 +30,9 @@ interface PokemonDetails {
 
 // Получение списка покемонов с фильтрацией по имени
 export const fetchPokemons = async (
-  searchTerm: string = '',
-  page: number = 1
-): Promise<{ name: string; description: string }[]> => {
+  searchTerm: string = "",
+  page: number = 1,
+): Promise<PokemonResponse> => {
   // Формируем URL с параметрами постраничной навигации
   const url = searchTerm
     ? `${BASE_URL}/pokemon?limit=1000` // Загружаем всех покемонов для поиска по имени
@@ -43,42 +44,28 @@ export const fetchPokemons = async (
   }
 
   const data: PokemonResponse = await response.json();
-  const filteredResults = data.results.filter((pokemon) =>
-    pokemon.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
-  // Получаем описание для каждого покемона
-  const pokemons = await Promise.all(
-    filteredResults.map(async (pokemon) => {
-      const pokemonResponse = await fetch(pokemon.url);
-      const pokemonData: PokemonData = await pokemonResponse.json();
-      const speciesResponse = await fetch(pokemonData.species.url);
-      const speciesData: PokemonSpecies = await speciesResponse.json();
-      const description =
-        speciesData.flavor_text_entries.find(
-          (entry) => entry.language.name === 'en'
-        )?.flavor_text || 'No description available';
-      return { name: pokemon.name, description };
-    })
-  );
+  if (searchTerm) {
+    data.results = data.results.filter((pokemon) =>
+      pokemon.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    );
+  }
 
-  return pokemons;
+  return data;
 };
 
 // Получение подробной информации о покемоне по имени
 export const fetchPokemonDetails = async (
-  name: string
+  id: number,
 ): Promise<PokemonDetails> => {
-  const url = `${BASE_URL}/pokemon/${name}`;
+  const url = `${BASE_URL}/pokemon-species/${id}`;
   const response = await fetch(url);
   const pokemon: PokemonData = await response.json();
-  const speciesResponse = await fetch(pokemon.species.url);
-  const speciesData: PokemonSpecies = await speciesResponse.json();
+
   const description =
-    speciesData.flavor_text_entries.find(
-      (entry) => entry.language.name === 'en'
-    )?.flavor_text || 'No description available';
-  const imageUrl = pokemon.sprites.other['official-artwork'].front_default;
+    pokemon.flavor_text_entries.find((entry) => entry.language.name === "en")
+      ?.flavor_text || "No description available";
+  const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
 
   return { name: pokemon.name, description, imageUrl };
 };

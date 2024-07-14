@@ -1,12 +1,12 @@
 // DetailedCard.tsx
 
-import React, { useRef, useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { fetchPokemonDetails } from '../../api/api';
-import Loader from '../Loader/Loader';
-import useOutsideAlerter from '../../hooks/useOutsideAlerter'; // Импортируйте ваш хук
-import sanitizeDescription from '../../utility/sanitizeText'; // Импортируем утилиту
-import './DetailedCard.css';
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { fetchPokemonDetails } from "../../api/api";
+import useOutsideAlerter from "../../hooks/useOutsideAlerter"; // Импортируйте ваш хук
+import sanitizeDescription from "../../utility/sanitizeText"; // Импортируем утилиту
+import Loader from "../Loader/Loader";
+import "./DetailedCard.css";
 
 const DetailedCard: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -30,16 +30,16 @@ const DetailedCard: React.FC = () => {
     const fetchPokemon = async () => {
       try {
         setLoading(true);
-        const pokemonDetails = await fetchPokemonDetails(id || '');
+        const pokemonDetails = await fetchPokemonDetails(parseInt(id!));
         const sanitizedDescription = sanitizeDescription(
-          pokemonDetails.description
+          pokemonDetails.description,
         ); // Применяем утилиту
         setPokemon({ ...pokemonDetails, description: sanitizedDescription });
       } catch (error) {
         if (error instanceof Error) {
           setError(error.message);
         } else {
-          setError('An unknown error occurred.');
+          setError("An unknown error occurred.");
         }
       } finally {
         setLoading(false);

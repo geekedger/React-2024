@@ -1,30 +1,36 @@
-import React from 'react';
-import { useSearchParams } from 'react-router-dom';
-import './Pagination.css';
+import React from "react";
+import { NavLink, useSearchParams } from "react-router-dom";
+import "./Pagination.css";
 
 interface PaginationProps {
-  onPageChange: (page: number) => void;
+  next: boolean;
 }
 
-const Pagination: React.FC<PaginationProps> = ({ onPageChange }) => {
+const Pagination: React.FC<PaginationProps> = ({ next }) => {
   const [searchParams] = useSearchParams();
-  const page = searchParams.get('page')
-    ? parseInt(searchParams.get('page')!)
+  const page = searchParams.get("page")
+    ? parseInt(searchParams.get("page")!)
     : 1;
 
-  const handlePageChange = (newPage: number) => {
-    if (newPage > 0) {
-      onPageChange(newPage);
-    }
-  };
+  const searchTerm = searchParams.get("search");
 
   return (
     <div className="pagination">
-      <button onClick={() => handlePageChange(page - 1)} disabled={page <= 1}>
-        Previous
-      </button>
+      {page > 1 && (
+        <NavLink
+          to={`?page=${page - 1}${searchTerm ? `&search=${searchTerm}` : ""}`}
+        >
+          Previous
+        </NavLink>
+      )}
       <span>Page {page}</span>
-      <button onClick={() => handlePageChange(page + 1)}>Next</button>
+      {next && (
+        <NavLink
+          to={`?page=${page + 1}${searchTerm ? `&search=${searchTerm}` : ""}`}
+        >
+          Next
+        </NavLink>
+      )}
     </div>
   );
 };

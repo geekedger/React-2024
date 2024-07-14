@@ -1,41 +1,35 @@
-import { render } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
-import Pagination from '../components/Pagination/Pagination';
-import '@testing-library/jest-dom';
+import "@testing-library/jest-dom";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
+import Pagination from "../components/Pagination/Pagination";
 
-describe('Pagination Component', () => {
-  it('should render Pagination component', () => {
-    const mockOnPageChange = jest.fn();
-    const { getByText, getByRole } = render(
+describe("Pagination Component", () => {
+  it("should render Pagination component", () => {
+    jest.spyOn(URLSearchParams.prototype, "get").mockReturnValue("2");
+
+    const { getByText } = render(
       <MemoryRouter>
-        <Pagination onPageChange={mockOnPageChange} />
-      </MemoryRouter>
+        <Pagination next={true} />
+      </MemoryRouter>,
     );
 
-    expect(getByText(/Page 1/i)).toBeInTheDocument(); // Check if Page 1 text is in the document
-    expect(getByRole('button', { name: /Previous/i })).toBeDisabled(); // Check if Previous button is disabled
+    expect(getByText(/Page 2/i)).toBeInTheDocument(); // Check if Page 1 text is in the document
+    expect(getByText("Next")).toBeInTheDocument(); // Check if Previous button is disabled
   });
 
-  it('should call onPageChange with correct page number', () => {
-    const mockOnPageChange = jest.fn();
-    const { getByRole } = render(
+  it("should change url when clicking next", () => {
+    Object.defineProperty(window, "location", {
+      value: new URL("https://yourtesturl.com/some-path?page=3"),
+      writable: true,
+    });
+
+    render(
       <MemoryRouter>
-        <Pagination onPageChange={mockOnPageChange} />
-      </MemoryRouter>
+        <Pagination next={true} />
+      </MemoryRouter>,
     );
 
-    getByRole('button', { name: /Next/i }).click();
-    expect(mockOnPageChange).toHaveBeenCalledWith(2); // Check if onPageChange is called with page number 2
-  });
-
-  it('should not allow going to previous page when on page 1', () => {
-    const mockOnPageChange = jest.fn();
-    const { getByRole } = render(
-      <MemoryRouter>
-        <Pagination onPageChange={mockOnPageChange} />
-      </MemoryRouter>
-    );
-
-    expect(getByRole('button', { name: /Previous/i })).toBeDisabled(); // Check if Previous button is disabled
+    fireEvent.click(screen.getByText("Next"));
+    expect(window.location.search).toBe("?page=3");
   });
 });

@@ -7,13 +7,14 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx src/",
-    "test": "jest",
+    "test": "jest --coverage",
     "preview": "vite preview",
     "format:fix": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
     "prepare": "husky install"
   },
   "dependencies": {
     "axios": "^1.7.2",
+    "history": "^5.3.0",
     "jest-environment-jsdom": "^29.7.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
