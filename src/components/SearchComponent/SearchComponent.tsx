@@ -1,0 +1,45 @@
+import React, { useState, useEffect } from 'react';
+import './SearchComponent.css';
+
+interface SearchComponentProps {
+  searchTerm: string;
+  onSearch: (searchTerm: string) => void;
+}
+
+const SearchComponent: React.FC<SearchComponentProps> = ({
+  searchTerm: initialSearchTerm,
+  onSearch,
+}) => {
+  const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
+
+  useEffect(() => {
+    setSearchTerm(initialSearchTerm);
+  }, [initialSearchTerm]);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log('Search term:', searchTerm);
+    onSearch(searchTerm);
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="search-form">
+      <input
+        type="text"
+        value={searchTerm}
+        onChange={handleChange}
+        placeholder="Search Pokémon"
+        className="search-input"
+      />
+      <button type="submit" className="search-button">
+        Search
+      </button>
+    </form>
+  );
+};
+
+export default SearchComponent;
