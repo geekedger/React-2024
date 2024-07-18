@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./SearchComponent.css";
+import { useTheme } from "../../contexts/ThemeContext";
 
 interface SearchComponentProps {
   searchTerm: string;
@@ -11,6 +12,7 @@ const SearchComponent: React.FC<SearchComponentProps> = ({
   onSearch,
 }) => {
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
+  const { theme } = useTheme();
 
   useEffect(() => {
     setSearchTerm(initialSearchTerm);
@@ -27,7 +29,7 @@ const SearchComponent: React.FC<SearchComponentProps> = ({
   };
 
   return (
-    <form onSubmit={handleSubmit} className={`search-form`}>
+    <form onSubmit={handleSubmit} className={`search-form ${theme}`}>
       <input
         type="text"
         value={searchTerm}

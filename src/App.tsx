@@ -11,10 +11,10 @@ import Pagination from "./components/Pagination/Pagination";
 import ResultsComponent from "./components/ResultsComponent/ResultsComponent";
 import SearchComponent from "./components/SearchComponent/SearchComponent";
 import useSearchQuery from "./hooks/useSearchQuery";
-import { ThemeProvider } from "./ThemeContext";
-import MainComponent from "./components/MainComponent/MainComponent";
+import { ThemeProvider, useTheme } from "./contexts/ThemeContext";
+import ThemeToggleButton from "./components/ThemeToggleButton/ThemeToggleButton";
 
-const App: React.FC = () => {
+const AppContent: React.FC = () => {
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -53,37 +53,39 @@ const App: React.FC = () => {
     navigate(`/?search=${newSearchTerm}&page=1`);
   };
 
+  const { theme } = useTheme();
+
   return (
-    <ErrorBoundary fallback={<FallbackComponent />}>
-      <ThemeProvider>
-        <MainComponent>
-          <div className="app">
-            <div className="app-left">
-              <div className="app-top">
-                <SearchComponent
-                  searchTerm={searchTerm}
-                  onSearch={handleSearch}
-                />
-                {loading && <Loader />}
-                {error && !loading && <p className="error-message">{error}</p>}
-              </div>
-              <div className="app-bottom">
-                {!loading && !error && (
-                  <>
-                    <ResultsComponent pokemons={pokemons} error={null} />
-                    <Pagination next={pokemons.length === 20} />
-                  </>
-                )}
-              </div>
-            </div>
-            <div className="app-right">
-              <Outlet />
-            </div>
-          </div>
-        </MainComponent>
-      </ThemeProvider>
-    </ErrorBoundary>
+    <div className={`app ${theme}`}>
+      <div className="app-left">
+        <div className="app-top">
+          <ThemeToggleButton />
+          <SearchComponent searchTerm={searchTerm} onSearch={handleSearch} />
+          {loading && <Loader />}
+          {error && !loading && <p className="error-message">{error}</p>}
+        </div>
+        <div className="app-bottom">
+          {!loading && !error && (
+            <>
+              <ResultsComponent pokemons={pokemons} error={null} />
+              <Pagination next={pokemons.length === 20} />
+            </>
+          )}
+        </div>
+      </div>
+      <div className="app-right">
+        <Outlet />
+      </div>
+    </div>
   );
 };
+
+const App: React.FC = () => (
+  <ErrorBoundary fallback={<FallbackComponent />}>
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
+  </ErrorBoundary>
+);
 
 export default App;

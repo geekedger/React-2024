@@ -1,5 +1,5 @@
 .pokemon-card {
-  background-color: #fff;
+  /* background-color: #fff; */
   border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
@@ -21,7 +21,7 @@
 
 .pokemon-card h2 {
   font-size: 20px;
-  color: #333;
+  /* color: #333; */
   margin-bottom: 10px;
   transition: color 0.3s ease;
 }
