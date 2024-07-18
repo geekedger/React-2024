@@ -1,3 +1,5 @@
+// App.tsx
+
 import React, { useEffect, useState } from "react";
 import { Outlet, useNavigate, useSearchParams } from "react-router-dom";
 import { fetchPokemons, Pokemon } from "./api/api";
@@ -9,6 +11,8 @@ import Pagination from "./components/Pagination/Pagination";
 import ResultsComponent from "./components/ResultsComponent/ResultsComponent";
 import SearchComponent from "./components/SearchComponent/SearchComponent";
 import useSearchQuery from "./hooks/useSearchQuery";
+import { ThemeProvider } from "./ThemeContext";
+import MainComponent from "./components/MainComponent/MainComponent";
 
 const App: React.FC = () => {
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
@@ -51,26 +55,33 @@ const App: React.FC = () => {
 
   return (
     <ErrorBoundary fallback={<FallbackComponent />}>
-      <div className="app">
-        <div className="app-left">
-          <div className="app-top">
-            <SearchComponent searchTerm={searchTerm} onSearch={handleSearch} />
-            {loading && <Loader />}
-            {error && !loading && <p className="error-message">{error}</p>}
+      <ThemeProvider>
+        <MainComponent>
+          <div className="app">
+            <div className="app-left">
+              <div className="app-top">
+                <SearchComponent
+                  searchTerm={searchTerm}
+                  onSearch={handleSearch}
+                />
+                {loading && <Loader />}
+                {error && !loading && <p className="error-message">{error}</p>}
+              </div>
+              <div className="app-bottom">
+                {!loading && !error && (
+                  <>
+                    <ResultsComponent pokemons={pokemons} error={null} />
+                    <Pagination next={pokemons.length === 20} />
+                  </>
+                )}
+              </div>
+            </div>
+            <div className="app-right">
+              <Outlet />
+            </div>
           </div>
-          <div className="app-bottom">
-            {!loading && !error && (
-              <>
-                <ResultsComponent pokemons={pokemons} error={null} />
-                <Pagination next={pokemons.length === 20} />
-              </>
-            )}
-          </div>
-        </div>
-        <div className="app-right">
-          <Outlet />
-        </div>
-      </div>
+        </MainComponent>
+      </ThemeProvider>
     </ErrorBoundary>
   );
 };

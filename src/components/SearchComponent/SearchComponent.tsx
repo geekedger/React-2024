@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import './SearchComponent.css';
+import React, { useState, useEffect } from "react";
+import "./SearchComponent.css";
 
 interface SearchComponentProps {
   searchTerm: string;
@@ -22,20 +22,20 @@ const SearchComponent: React.FC<SearchComponentProps> = ({
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log('Search term:', searchTerm);
+    console.log("Search term:", searchTerm);
     onSearch(searchTerm);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="search-form">
+    <form onSubmit={handleSubmit} className={`search-form`}>
       <input
         type="text"
         value={searchTerm}
         onChange={handleChange}
         placeholder="Search Pokémon"
-        className="search-input"
+        className={`search-input`}
       />
-      <button type="submit" className="search-button">
+      <button type="submit" className={`search-button`}>
         Search
       </button>
     </form>
