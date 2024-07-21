@@ -1,4 +1,4 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import React, { Component, ErrorInfo, ReactNode } from "react";
 interface State {
   hasError: boolean;
 }
@@ -15,7 +15,7 @@ class ErrorBoundary extends Component<Props, State> {
     return { hasError: true };
   }
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('ErrorBoundary caught an error', error, errorInfo);
+    console.error("ErrorBoundary caught an error", error, errorInfo);
   }
   handleRetry = () => {
     this.setState({ hasError: false });

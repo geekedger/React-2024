@@ -1,5 +1,3 @@
-// App.tsx
-
 import React, { useEffect, useState } from "react";
 import { Outlet, useNavigate, useSearchParams } from "react-router-dom";
 import { fetchPokemons, Pokemon } from "./api/api";
@@ -13,6 +11,8 @@ import SearchComponent from "./components/SearchComponent/SearchComponent";
 import useSearchQuery from "./hooks/useSearchQuery";
 import { ThemeProvider, useTheme } from "./contexts/ThemeContext";
 import ThemeToggleButton from "./components/ThemeToggleButton/ThemeToggleButton";
+import { Provider } from "react-redux";
+import store from "./store"; // Импортируйте ваш Redux store
 
 const AppContent: React.FC = () => {
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
@@ -82,9 +82,11 @@ const AppContent: React.FC = () => {
 
 const App: React.FC = () => (
   <ErrorBoundary fallback={<FallbackComponent />}>
-    <ThemeProvider>
-      <AppContent />
-    </ThemeProvider>
+    <Provider store={store}>
+      <ThemeProvider>
+        <AppContent />
+      </ThemeProvider>
+    </Provider>
   </ErrorBoundary>
 );
 

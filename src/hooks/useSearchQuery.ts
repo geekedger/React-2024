@@ -1,10 +1,10 @@
 // hooks/useSearchQuery.ts
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
-const useSearchQuery = (key: string, defaultValue: string = '') => {
+const useSearchQuery = (key: string, defaultValue: string = "") => {
   const [value, setValue] = useState(
-    () => localStorage.getItem(key) || defaultValue
+    () => localStorage.getItem(key) || defaultValue,
   );
 
   useEffect(() => {
