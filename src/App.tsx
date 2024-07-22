@@ -11,30 +11,36 @@ import SearchComponent from "./components/SearchComponent/SearchComponent";
 import useSearchQuery from "./hooks/useSearchQuery";
 import { ThemeProvider, useTheme } from "./contexts/ThemeContext";
 import ThemeToggleButton from "./components/ThemeToggleButton/ThemeToggleButton";
-import { Provider } from "react-redux";
-import store from "./store/store"; // Импортируйте ваш Redux store
+import { Provider, useDispatch, useSelector } from "react-redux";
+import store, { RootState } from "./store/store";
 import FlyoutComponent from "./components/FlyoutComponent/FlyoutComponent";
+import { setCurrentPage, setPageItems } from "./store/currentPageSlice";
 
 const AppContent: React.FC = () => {
-  const [pokemons, setPokemons] = useState<Pokemon[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useSearchQuery("searchTerm", "");
   const [params] = useSearchParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const page = parseInt(params.get("page") ?? "1");
+  // Получаем текущую страницу из Redux store
+  const currentPage = useSelector((state: RootState) => state.currentPage.page);
+  const pokemons = useSelector((state: RootState) => state.currentPage.items);
+
+  // Используем параметр page из searchParams или значение из Redux store
+  const page = isNaN(parseInt(params.get("page") ?? "")) ? currentPage : parseInt(params.get("page") ?? "1");
 
   useEffect(() => {
     const fetchData = async (searchTerm: string = "", page: number = 1) => {
       setLoading(true);
       setError(null);
       try {
-        console.log(
-          `Fetching data with searchTerm: ${searchTerm}, page: ${page}`,
-        );
+        console.log(`Fetching data with searchTerm: ${searchTerm}, page: ${page}`);
         const response = await fetchPokemons(searchTerm, page);
-        setPokemons(response.results);
+        console.log('Fetched data:', response);
+        dispatch(setPageItems(response.results)); // Обновляем покемонов в Redux store
+        dispatch(setCurrentPage(page)); // Обновляем текущую страницу в Redux store
       } catch (error) {
         if (error instanceof Error) {
           setError(error.message);
@@ -46,7 +52,7 @@ const AppContent: React.FC = () => {
       }
     };
     fetchData(searchTerm, page);
-  }, [searchTerm, page]);
+  }, [searchTerm, page, dispatch]);
 
   const handleSearch = (newSearchTerm: string) => {
     console.log("Handling search with term:", newSearchTerm);

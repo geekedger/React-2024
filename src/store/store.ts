@@ -1,30 +1,32 @@
-// src/store/store.ts
 import { configureStore, EnhancedStore } from "@reduxjs/toolkit";
-import counterReducer from "./slices";
-import { api } from "./apiSlice";
+import { api, Pokemon } from "./apiSlice";
 import themeReducer, { ThemeState } from "./ThemeSlice";
-import { CounterState } from "./slices";
+import currentPageReducer from './currentPageSlice';
 import selectedItemsReducer from './selectedItemsSlice';
 import flyoutReducer from './flyoutSlice';
-
 
 const store: EnhancedStore<{
   selectedItems: any;
   api: ReturnType<typeof api.reducer>;
   theme: ThemeState;
-  counter: CounterState;
+  currentPage: {
+    page: number;
+    items: Pokemon[];
+  };
+  flyout: any;
 }> = configureStore({
   reducer: {
     [api.reducerPath]: api.reducer, // RTK Query API reducer
-    theme: themeReducer, // Your theme reducer
-    counter: counterReducer, // Your counter reducer
+    theme: themeReducer, // редуктор темы
     selectedItems: selectedItemsReducer,
     flyout: flyoutReducer,
+    currentPage: currentPageReducer, // Новый редуктор текущей страницы
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(api.middleware), // RTK Query middleware
 });
 
+// Определяем тип RootState
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 

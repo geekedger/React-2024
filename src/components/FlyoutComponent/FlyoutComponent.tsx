@@ -1,12 +1,16 @@
-// src/components/FlyoutComponent.tsx
-import React from 'react';
+import React from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
-import { hideFlyout, clearSelectedItems } from '../../store/flyoutSlice';
+import { clearSelectedItems } from '../../store/selectedItemsSlice';
+import { hideFlyout } from '../../store/flyoutSlice';
+import "./FlyoutComponent.css";
 
-const FlyoutComponent: React.FC = () => {
+const FlyoutComponent = () => {
   const dispatch = useDispatch();
-  const { isVisible, selectedItems } = useSelector((state: RootState) => state.flyout);
+  const selectedItems = useSelector((state: RootState) => state.selectedItems.selectedItems);
+  const isVisible = useSelector((state: RootState) => state.flyout.isVisible);
+
+  if (!isVisible) return null;
 
   const handleUnselectAll = () => {
     dispatch(clearSelectedItems());
@@ -14,7 +18,7 @@ const FlyoutComponent: React.FC = () => {
   };
 
   const handleDownload = () => {
-    const csvContent = `data:text/csv;charset=utf-8,${selectedItems.map(item => `"${item}"`).join('\n')}`;
+    const csvContent = "data:text/csv;charset=utf-8," + selectedItems.map(e => `${e.name},${e.description},${e.details}`).join("\n");
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
@@ -23,12 +27,10 @@ const FlyoutComponent: React.FC = () => {
     link.click();
   };
 
-  if (!isVisible) return null;
-
   return (
     <div className="flyout">
-      <p>{selectedItems.length} item(s) selected</p>
-      <button onClick={handleUnselectAll}>Unselect All</button>
+      <p>{selectedItems.length} items are selected</p>
+      <button onClick={handleUnselectAll}>Unselect all</button>
       <button onClick={handleDownload}>Download</button>
     </div>
   );
