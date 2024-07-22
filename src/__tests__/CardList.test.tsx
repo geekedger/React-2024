@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import ResultsComponent from "../components/ResultsComponent/ResultsComponent";
+import ResultsComponent from "../components/ResultsComponent/ResultsComponent.old";
 import { mockPokemons } from "./__ mocks __/CardList.mock";
 
 describe("BookList component", () => {

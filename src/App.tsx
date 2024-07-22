@@ -12,7 +12,8 @@ import useSearchQuery from "./hooks/useSearchQuery";
 import { ThemeProvider, useTheme } from "./contexts/ThemeContext";
 import ThemeToggleButton from "./components/ThemeToggleButton/ThemeToggleButton";
 import { Provider } from "react-redux";
-import store from "./store"; // Импортируйте ваш Redux store
+import store from "./store/store"; // Импортируйте ваш Redux store
+import FlyoutComponent from "./components/FlyoutComponent/FlyoutComponent";
 
 const AppContent: React.FC = () => {
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
@@ -69,6 +70,7 @@ const AppContent: React.FC = () => {
             <>
               <ResultsComponent pokemons={pokemons} error={null} />
               <Pagination next={pokemons.length === 20} />
+              <FlyoutComponent />
             </>
           )}
         </div>

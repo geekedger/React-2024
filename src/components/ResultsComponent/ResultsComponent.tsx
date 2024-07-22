@@ -1,29 +1,25 @@
-import React from "react";
-import "./ResultsComponent.css";
-import PokemonCard from "../PokemonCard/PokemonCard";
-import { Pokemon } from "../../api/api";
+import React from 'react';
+import PokemonCard from '../PokemonCard/PokemonCard';
+import './ResultsComponent.css'; // Добавляем импорт CSS файла
 
 interface ResultsComponentProps {
-  pokemons: Pokemon[];
-  error: string | null; // Сообщение об ошибке
+  pokemons: { name: string; url: string }[];
+  error: string | null;
 }
 
-const ResultsComponent: React.FC<ResultsComponentProps> = ({
-  pokemons,
-  error,
-}) => {
+const ResultsComponent: React.FC<ResultsComponentProps> = ({ pokemons, error }) => {
   return (
-    <div className="results">
+    <div>
       {error ? (
-        <p className="error-message">{error}</p> // Отображаем сообщение об ошибке
-      ) : pokemons.length > 0 ? (
-        pokemons.map((pokemon, index) => (
-          <div key={index}>
-            <PokemonCard pokemon={pokemon} />
-          </div>
-        ))
+        <p>{error}</p>
       ) : (
-        <p className="no-results">No Pokemon found</p> // Сообщение, если покемоны не найдены
+        <ul className="pokemon-list">
+          {pokemons.map((pokemon) => (
+            <li key={pokemon.name} className="pokemon-list-item">
+              <PokemonCard pokemon={pokemon} />
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );

@@ -4,8 +4,12 @@ import counterReducer from "./slices";
 import { api } from "./apiSlice";
 import themeReducer, { ThemeState } from "./ThemeSlice";
 import { CounterState } from "./slices";
+import selectedItemsReducer from './selectedItemsSlice';
+import flyoutReducer from './flyoutSlice';
+
 
 const store: EnhancedStore<{
+  selectedItems: any;
   api: ReturnType<typeof api.reducer>;
   theme: ThemeState;
   counter: CounterState;
@@ -14,6 +18,8 @@ const store: EnhancedStore<{
     [api.reducerPath]: api.reducer, // RTK Query API reducer
     theme: themeReducer, // Your theme reducer
     counter: counterReducer, // Your counter reducer
+    selectedItems: selectedItemsReducer,
+    flyout: flyoutReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(api.middleware), // RTK Query middleware

@@ -1,5 +1,4 @@
 .pokemon-card {
-  /* background-color: #fff; */
   border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
@@ -11,6 +10,7 @@
     transform 0.3s ease,
     box-shadow 0.3s ease,
     background-color 0.3s ease;
+  position: relative; /* Позволяет позиционировать чекбокс относительно карточки */
 }
 
 .pokemon-card:hover {
@@ -21,7 +21,6 @@
 
 .pokemon-card h2 {
   font-size: 20px;
-  /* color: #333; */
   margin-bottom: 10px;
   transition: color 0.3s ease;
 }
@@ -38,4 +37,33 @@
 
 .pokemon-card:hover p {
   color: #333;
+}
+
+/* Стили для чекбокса */
+.pokemon-card-checkbox {
+  position: absolute; /* Позиционируем чекбокс относительно карточки */
+  top: 3px; /* Отступ от верхнего края */
+  right: 3px; /* Отступ от правого края */
+  width: 30px; /* Размер чекбокса */
+  height: 30px; /* Размер чекбокса */
+  cursor: pointer; /* Изменяем курсор при наведении */
+  appearance: none; /* Убираем стандартный стиль чекбокса */
+  border: 2px solid #ccc; /* Цвет рамки чекбокса */
+  border-radius: 4px; /* Радиус скругления */
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.pokemon-card-checkbox:checked {
+  background-color: #007bff; /* Цвет фона при активном состоянии */
+  border-color: #007bff; /* Цвет рамки при активном состоянии */
+}
+
+.pokemon-card-checkbox:checked::after {
+  content: '✔'; /* Символ галочки */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff; /* Цвет галочки */
+  font-size: 24px;
 }

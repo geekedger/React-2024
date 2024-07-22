@@ -2,7 +2,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 10px;
+  gap: 10px; /* Расстояние между карточками */
   padding: 10px;
 }
 
@@ -27,4 +27,18 @@
 .results.dark {
   background-color: black;
   color: white;
+}
+
+/* Стили для карточек в списке */
+.pokemon-list {
+  list-style-type: none; /* Убираем маркеры списка */
+  padding: 0; /* Убираем отступы */
+  display: flex; /* Используем Flexbox */
+  flex-wrap: wrap; /* Размещаем элементы по строкам */
+  gap: 10px; /* Расстояние между карточками */
+}
+
+.pokemon-list-item {
+  margin-bottom: 0; /* Убираем отступ между элементами списка */
+  flex: 1 1 200px; /* Карточки занимают пространство от 200px и больше по необходимости */
 }
