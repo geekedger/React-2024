@@ -1,14 +1,11 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Pokemon } from '../api/api';
+import { createSlice } from '@reduxjs/toolkit';
 
 interface FlyoutState {
   isVisible: boolean;
-  selectedItems: Pokemon[];
 }
 
 const initialState: FlyoutState = {
   isVisible: false,
-  selectedItems: [],
 };
 
 const flyoutSlice = createSlice({
@@ -21,14 +18,8 @@ const flyoutSlice = createSlice({
     hideFlyout: (state) => {
       state.isVisible = false;
     },
-    setSelectedItems: (state, action: PayloadAction<Pokemon[]>) => {
-      state.selectedItems = action.payload;
-    },
-    clearSelectedItems: (state) => {
-      state.selectedItems = [];
-    },
   },
 });
 
-export const { showFlyout, hideFlyout, setSelectedItems, clearSelectedItems } = flyoutSlice.actions;
+export const { showFlyout, hideFlyout } = flyoutSlice.actions;
 export default flyoutSlice.reducer;

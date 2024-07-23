@@ -1,9 +1,7 @@
-// src/store/apiSlice.ts
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { setPageItems } from './currentPageSlice'; // Импортируем action
-import { AppDispatch } from './store'; // Импортируем тип AppDispatch
+import { setLoading } from './loadingSlice';
+import { setPageItems } from './currentPageSlice';
 
-// Define interfaces
 export interface Pokemon {
   name: string;
   url: string;
@@ -19,7 +17,6 @@ export interface PokemonDetails {
   imageUrl: string;
 }
 
-// Create the API slice
 export const api = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({ baseUrl: 'https://pokeapi.co/api/v2' }),
@@ -27,24 +24,33 @@ export const api = createApi({
     fetchPokemons: builder.query<PokemonResponse, { searchTerm?: string; page?: number }>({
       query: ({ searchTerm = '', page = 1 }) => {
         const url = searchTerm
-          ? `/pokemon?limit=1000` // Загружаем всех покемонов для поиска по имени
-          : `/pokemon?limit=20&offset=${(page - 1) * 20}`; // Загружаем 20 покемонов на странице
+          ? `/pokemon?limit=1000`
+          : `/pokemon?limit=20&offset=${(page - 1) * 20}`;
         return url;
       },
-      transformResponse: (response: PokemonResponse) => response,
-      async onQueryStarted({ searchTerm, page }, { dispatch, queryFulfilled }) {
+      transformResponse: (response: PokemonResponse, _meta, { searchTerm = '' }) => {
+        if (searchTerm) {
+          response.results = response.results.filter(pokemon =>
+            pokemon.name.toLowerCase().includes(searchTerm.toLowerCase())
+          );
+        }
+        return response;
+      },
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        dispatch(setLoading(true));
         try {
           const { data } = await queryFulfilled;
-          // Save page items in store
           dispatch(setPageItems(data.results));
         } catch (err) {
-          console.error('Failed to fetch Pokémon data:', err);
+        } finally {
+          dispatch(setLoading(false));
         }
       },
     }),
     fetchPokemonDetails: builder.query<PokemonDetails, number>({
       query: (id: number) => `/pokemon-species/${id}`,
       transformResponse: (response: {
+        id: number;
         name: string;
         flavor_text_entries: {
           flavor_text: string;
@@ -60,9 +66,18 @@ export const api = createApi({
           response.flavor_text_entries.find(
             (entry) => entry.language.name === 'en',
           )?.flavor_text || 'No description available';
-        const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${response.name}.png`;
+        const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${response.id}.png`;
 
         return { name: response.name, description, imageUrl };
+      },
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        dispatch(setLoading(true));
+        try {
+          await queryFulfilled;
+        } catch (err) {
+        } finally {
+          dispatch(setLoading(false));
+        }
       },
     }),
   }),

@@ -1,35 +1,36 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+interface PokemonDetails {
+  name: string;
+  url: string;
+  description: string;
+  details: string;
+  imageUrl: string;
+}
+
 interface SelectedItemsState {
-  selectedItems: any[];
-  isLoading: boolean;
+  items: PokemonDetails[];
 }
 
 const initialState: SelectedItemsState = {
-  selectedItems: [],
-  isLoading: false,
+  items: [],
 };
 
 const selectedItemsSlice = createSlice({
   name: 'selectedItems',
   initialState,
   reducers: {
-    selectItem: (state, action: PayloadAction<any>) => {
-      state.selectedItems.push(action.payload);
+    selectItem: (state, action: PayloadAction<PokemonDetails>) => {
+      state.items.push(action.payload);
     },
-    unselectItem: (state, action: PayloadAction<any>) => {
-      state.selectedItems = state.selectedItems.filter(
-        item => item.name !== action.payload.name
-      );
+    unselectItem: (state, action: PayloadAction<PokemonDetails>) => {
+      state.items = state.items.filter(item => item.name !== action.payload.name);
     },
     clearSelectedItems: (state) => {
-      state.selectedItems = [];
-    },
-    setLoading: (state, action: PayloadAction<boolean>) => {
-      state.isLoading = action.payload;
+      state.items = [];
     },
   },
 });
 
-export const { selectItem, unselectItem, clearSelectedItems, setLoading } = selectedItemsSlice.actions;
+export const { selectItem, unselectItem, clearSelectedItems } = selectedItemsSlice.actions;
 export default selectedItemsSlice.reducer;

@@ -1,12 +1,14 @@
 import React, { useEffect } from "react";
-import { NavLink, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
-import { selectItem, unselectItem, setLoading } from '../../store/selectedItemsSlice';
+import { selectItem, unselectItem } from '../../store/selectedItemsSlice';
 import { showFlyout, hideFlyout } from '../../store/flyoutSlice';
 import { useFetchPokemonDetailsQuery } from '../../store/apiSlice';
-import { Pokemon } from "../../api/api";
+
 import "./PokemonCard.css";
+import { Pokemon } from "../../Interfaces/IPokemon";
+import { setLoading } from "../../store/loadingSlice";
 
 interface PokemonCardProps {
   pokemon: Pokemon;
@@ -18,16 +20,26 @@ const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
   const id = parseInt(pokemon.url.split('/').filter(Boolean).pop()!);
   const { data: details, isFetching } = useFetchPokemonDetailsQuery(id);
   const dispatch = useDispatch();
-  const selectedItems = useSelector((state: RootState) => state.selectedItems.selectedItems);
-  const isLoading = useSelector((state: RootState) => state.selectedItems.isLoading);
+  const selectedItems = useSelector((state: RootState) => state.selectedItems.items);
+
+  const navigate = useNavigate();
+
+  // Глобальное состояние загрузки
+  const globalLoading = useSelector((state: RootState) => state.loading.isLoading);
 
   useEffect(() => {
-    dispatch(setLoading(isFetching));
+    if (isFetching) {
+      dispatch(setLoading(true)); // Обновите глобальное состояние загрузки
+    } else {
+      dispatch(setLoading(false)); // Отключите состояние загрузки
+    }
   }, [isFetching, dispatch]);
 
   const isSelected = selectedItems.some(item => item.name === pokemon.name);
 
-  const handleCheckboxChange = () => {
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.stopPropagation(); // Останавливаем всплытие события, чтобы клик не приводил к переходу
+
     if (details) {
       const pokemonDetails = {
         name: details.name,
@@ -51,21 +63,25 @@ const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
     }
   };
 
+  const handleCardClick = () => {
+    navigate(`/details/${id}?page=${page}`);
+  };
+
   return (
-    <div className="pokemon-card">
+    <div className="pokemon-card" onClick={handleCardClick}>
       <input
         type="checkbox"
         checked={isSelected}
         onChange={handleCheckboxChange}
         className="pokemon-card-checkbox"
-        disabled={isFetching} // Disable checkbox if details are being fetched
+        disabled={isFetching}
+        onClick={(e) => e.stopPropagation()} // Останавливаем всплытие события, чтобы клик не приводил к переходу
       />
-      <NavLink to={`/details/${id}?page=${page}`} className="pokemon-card-link">
-        <div className="pokemon-card-content">
-          <h2>{pokemon.name}</h2>
-          {isLoading && <p>Loading...</p>} {/* Show loading indicator if data is being loaded */}
-        </div>
-      </NavLink>
+      <div className="pokemon-card-content">
+        <h2>{pokemon.name}</h2>
+        {/* Показ глобального состояния загрузки */}
+        {globalLoading && <p>Loading...</p>}
+      </div>
     </div>
   );
 };

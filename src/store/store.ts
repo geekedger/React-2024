@@ -1,32 +1,32 @@
+// src/store/store.ts
 import { configureStore, EnhancedStore } from "@reduxjs/toolkit";
-import { api, Pokemon } from "./apiSlice";
-import themeReducer, { ThemeState } from "./ThemeSlice";
+import { api } from "./apiSlice";
+import themeReducer, { ThemeState } from "./themeSlice";
 import currentPageReducer from './currentPageSlice';
 import selectedItemsReducer from './selectedItemsSlice';
 import flyoutReducer from './flyoutSlice';
+import loadingReducer from './loadingSlice'; // Импортируйте loadingReducer
 
 const store: EnhancedStore<{
-  selectedItems: any;
+  selectedItems: ReturnType<typeof selectedItemsReducer>;
   api: ReturnType<typeof api.reducer>;
   theme: ThemeState;
-  currentPage: {
-    page: number;
-    items: Pokemon[];
-  };
-  flyout: any;
+  currentPage: ReturnType<typeof currentPageReducer>;
+  flyout: ReturnType<typeof flyoutReducer>;
+  loading: ReturnType<typeof loadingReducer>; // Добавьте loading в типы
 }> = configureStore({
   reducer: {
-    [api.reducerPath]: api.reducer, // RTK Query API reducer
-    theme: themeReducer, // редуктор темы
+    [api.reducerPath]: api.reducer,
+    theme: themeReducer,
     selectedItems: selectedItemsReducer,
     flyout: flyoutReducer,
-    currentPage: currentPageReducer, // Новый редуктор текущей страницы
+    currentPage: currentPageReducer,
+    loading: loadingReducer, // Добавьте loadingReducer
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(api.middleware), // RTK Query middleware
+    getDefaultMiddleware().concat(api.middleware),
 });
 
-// Определяем тип RootState
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
