@@ -9,10 +9,12 @@ import { useFetchPokemonDetailsQuery } from '../../store/apiSlice';
 import "./PokemonCard.css";
 import { Pokemon } from "../../Interfaces/IPokemon";
 import { setLoading } from "../../store/loadingSlice";
+import Loader from "../Loader/Loader";
 
 interface PokemonCardProps {
   pokemon: Pokemon;
 }
+
 
 const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
   const [params] = useSearchParams();
@@ -65,6 +67,7 @@ const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
 
   const handleCardClick = () => {
     navigate(`/details/${id}?page=${page}`);
+ 
   };
 
   return (
@@ -80,7 +83,7 @@ const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
       <div className="pokemon-card-content">
         <h2>{pokemon.name}</h2>
         {/* Показ глобального состояния загрузки */}
-        {globalLoading && <p>Loading...</p>}
+        {globalLoading && <Loader />}
       </div>
     </div>
   );

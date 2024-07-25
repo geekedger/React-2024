@@ -5,7 +5,8 @@ import themeReducer, { ThemeState } from "./themeSlice";
 import currentPageReducer from './currentPageSlice';
 import selectedItemsReducer from './selectedItemsSlice';
 import flyoutReducer from './flyoutSlice';
-import loadingReducer from './loadingSlice'; // Импортируйте loadingReducer
+import loadingReducer from './loadingSlice';
+import pokemonDetailsReducer from './pokemonDetailsSlice'; // Импортируйте pokemonDetailsReducer
 
 const store: EnhancedStore<{
   selectedItems: ReturnType<typeof selectedItemsReducer>;
@@ -13,7 +14,8 @@ const store: EnhancedStore<{
   theme: ThemeState;
   currentPage: ReturnType<typeof currentPageReducer>;
   flyout: ReturnType<typeof flyoutReducer>;
-  loading: ReturnType<typeof loadingReducer>; // Добавьте loading в типы
+  loading: ReturnType<typeof loadingReducer>;
+  pokemonDetails: ReturnType<typeof pokemonDetailsReducer>; // Добавьте pokemonDetails в типы
 }> = configureStore({
   reducer: {
     [api.reducerPath]: api.reducer,
@@ -21,7 +23,8 @@ const store: EnhancedStore<{
     selectedItems: selectedItemsReducer,
     flyout: flyoutReducer,
     currentPage: currentPageReducer,
-    loading: loadingReducer, // Добавьте loadingReducer
+    loading: loadingReducer,
+    pokemonDetails: pokemonDetailsReducer, // Добавьте pokemonDetailsReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(api.middleware),

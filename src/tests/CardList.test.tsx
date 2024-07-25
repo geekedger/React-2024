@@ -2,9 +2,9 @@ import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import ResultsComponent from "../components/ResultsComponent/ResultsComponent";
-import { mockPokemons } from "./__ mocks __/CardList.mock";
+import { mockPokemons } from "./mocks/CardList.mock";
 
-describe("BookList component", () => {
+describe("ResultsComponent component", () => {
   test("Verify that the component renders the specified number of cards", () => {
     const props = {
       pokemons: mockPokemons.results,

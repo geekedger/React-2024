@@ -2,7 +2,7 @@ import "@testing-library/jest-dom";
 import { render } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import App from "../App";
-import { mockPokemons } from "./__ mocks __/CardList.mock";
+import { mockPokemons } from "./mocks/CardList.mock";
 
 export function mockFetch(data: unknown) {
   return jest.fn(() =>

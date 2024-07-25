@@ -7,17 +7,17 @@ export default {
   },
   rootDir: "src",
   moduleNameMapper: {
-    "\\.(gif|ttf|eot|svg|png)$": "<rootDir>/__test__/__mocks__/fileMock.js",
+    "\\.(gif|ttf|eot|svg|png)$": "<rootDir>/tests/mocks/",
     "^@app/(.*)$": "<rootDir>/$1",
     "\\.(css)$": "identity-obj-proxy",
   },
   testMatch: [
-    "**/__tests__/**/*.jsx",
+    "**/tests/**/*.jsx",
     "**/?(*.)+(spec|test).jsx",
-    "**/__tests__/**/*.tsx",
+    "**/tests/**/*.tsx",
     "**/?(*.)+(spec|test).tsx",
   ], // Добавьте шаблоны для .tsx файлов, если у вас есть тесты на TypeScript
-  moduleFileExtensions: ["js", "jsx", "ts", "tsx", "json", "node"], // Добавьте ts и tsx
+  moduleFileExtensions: ["js", "jsx", "ts", "tsx", "json", "node"], 
   collectCoverage: false,
   coverageReporters: ["text", "text-summary"],
   coverageDirectory: "coverage",

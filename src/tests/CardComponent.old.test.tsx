@@ -2,8 +2,9 @@ import "@testing-library/jest-dom";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import PokemonCard from "../components/PokemonCard/PokemonCard";
-import { pokemonMock } from "./__ mocks __/Pokemon";
+import { pokemonMock } from "./mocks/Pokemon.mock";
 import DetailedCard from "../components/DetailedCard/DetailedCard";
+import { Provider } from "react-redux";
 
 export function mockFetch(data: unknown) {
   return jest.fn(() =>
@@ -63,3 +64,5 @@ describe("Pokemon component", () => {
     });
   });
 });
+
+

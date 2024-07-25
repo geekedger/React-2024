@@ -15,7 +15,7 @@ const ResultsComponent: React.FC<ResultsComponentProps> = ({ pokemons, error }) 
   }
 
   if (pokemons.length === 0) {
-    return <p>No Pokémon found.</p>;
+    return <p>No Pokemon found</p>;
   }
 
   return (
