@@ -1,12 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-interface PokemonDetails {
-  name: string;
-  url: string;
-  description: string;
-  details: string;
-  imageUrl: string;
-}
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { PokemonDetails } from "../Interfaces/IPokemondetails";
 
 interface SelectedItemsState {
   items: PokemonDetails[];
@@ -17,14 +10,16 @@ const initialState: SelectedItemsState = {
 };
 
 const selectedItemsSlice = createSlice({
-  name: 'selectedItems',
+  name: "selectedItems",
   initialState,
   reducers: {
     selectItem: (state, action: PayloadAction<PokemonDetails>) => {
       state.items.push(action.payload);
     },
     unselectItem: (state, action: PayloadAction<PokemonDetails>) => {
-      state.items = state.items.filter(item => item.name !== action.payload.name);
+      state.items = state.items.filter(
+        (item) => item.name !== action.payload.name,
+      );
     },
     clearSelectedItems: (state) => {
       state.items = [];
@@ -32,5 +27,6 @@ const selectedItemsSlice = createSlice({
   },
 });
 
-export const { selectItem, unselectItem, clearSelectedItems } = selectedItemsSlice.actions;
+export const { selectItem, unselectItem, clearSelectedItems } =
+  selectedItemsSlice.actions;
 export default selectedItemsSlice.reducer;

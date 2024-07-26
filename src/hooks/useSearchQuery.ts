@@ -1,5 +1,3 @@
-// hooks/useSearchQuery.ts
-
 import { useState, useEffect } from "react";
 
 const useSearchQuery = (key: string, defaultValue: string = "") => {

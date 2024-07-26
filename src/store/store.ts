@@ -2,11 +2,11 @@
 import { configureStore, EnhancedStore } from "@reduxjs/toolkit";
 import { api } from "./apiSlice";
 import themeReducer, { ThemeState } from "./themeSlice";
-import currentPageReducer from './currentPageSlice';
-import selectedItemsReducer from './selectedItemsSlice';
-import flyoutReducer from './flyoutSlice';
-import loadingReducer from './loadingSlice';
-import pokemonDetailsReducer from './pokemonDetailsSlice'; // Импортируйте pokemonDetailsReducer
+import currentPageReducer from "./currentPageSlice";
+import selectedItemsReducer from "./selectedItemsSlice";
+import flyoutReducer from "./flyoutSlice";
+import loadingReducer from "./loadingSlice";
+import pokemonDetailsReducer from "./pokemonDetailsSlice";
 
 const store: EnhancedStore<{
   selectedItems: ReturnType<typeof selectedItemsReducer>;
@@ -15,7 +15,7 @@ const store: EnhancedStore<{
   currentPage: ReturnType<typeof currentPageReducer>;
   flyout: ReturnType<typeof flyoutReducer>;
   loading: ReturnType<typeof loadingReducer>;
-  pokemonDetails: ReturnType<typeof pokemonDetailsReducer>; // Добавьте pokemonDetails в типы
+  pokemonDetails: ReturnType<typeof pokemonDetailsReducer>;
 }> = configureStore({
   reducer: {
     [api.reducerPath]: api.reducer,
@@ -24,7 +24,7 @@ const store: EnhancedStore<{
     flyout: flyoutReducer,
     currentPage: currentPageReducer,
     loading: loadingReducer,
-    pokemonDetails: pokemonDetailsReducer, // Добавьте pokemonDetailsReducer
+    pokemonDetails: pokemonDetailsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(api.middleware),

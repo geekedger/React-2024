@@ -3,7 +3,7 @@ export default {
   testEnvironment: "jest-environment-jsdom",
   transform: {
     "^.+\\.tsx?$": "ts-jest",
-    "^.+\\.jsx?$": "babel-jest", // Добавьте это правило для обработки .jsx файлов
+    "^.+\\.jsx?$": "babel-jest",
   },
   rootDir: "src",
   moduleNameMapper: {
@@ -16,10 +16,11 @@ export default {
     "**/?(*.)+(spec|test).jsx",
     "**/tests/**/*.tsx",
     "**/?(*.)+(spec|test).tsx",
-  ], // Добавьте шаблоны для .tsx файлов, если у вас есть тесты на TypeScript
+  ],
   moduleFileExtensions: ["js", "jsx", "ts", "tsx", "json", "node"],
   collectCoverage: false,
   silent: false,
+  detectOpenHandles: true,
   coverageReporters: ["text", "text-summary"],
   coverageDirectory: "coverage",
   coverageThreshold: {

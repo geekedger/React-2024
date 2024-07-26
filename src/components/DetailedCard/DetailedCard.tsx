@@ -1,4 +1,3 @@
-// src/components/DetailedCard/DetailedCard.tsx
 import React, { useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useFetchPokemonDetailsQuery } from "../../store/apiSlice";
@@ -6,19 +5,24 @@ import useOutsideAlerter from "../../hooks/useOutsideAlerter";
 import sanitizeDescription from "../../utils/sanitizeText";
 import Loader from "../Loader/Loader";
 import { useDispatch } from "react-redux";
-import { setPokemonDetails, clearPokemonDetails } from "../../store/pokemonDetailsSlice";
+import {
+  setPokemonDetails,
+  clearPokemonDetails,
+} from "../../store/pokemonDetailsSlice";
 import "./DetailedCard.css";
 
 const DetailedCard: React.FC = () => {
-  const { id } = useParams<{ id: string }>(); // Получаем ID покемона из URL
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const cardRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
 
-  const { data: pokemonDetails, isLoading } = useFetchPokemonDetailsQuery(parseInt(id!, 10));
+  const { data: pokemonDetails, isLoading } = useFetchPokemonDetailsQuery(
+    parseInt(id!, 10),
+  );
 
   const handleClose = () => {
-    navigate(-1); 
+    navigate(-1);
     dispatch(clearPokemonDetails());
   };
 
@@ -26,12 +30,16 @@ const DetailedCard: React.FC = () => {
 
   useEffect(() => {
     if (pokemonDetails) {
-      const sanitizedDescription = sanitizeDescription(pokemonDetails.description);
-      dispatch(setPokemonDetails({
-        name: pokemonDetails.name,
-        description: sanitizedDescription,
-        imageUrl: pokemonDetails.imageUrl
-      }));
+      const sanitizedDescription = sanitizeDescription(
+        pokemonDetails.description,
+      );
+      dispatch(
+        setPokemonDetails({
+          name: pokemonDetails.name,
+          description: sanitizedDescription,
+          imageUrl: pokemonDetails.imageUrl,
+        }),
+      );
     }
   }, [pokemonDetails, dispatch]);
 

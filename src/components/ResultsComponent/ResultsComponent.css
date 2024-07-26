@@ -2,7 +2,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 10px; /* Расстояние между карточками */
+  gap: 10px;
   padding: 10px;
 }
 
@@ -29,17 +29,21 @@
   color: white;
 }
 
-/* Стили для карточек в списке */
 .pokemon-list {
-  list-style-type: none; /* Убираем маркеры списка */
-  padding: 0; /* Убираем отступы */
-  display: flex; /* Используем Flexbox */
-  flex-wrap: wrap; /* Размещаем элементы по строкам */
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  gap: 10px; /* Расстояние между карточками */
+  gap: 10px;
 }
 
 .pokemon-list-item {
-  margin-bottom: 0; /* Убираем отступ между элементами списка */
-  flex: 0 1 200px; /* Карточки занимают пространство от 200px и больше по необходимости */
+  margin-bottom: 0;
+  flex: 0 1 200px;
+}
+
+.no-pokemon-message {
+  text-align: center;
+  font-size: 24px;
 }

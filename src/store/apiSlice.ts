@@ -1,20 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { setLoading } from "./loadingSlice";
 import { setPageItems } from "./currentPageSlice";
-
-export interface Pokemon {
-  name: string;
-  url: string;
-}
+import { Pokemon } from "../Interfaces/IPokemon";
+import { PokemonDetails } from "../Interfaces/IPokemondetails";
 
 export interface PokemonResponse {
   results: Pokemon[];
-}
-
-export interface PokemonDetails {
-  name: string;
-  description: string;
-  imageUrl: string;
 }
 
 export const api = createApi({

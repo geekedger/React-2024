@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Outlet, useNavigate, useSearchParams } from "react-router-dom";
 import { useFetchPokemonsQuery } from "./store/apiSlice";
-import "./App.css";
 import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
 import FallbackComponent from "./components/FallbackComponent/FallbackComponent";
 import Loader from "./components/Loader/Loader";
@@ -9,12 +8,14 @@ import Pagination from "./components/Pagination/Pagination";
 import ResultsComponent from "./components/ResultsComponent/ResultsComponent";
 import SearchComponent from "./components/SearchComponent/SearchComponent";
 import useSearchQuery from "./hooks/useSearchQuery";
-import { ThemeProvider, useTheme } from "./contexts/ThemeContext";
+import { ThemeProvider } from "./contexts/ThemeProvider";
 import ThemeToggleButton from "./components/ThemeToggleButton/ThemeToggleButton";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import store, { RootState } from "./store/store";
 import FlyoutComponent from "./components/FlyoutComponent/FlyoutComponent";
 import { setCurrentPage, setPageItems } from "./store/currentPageSlice";
+import { useTheme } from "./hooks/useTheme";
+import "./App.css";
 
 const AppContent: React.FC = () => {
   const [error, setError] = useState<string | null>(null);

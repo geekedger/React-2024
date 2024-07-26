@@ -49,27 +49,3 @@
   background-color: #726f6f;
   color: #000;
 }
-
-/* .throw-error-button {
-  background-color: #f44336;
-  color: #fff;
-  border: none;
-  padding: 12px 25px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 18px;
-  transition:
-    background-color 0.3s ease,
-    transform 0.3s ease;
-  margin-top: 10px;
-} */
-
-/* .throw-error-button:hover {
-  background-color: #d32f2f;
-  transform: scale(1.05);
-}
-
-.throw-error-button:active {
-  background-color: #b71c1c;
-  transform: scale(0.98);
-} */

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./SearchComponent.css";
-import { useTheme } from "../../contexts/ThemeContext";
+import { useTheme } from "../../hooks/useTheme";
 
 interface SearchComponentProps {
   searchTerm: string;

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Pokemon } from "./apiSlice";
+import { Pokemon } from "../Interfaces/IPokemon";
 
 interface CurrentPageState {
   page: number;

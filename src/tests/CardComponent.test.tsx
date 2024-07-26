@@ -6,7 +6,6 @@ import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import { api } from "../store/apiSlice";
 import PokemonCard from "../components/PokemonCard/PokemonCard";
-import { pokemonMock } from "./mocks/Pokemon.mock";
 import { useFetchPokemonDetailsQuery } from "../store/apiSlice";
 import selectedItemsReducer, {
   selectItem,
@@ -15,6 +14,7 @@ import selectedItemsReducer, {
 import loadingReducer, { setLoading } from "../store/loadingSlice";
 import DetailedCard from "../components/DetailedCard/DetailedCard";
 import { hideFlyout, showFlyout } from "../store/flyoutSlice";
+import { mockPokemon } from "./mocks/Pokemon.mock";
 
 const store = configureStore({
   reducer: {
@@ -49,29 +49,18 @@ describe("PokemonCard component", () => {
       isFetching: false,
     }));
 
-    // jest.mock('../store/selectedItemsSlice', () => ({
-    //     ...jest.requireActual('../store/selectedItemsSlice'),
-    //     selectItem: jest.fn(),
-    //     unselectItem: jest.fn(),
-    //   }));
-    //   jest.mock('../store/flyoutSlice', () => ({
-    //     ...jest.requireActual('../store/flyoutSlice'),
-    //     showFlyout: jest.fn(),
-    //     hideFlyout: jest.fn(),
-    //   }));
-
-    jest.clearAllMocks(); // Clear mock call count before each test
+    jest.clearAllMocks();
   });
 
   test("Ensure that the card component renders the relevant card data", () => {
     render(
       <Provider store={store}>
         <MemoryRouter>
-          <PokemonCard pokemon={pokemonMock} />
+          <PokemonCard pokemon={mockPokemon} />
         </MemoryRouter>
       </Provider>,
     );
-    const titleElement = screen.getByText(pokemonMock.name);
+    const titleElement = screen.getByText(mockPokemon.name);
     expect(titleElement).toBeInTheDocument();
   });
 
@@ -80,7 +69,7 @@ describe("PokemonCard component", () => {
       <Provider store={store}>
         <MemoryRouter>
           <Routes>
-            <Route path="/" element={<PokemonCard pokemon={pokemonMock} />} />
+            <Route path="/" element={<PokemonCard pokemon={mockPokemon} />} />
             <Route path="/details/:id" element={<DetailedCard />} />
           </Routes>
         </MemoryRouter>
@@ -88,7 +77,7 @@ describe("PokemonCard component", () => {
     );
 
     const pokemonCardElement = screen
-      .getByText(pokemonMock.name)
+      .getByText(mockPokemon.name)
       .closest(".pokemon-card");
     expect(pokemonCardElement).toBeInTheDocument();
 
@@ -111,7 +100,7 @@ describe("PokemonCard component", () => {
       <Provider store={store}>
         <MemoryRouter>
           <Routes>
-            <Route path="/" element={<PokemonCard pokemon={pokemonMock} />} />
+            <Route path="/" element={<PokemonCard pokemon={mockPokemon} />} />
             <Route path="/details/:id" element={<DetailedCard />} />
           </Routes>
         </MemoryRouter>
@@ -119,14 +108,14 @@ describe("PokemonCard component", () => {
     );
 
     const pokemonCardElement = screen
-      .getByText(pokemonMock.name)
+      .getByText(mockPokemon.name)
       .closest(".pokemon-card");
     expect(pokemonCardElement).toBeInTheDocument();
 
     fireEvent.click(pokemonCardElement!);
 
     await waitFor(() => {
-      expect(useFetchPokemonDetailsQuery).toHaveBeenCalledWith(pokemonMock.id);
+      expect(useFetchPokemonDetailsQuery).toHaveBeenCalledWith(mockPokemon.id);
     });
 
     await waitFor(() => {
@@ -147,13 +136,12 @@ describe("PokemonCard component", () => {
       isFetching: true,
     });
 
-    // Устанавливаем глобальное состояние загрузки
     store.dispatch(setLoading(true));
 
     render(
       <Provider store={store}>
         <MemoryRouter>
-          <PokemonCard pokemon={pokemonMock} />
+          <PokemonCard pokemon={mockPokemon} />
         </MemoryRouter>
       </Provider>,
     );
@@ -166,7 +154,7 @@ describe("PokemonCard component", () => {
     render(
       <Provider store={store}>
         <MemoryRouter>
-          <PokemonCard pokemon={pokemonMock} />
+          <PokemonCard pokemon={mockPokemon} />
         </MemoryRouter>
       </Provider>,
     );
@@ -185,7 +173,7 @@ describe("PokemonCard component", () => {
     render(
       <Provider store={store}>
         <MemoryRouter>
-          <PokemonCard pokemon={pokemonMock} />
+          <PokemonCard pokemon={mockPokemon} />
         </MemoryRouter>
       </Provider>,
     );
@@ -195,19 +183,17 @@ describe("PokemonCard component", () => {
 
     const expectedPokemonDetails = {
       name: "Pikachu",
-      url: pokemonMock.url,
+      url: mockPokemon.url,
       description: "A yellow electric-type Pokemon",
-      details: `https://pokeapi.co/api/v2/pokemon/${pokemonMock.id}`,
+      details: `https://pokeapi.co/api/v2/pokemon/${mockPokemon.id}`,
       imageUrl: "https://example.com/pikachu.png",
     };
 
-    // Проверяем вызовы dispatch
     expect(dispatch).toHaveBeenCalledWith(selectItem(expectedPokemonDetails));
 
     fireEvent.click(checkbox);
     expect(dispatch).toHaveBeenCalledWith(unselectItem(expectedPokemonDetails));
 
-    // Проверяем отображение и скрытие флайаута
     expect(dispatch).toHaveBeenCalledWith(showFlyout());
     expect(dispatch).toHaveBeenCalledWith(hideFlyout());
   });
