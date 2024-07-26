@@ -1,18 +1,20 @@
-import 'whatwg-fetch';
+import "whatwg-fetch";
 import "@testing-library/jest-dom";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
-import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
-import { api } from '../store/apiSlice';
+import { Provider } from "react-redux";
+import { configureStore } from "@reduxjs/toolkit";
+import { api } from "../store/apiSlice";
 import PokemonCard from "../components/PokemonCard/PokemonCard";
 import { pokemonMock } from "./mocks/Pokemon.mock";
-import { useFetchPokemonDetailsQuery } from '../store/apiSlice';
-import selectedItemsReducer, { selectItem, unselectItem } from "../store/selectedItemsSlice";
+import { useFetchPokemonDetailsQuery } from "../store/apiSlice";
+import selectedItemsReducer, {
+  selectItem,
+  unselectItem,
+} from "../store/selectedItemsSlice";
 import loadingReducer, { setLoading } from "../store/loadingSlice";
-import DetailedCard from '../components/DetailedCard/DetailedCard';
-import flyoutSlice, { hideFlyout, showFlyout } from '../store/flyoutSlice';
-import selectedItemsSlice from '../store/selectedItemsSlice';
+import DetailedCard from "../components/DetailedCard/DetailedCard";
+import { hideFlyout, showFlyout } from "../store/flyoutSlice";
 
 const store = configureStore({
   reducer: {
@@ -24,20 +26,17 @@ const store = configureStore({
     getDefaultMiddleware().concat(api.middleware),
 });
 
-
-jest.mock('../store/apiSlice', () => ({
-  ...jest.requireActual('../store/apiSlice'),
+jest.mock("../store/apiSlice", () => ({
+  ...jest.requireActual("../store/apiSlice"),
   useFetchPokemonDetailsQuery: jest.fn().mockReturnValue({
     data: {
-      name: 'Pikachu',
-      description: 'An Electric-type Pokémon.',
-      imageUrl: 'https://example.com/pikachu.png',
+      name: "Pikachu",
+      description: "An Electric-type Pokémon.",
+      imageUrl: "https://example.com/pikachu.png",
     },
     isFetching: false,
   }),
 }));
-
-
 
 describe("PokemonCard component", () => {
   beforeEach(() => {
@@ -45,7 +44,7 @@ describe("PokemonCard component", () => {
       data: {
         name: "Pikachu",
         description: "A yellow electric-type Pokemon",
-        imageUrl: "https://example.com/pikachu.png"
+        imageUrl: "https://example.com/pikachu.png",
       },
       isFetching: false,
     }));
@@ -60,7 +59,7 @@ describe("PokemonCard component", () => {
     //     showFlyout: jest.fn(),
     //     hideFlyout: jest.fn(),
     //   }));
-    
+
     jest.clearAllMocks(); // Clear mock call count before each test
   });
 
@@ -85,18 +84,25 @@ describe("PokemonCard component", () => {
             <Route path="/details/:id" element={<DetailedCard />} />
           </Routes>
         </MemoryRouter>
-      </Provider>
+      </Provider>,
     );
 
-    const pokemonCardElement = screen.getByText(pokemonMock.name).closest('.pokemon-card');
+    const pokemonCardElement = screen
+      .getByText(pokemonMock.name)
+      .closest(".pokemon-card");
     expect(pokemonCardElement).toBeInTheDocument();
 
     fireEvent.click(pokemonCardElement!);
 
     await waitFor(() => {
-      expect(screen.getByText('Pikachu')).toBeInTheDocument();
-      expect(screen.getByText('A yellow electric-type Pokemon')).toBeInTheDocument();
-      expect(screen.getByAltText('Pikachu')).toHaveAttribute('src', 'https://example.com/pikachu.png');
+      expect(screen.getByText("Pikachu")).toBeInTheDocument();
+      expect(
+        screen.getByText("A yellow electric-type Pokemon"),
+      ).toBeInTheDocument();
+      expect(screen.getByAltText("Pikachu")).toHaveAttribute(
+        "src",
+        "https://example.com/pikachu.png",
+      );
     });
   });
 
@@ -109,10 +115,12 @@ describe("PokemonCard component", () => {
             <Route path="/details/:id" element={<DetailedCard />} />
           </Routes>
         </MemoryRouter>
-      </Provider>
+      </Provider>,
     );
 
-    const pokemonCardElement = screen.getByText(pokemonMock.name).closest('.pokemon-card');
+    const pokemonCardElement = screen
+      .getByText(pokemonMock.name)
+      .closest(".pokemon-card");
     expect(pokemonCardElement).toBeInTheDocument();
 
     fireEvent.click(pokemonCardElement!);
@@ -122,85 +130,85 @@ describe("PokemonCard component", () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByText('Pikachu')).toBeInTheDocument();
-      expect(screen.getByText('A yellow electric-type Pokemon')).toBeInTheDocument();
-      expect(screen.getByAltText('Pikachu')).toHaveAttribute('src', 'https://example.com/pikachu.png');
+      expect(screen.getByText("Pikachu")).toBeInTheDocument();
+      expect(
+        screen.getByText("A yellow electric-type Pokemon"),
+      ).toBeInTheDocument();
+      expect(screen.getByAltText("Pikachu")).toHaveAttribute(
+        "src",
+        "https://example.com/pikachu.png",
+      );
     });
   });
-
-
 
   test("displays loading state when fetching data", () => {
     (useFetchPokemonDetailsQuery as jest.Mock).mockReturnValueOnce({
       data: null,
       isFetching: true,
     });
-  
+
     // Устанавливаем глобальное состояние загрузки
     store.dispatch(setLoading(true));
-  
+
     render(
       <Provider store={store}>
         <MemoryRouter>
           <PokemonCard pokemon={pokemonMock} />
         </MemoryRouter>
-      </Provider>
+      </Provider>,
     );
-  
-    const loaderElement = screen.getByRole('status');
+
+    const loaderElement = screen.getByRole("status");
     expect(loaderElement).toBeInTheDocument();
   });
-  
+
   test("checkbox toggles selected state correctly", () => {
     render(
       <Provider store={store}>
         <MemoryRouter>
           <PokemonCard pokemon={pokemonMock} />
         </MemoryRouter>
-      </Provider>
+      </Provider>,
     );
-  
-    const checkbox = screen.getByRole('checkbox') as HTMLInputElement;
+
+    const checkbox = screen.getByRole("checkbox") as HTMLInputElement;
     fireEvent.click(checkbox);
     expect(checkbox.checked).toBe(true);
-  
+
     fireEvent.click(checkbox);
     expect(checkbox.checked).toBe(false);
   });
-  
 
-  
   test("dispatches correct actions on checkbox change", () => {
-    const dispatch = jest.spyOn(store, 'dispatch');
-  
+    const dispatch = jest.spyOn(store, "dispatch");
+
     render(
       <Provider store={store}>
         <MemoryRouter>
           <PokemonCard pokemon={pokemonMock} />
         </MemoryRouter>
-      </Provider>
+      </Provider>,
     );
-  
-    const checkbox = screen.getByRole('checkbox') as HTMLInputElement;
+
+    const checkbox = screen.getByRole("checkbox") as HTMLInputElement;
     fireEvent.click(checkbox);
-  
+
     const expectedPokemonDetails = {
-      name: 'Pikachu',
+      name: "Pikachu",
       url: pokemonMock.url,
-      description: 'A yellow electric-type Pokemon',
+      description: "A yellow electric-type Pokemon",
       details: `https://pokeapi.co/api/v2/pokemon/${pokemonMock.id}`,
-      imageUrl: 'https://example.com/pikachu.png',
+      imageUrl: "https://example.com/pikachu.png",
     };
-  
+
     // Проверяем вызовы dispatch
     expect(dispatch).toHaveBeenCalledWith(selectItem(expectedPokemonDetails));
-  
+
     fireEvent.click(checkbox);
     expect(dispatch).toHaveBeenCalledWith(unselectItem(expectedPokemonDetails));
-  
+
     // Проверяем отображение и скрытие флайаута
     expect(dispatch).toHaveBeenCalledWith(showFlyout());
     expect(dispatch).toHaveBeenCalledWith(hideFlyout());
-
   });
 });
