@@ -25,11 +25,16 @@ const AppContent: React.FC = () => {
 
   const currentPage = useSelector((state: RootState) => state.currentPage.page);
   const pokemons = useSelector((state: RootState) => state.currentPage.items);
-  const isLoading = useSelector((state: RootState) => state.loading.isLoading);
 
-  const page = isNaN(parseInt(params.get("page") ?? "")) ? currentPage : parseInt(params.get("page") ?? "1");
+  const page = isNaN(parseInt(params.get("page") ?? ""))
+    ? currentPage
+    : parseInt(params.get("page") ?? "1");
 
-  const { data, error: apiError, isLoading: apiLoading } = useFetchPokemonsQuery({ searchTerm, page });
+  const {
+    data,
+    error: apiError,
+    isLoading: apiLoading,
+  } = useFetchPokemonsQuery({ searchTerm, page });
 
   useEffect(() => {
     if (apiError) {
@@ -52,10 +57,6 @@ const AppContent: React.FC = () => {
   }, [data, dispatch, page]);
 
   const { theme } = useTheme();
-
-  useEffect(() => {
-    console.log('Loading state:', isLoading);
-  }, [isLoading]);
 
   return (
     <div className={`app ${theme}`}>

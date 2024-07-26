@@ -17,8 +17,9 @@ export default {
     "**/tests/**/*.tsx",
     "**/?(*.)+(spec|test).tsx",
   ], // Добавьте шаблоны для .tsx файлов, если у вас есть тесты на TypeScript
-  moduleFileExtensions: ["js", "jsx", "ts", "tsx", "json", "node"], 
+  moduleFileExtensions: ["js", "jsx", "ts", "tsx", "json", "node"],
   collectCoverage: false,
+  silent: false,
   coverageReporters: ["text", "text-summary"],
   coverageDirectory: "coverage",
   coverageThreshold: {
