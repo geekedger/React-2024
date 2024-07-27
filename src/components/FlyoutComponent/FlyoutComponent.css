@@ -1,0 +1,37 @@
+src/components/FlyoutComponent.css
+.flyout {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .flyout p {
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
+  
+  .flyout button {
+    margin: 5px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .flyout button:hover {
+    background-color: #0056b3;
+  }
+  

@@ -1,16 +1,28 @@
-import React from 'react';
-import { createRoot } from 'react-dom/client';
-import App from './App';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import App from "./App.tsx";
+import NotFound from "./components/NotFound/NotFound.tsx";
+import DetailedCard from "./components/DetailedCard/DetailedCard.tsx";
+import "./index.css";
 
-const container = document.getElementById('root');
-if (container) {
-  const root = createRoot(container);
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    children: [
+      {
+        path: "details/:id",
+        element: <DetailedCard />,
+      },
+    ],
+  },
+  {
+    path: "*",
+    element: <NotFound />,
+  },
+]);
 
-  root.render(
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  );
-} else {
-  console.error('Root container not found');
-}
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+  <RouterProvider router={router} />,
+);
