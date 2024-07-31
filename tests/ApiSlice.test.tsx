@@ -1,6 +1,9 @@
-import 'whatwg-fetch';
+import "whatwg-fetch";
 import { renderHook, waitFor } from "@testing-library/react";
-import { useFetchPokemonDetailsQuery, useFetchPokemonsQuery } from "../store/apiSlice";
+import {
+  useFetchPokemonDetailsQuery,
+  useFetchPokemonsQuery,
+} from "../store/apiSlice";
 import { Provider } from "react-redux";
 import { ReactNode } from "react";
 import store from "../store/store";
@@ -20,27 +23,27 @@ beforeEach(() => {
 
 describe("ApiSlice", () => {
   test("check if useFetchPokemonDetailsQuery hook works correctly", async () => {
-    fetchMock.mockOnceIf(
-      `https://pokeapi.co/api/v2/pokemon-species/1`,
-      () =>
-        Promise.resolve({
-          status: 200,
-          body: JSON.stringify({
-            id: 1,
-            name: mockPokemonDetails.name,
-            flavor_text_entries: [
-              {
-                flavor_text: mockPokemonDetails.description,
-                language: { name: 'en' },
-              },
-            ],
-            sprites: {
-              other: {
-                'official-artwork': { front_default: mockPokemonDetails.imageUrl },
+    fetchMock.mockOnceIf(`https://pokeapi.co/api/v2/pokemon-species/1`, () =>
+      Promise.resolve({
+        status: 200,
+        body: JSON.stringify({
+          id: 1,
+          name: mockPokemonDetails.name,
+          flavor_text_entries: [
+            {
+              flavor_text: mockPokemonDetails.description,
+              language: { name: "en" },
+            },
+          ],
+          sprites: {
+            other: {
+              "official-artwork": {
+                front_default: mockPokemonDetails.imageUrl,
               },
             },
-          }),
-        })
+          },
+        }),
+      }),
     );
 
     const { result } = renderHook(() => useFetchPokemonDetailsQuery(1), {
@@ -80,7 +83,7 @@ describe("ApiSlice", () => {
           body: JSON.stringify({
             results: mockPokemons.results,
           }),
-        })
+        }),
     );
 
     const { result } = renderHook(() => useFetchPokemonsQuery({ page: 1 }), {
