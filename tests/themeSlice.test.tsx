@@ -2,7 +2,7 @@ import themeReducer, {
   setTheme,
   toggleTheme,
   ThemeState,
-} from "../store/themeSlice";
+} from "../src/store/themeSlice";
 
 describe("themeSlice", () => {
   const initialState: ThemeState = {

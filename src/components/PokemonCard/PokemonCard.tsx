@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import { selectItem, unselectItem } from "../../store/selectedItemsSlice";
 import { showFlyout, hideFlyout } from "../../store/flyoutSlice";
 import { useFetchPokemonDetailsQuery } from "../../store/apiSlice";
 
-import "./PokemonCard.css";
+import styles from "./PokemonCard.module.css";
 import { Pokemon } from "../../Interfaces/IPokemon";
 import { setLoading } from "../../store/loadingSlice";
 import Loader from "../Loader/Loader";
@@ -16,16 +16,15 @@ interface PokemonCardProps {
 }
 
 const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
-  const [params] = useSearchParams();
-  const page = params.get("page") || 1;
+  const router = useRouter();
+  const { query } = router;
+  const page = query.page || "1";
   const id = parseInt(pokemon.url.split("/").filter(Boolean).pop()!);
   const { data: details, isFetching } = useFetchPokemonDetailsQuery(id);
   const dispatch = useDispatch();
   const selectedItems = useSelector(
     (state: RootState) => state.selectedItems.items,
   );
-
-  const navigate = useNavigate();
 
   const globalLoading = useSelector(
     (state: RootState) => state.loading.isLoading,
@@ -68,20 +67,20 @@ const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
   };
 
   const handleCardClick = () => {
-    navigate(`/details/${id}?page=${page}`);
+    router.push(`/details/${id}?page=${page}`);
   };
 
   return (
-    <div className="pokemon-card" onClick={handleCardClick}>
+    <div className={styles["pokemon-card"]} onClick={handleCardClick}>
       <input
         type="checkbox"
         checked={isSelected}
         onChange={handleCheckboxChange}
-        className="pokemon-card-checkbox"
+        className={styles["pokemon-card-checkbox"]}
         disabled={isFetching}
         onClick={(e) => e.stopPropagation()}
       />
-      <div className="pokemon-card-content">
+      <div className={styles["pokemon-card-content"]}>
         <h2>{pokemon.name}</h2>
         {globalLoading && <Loader />}
       </div>

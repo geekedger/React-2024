@@ -1,8 +1,9 @@
 import React from "react";
-import "./FallbackComponent.css";
+import styles from "./FallbackComponent.module.css";
+
 interface FallbackComponentProps {}
 const FallbackComponent: React.FC<FallbackComponentProps> = () => (
-  <div className="fallback">
+  <div className={styles.fallback}>
     <p>
       🚀 Ta-da! This error was deliberately crafted just for you! Thanks for
       testing!🎭

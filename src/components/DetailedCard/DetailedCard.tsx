@@ -1,5 +1,7 @@
+// components/DetailedCard/DetailedCard.tsx
+
 import React, { useEffect, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useRouter } from "next/router";
 import { useFetchPokemonDetailsQuery } from "../../store/apiSlice";
 import useOutsideAlerter from "../../hooks/useOutsideAlerter";
 import sanitizeDescription from "../../utils/sanitizeText";
@@ -9,20 +11,24 @@ import {
   setPokemonDetails,
   clearPokemonDetails,
 } from "../../store/pokemonDetailsSlice";
-import "./DetailedCard.css";
+import styles from "./DetailedCard.module.css";
 
-const DetailedCard: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
+interface DetailedCardProps {
+  id: string;
+}
+
+const DetailedCard: React.FC<DetailedCardProps> = () => {
+  const router = useRouter();
+  const { id } = router.query;
   const cardRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
 
   const { data: pokemonDetails, isLoading } = useFetchPokemonDetailsQuery(
-    parseInt(id!, 10),
+    parseInt(id as string, 10),
   );
 
   const handleClose = () => {
-    navigate(-1);
+    router.back();
     dispatch(clearPokemonDetails());
   };
 
@@ -54,10 +60,10 @@ const DetailedCard: React.FC = () => {
         <img
           src={pokemonDetails.imageUrl}
           alt={pokemonDetails.name}
-          className="pokemon-image"
+          className={styles["pokemon-image"]}
         />
         <p>{sanitizeDescription(pokemonDetails.description)}</p>
-        <button className="close-button" onClick={handleClose}>
+        <button className={styles["close-button"]} onClick={handleClose}>
           Close
         </button>
       </div>
@@ -65,7 +71,7 @@ const DetailedCard: React.FC = () => {
   }
 
   return (
-    <div ref={cardRef} className="detailed-card">
+    <div ref={cardRef} className={styles["detailed-card"]}>
       {content}
     </div>
   );

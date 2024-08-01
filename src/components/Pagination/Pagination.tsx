@@ -1,35 +1,49 @@
+// components/Pagination/Pagination.tsx
+
 import React from "react";
-import { NavLink, useSearchParams } from "react-router-dom";
-import "./Pagination.css";
+import { useRouter } from "next/router";
+import Link from "next/link";
+import styles from "./Pagination.module.css";
 
 interface PaginationProps {
   next: boolean;
 }
 
 const Pagination: React.FC<PaginationProps> = ({ next }) => {
-  const [searchParams] = useSearchParams();
-  const page = searchParams.get("page")
-    ? parseInt(searchParams.get("page")!)
-    : 1;
+  const router = useRouter();
+  const { query } = router;
 
-  const searchTerm = searchParams.get("search");
+  const page = query.page ? parseInt(query.page as string, 10) : 1;
+  const searchTerm = query.search as string | undefined;
 
   return (
-    <div className="pagination">
+    <div className={styles.pagination}>
       {page > 1 && (
-        <NavLink
-          to={`?page=${page - 1}${searchTerm ? `&search=${searchTerm}` : ""}`}
+        <Link
+          href={{
+            pathname: "/",
+            query: {
+              page: page - 1,
+              search: searchTerm || undefined,
+            },
+          }}
         >
           Previous
-        </NavLink>
+        </Link>
       )}
       <span>Page {page}</span>
       {next && (
-        <NavLink
-          to={`?page=${page + 1}${searchTerm ? `&search=${searchTerm}` : ""}`}
+        <Link
+          href={{
+            pathname: "/",
+            query: {
+              page: page + 1,
+              search: searchTerm || undefined,
+            },
+          }}
         >
           Next
-        </NavLink>
+        </Link>
       )}
     </div>
   );

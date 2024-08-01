@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./SearchComponent.css";
+import styles from "./SearchComponent.module.css";
 import { useTheme } from "../../hooks/useTheme";
 
 interface SearchComponentProps {
@@ -28,15 +28,18 @@ const SearchComponent: React.FC<SearchComponentProps> = ({
   };
 
   return (
-    <form onSubmit={handleSubmit} className={`search-form ${theme}`}>
+    <form
+      onSubmit={handleSubmit}
+      className={`${styles["search-form"]} ${styles[theme]}`}
+    >
       <input
         type="text"
         value={searchTerm}
         onChange={handleChange}
         placeholder="Search Pokémon"
-        className={`search-input`}
+        className={styles[`search-input`]}
       />
-      <button type="submit" className={`search-button`}>
+      <button type="submit" className={styles[`search-button`]}>
         Search
       </button>
     </form>

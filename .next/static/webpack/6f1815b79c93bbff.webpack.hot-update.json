@@ -1,0 +1,11 @@
+{
+  "c": ["webpack"],
+  "r": ["pages/404"],
+  "m": [
+    "./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[6].oneOf[9].use[1]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[6].oneOf[9].use[2]!./src/components/NotFound/NotFound.module.css",
+    "./node_modules/next/dist/build/webpack/loaders/next-client-pages-loader.js?absolutePagePath=D%3A%5Cwork%5CReact%5CReact-2024%5Cpages%5C404.tsx&page=%2F404!",
+    "./pages/404.tsx",
+    "./src/components/NotFound/NotFound.module.css",
+    "./src/components/NotFound/NotFound.tsx"
+  ]
+}

@@ -1,12 +1,21 @@
 import { useState, useEffect } from "react";
 
 const useSearchQuery = (key: string, defaultValue: string = "") => {
-  const [value, setValue] = useState(
-    () => localStorage.getItem(key) || defaultValue,
-  );
+  const [value, setValue] = useState<string>(defaultValue);
 
   useEffect(() => {
-    localStorage.setItem(key, value);
+    if (typeof window !== "undefined") {
+      const storedValue = localStorage.getItem(key);
+      if (storedValue !== null) {
+        setValue(storedValue);
+      }
+    }
+  }, [key]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem(key, value);
+    }
   }, [key, value]);
 
   return [value, setValue] as const;
