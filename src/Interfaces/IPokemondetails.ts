@@ -1,4 +1,5 @@
 export interface PokemonDetails {
+  id?: string;
   name: string;
   url?: string;
   description: string;

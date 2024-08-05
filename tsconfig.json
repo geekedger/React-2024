@@ -23,6 +23,6 @@
       "path": "./tsconfig.node.json"
     }
   ],
-  "exclude": ["src/**/__ mocks __/*.mock.tsx"],
+  "exclude": ["src/**/__mocks__/*.mock.tsx"],
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
 }

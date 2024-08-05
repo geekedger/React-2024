@@ -12,6 +12,7 @@ const SearchComponent: React.FC<SearchComponentProps> = ({
   onSearch,
 }) => {
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
+  const [error, setError] = useState<Error | null>(null);
   const { theme } = useTheme();
 
   useEffect(() => {
@@ -26,6 +27,16 @@ const SearchComponent: React.FC<SearchComponentProps> = ({
     event.preventDefault();
     onSearch(searchTerm);
   };
+  const throwError = () => {
+    console.log("Throwing error");
+    setError(new Error("Simulated error."));
+  };
+
+  useEffect(() => {
+    if (error) {
+      throw error; // Выбрасываем ошибку только после того, как она была установлена
+    }
+  }, [error]);
 
   return (
     <form
@@ -37,10 +48,17 @@ const SearchComponent: React.FC<SearchComponentProps> = ({
         value={searchTerm}
         onChange={handleChange}
         placeholder="Search Pokémon"
-        className={styles[`search-input`]}
+        className={styles["search-input"]}
       />
-      <button type="submit" className={styles[`search-button`]}>
+      <button type="submit" className={styles["search-button"]}>
         Search
+      </button>
+      <button
+        type="button"
+        onClick={throwError}
+        className={styles["throw-error-button"]}
+      >
+        Throw Error
       </button>
     </form>
   );

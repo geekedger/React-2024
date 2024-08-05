@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Pokemon } from "../Interfaces/IPokemon";
 
-interface CurrentPageState {
+export interface CurrentPageState {
   page: number;
   items: Pokemon[];
 }

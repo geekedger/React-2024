@@ -3,6 +3,7 @@
   flex-direction: column;
   align-items: center;
   margin-bottom: 20px;
+  position: relative;
 }
 
 .search-input {
@@ -19,7 +20,8 @@
   color: #fff;
 }
 
-.search-button {
+.search-button,
+.throw-error-button {
   background-color: #216bf3;
   color: #fff;
   border: none;
@@ -48,4 +50,11 @@
 .search-form.dark input {
   background-color: #726f6f;
   color: #000;
+}
+
+.throw-error-button {
+  position: absolute; /* Абсолютное позиционирование относительно родителя */
+  top: 10px;
+  left: 0;
+  padding: 12px 25px;
 }

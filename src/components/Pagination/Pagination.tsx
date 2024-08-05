@@ -2,7 +2,6 @@
 
 import React from "react";
 import { useRouter } from "next/router";
-import Link from "next/link";
 import styles from "./Pagination.module.css";
 
 interface PaginationProps {
@@ -16,35 +15,28 @@ const Pagination: React.FC<PaginationProps> = ({ next }) => {
   const page = query.page ? parseInt(query.page as string, 10) : 1;
   const searchTerm = query.search as string | undefined;
 
+  const handlePagination = (newPage: number) => {
+    // Используйте shallow навигацию для обновления URL
+    router.push(
+      {
+        pathname: "/",
+        query: {
+          page: newPage,
+          search: searchTerm || undefined,
+        },
+      },
+      undefined,
+      { shallow: true },
+    );
+  };
+
   return (
     <div className={styles.pagination}>
       {page > 1 && (
-        <Link
-          href={{
-            pathname: "/",
-            query: {
-              page: page - 1,
-              search: searchTerm || undefined,
-            },
-          }}
-        >
-          Previous
-        </Link>
+        <button onClick={() => handlePagination(page - 1)}>Previous</button>
       )}
       <span>Page {page}</span>
-      {next && (
-        <Link
-          href={{
-            pathname: "/",
-            query: {
-              page: page + 1,
-              search: searchTerm || undefined,
-            },
-          }}
-        >
-          Next
-        </Link>
-      )}
+      {next && <button onClick={() => handlePagination(page + 1)}>Next</button>}
     </div>
   );
 };

@@ -1,21 +1,23 @@
 import React from "react";
 import { AppProps } from "next/app";
 import { Provider } from "react-redux";
-import store from "../src/store/store";
-import { ThemeProvider } from "../src/contexts/ThemeProvider";
+import { wrapper } from "../src/store/store";
 import ErrorBoundary from "../src/components/ErrorBoundary/ErrorBoundary";
 import FallbackComponent from "../src/components/FallbackComponent/FallbackComponent";
 import "../src/styles/globals.css";
+import { ThemeProvider } from "../src/contexts/ThemeProvider";
 
-const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
+const MyApp: React.FC<AppProps> = ({ Component, ...rest }) => {
+  const { store, props } = wrapper.useWrappedStore(rest);
+
   return (
-    <ErrorBoundary fallback={<FallbackComponent />}>
-      <Provider store={store}>
+    <Provider store={store}>
+      <ErrorBoundary fallback={<FallbackComponent onRetry={() => {}} />}>
         <ThemeProvider>
-          <Component {...pageProps} />
+          <Component {...props.pageProps} />
         </ThemeProvider>
-      </Provider>
-    </ErrorBoundary>
+      </ErrorBoundary>
+    </Provider>
   );
 };
 

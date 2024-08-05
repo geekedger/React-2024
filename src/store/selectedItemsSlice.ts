@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { PokemonDetails } from "../Interfaces/IPokemondetails";
 
-interface SelectedItemsState {
+export interface SelectedItemsState {
   items: PokemonDetails[];
 }
 

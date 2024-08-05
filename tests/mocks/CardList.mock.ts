@@ -1,4 +1,4 @@
-import { ICardList } from "../../Interfaces/ICardList";
+import { ICardList } from "../../src/Interfaces/ICardList";
 
 export const mockPokemons: ICardList = {
   results: [
