@@ -4,11 +4,10 @@ import { cleanup, render, screen, waitFor } from "@testing-library/react";
 import { RouterContext } from "next/dist/shared/lib/router-context.shared-runtime";
 import ResultsComponent from "../components/ResultsComponent/ResultsComponent";
 import { mockPokemons } from "./mocks/CardList.mock";
-import { Provider } from "react-redux";
-
-import { createMockRouter } from "./mocks/Router.mock"; // обновите путь, если нужно
+import { createMockRouter } from "./mocks/Router.mock";
 import { createTestStore, store } from "./mocks/render-with-store.mock";
 import { RootState } from "../store/store";
+import { Provider } from "react-redux";
 
 const initialState: Partial<RootState> = {
   // Начальное состояние для theme

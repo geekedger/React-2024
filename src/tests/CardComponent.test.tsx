@@ -1,32 +1,16 @@
 import "whatwg-fetch";
 import "@testing-library/jest-dom";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { Provider } from "react-redux";
 import PokemonCard from "../components/PokemonCard/PokemonCard";
 import { useFetchPokemonDetailsQuery } from "../store/apiSlice";
 import { selectItem, unselectItem } from "../store/selectedItemsSlice";
 import DetailedCard from "../components/DetailedCard/DetailedCard";
-// import { hideFlyout, showFlyout,flyoutReducer } from "../store/flyoutSlice";
 import { mockPokemon } from "./mocks/Pokemon.mock";
 import { createMockRouter } from "./mocks/Router.mock";
 import { RouterContext } from "next/dist/shared/lib/router-context.shared-runtime";
-
 import { hideFlyout, showFlyout } from "../store/flyoutSlice";
 import { renderWithStore, store } from "./mocks/render-with-store.mock";
-
-// const store = configureStore({
-//   reducer: {
-//     [api.reducerPath]: api.reducer,
-//     theme: themeReducer,
-//     selectedItems: selectedItemsReducer,
-//     flyout: flyoutReducer,
-//     currentPage: currentPageReducer,
-//     loading: loadingReducer,
-//     pokemonDetails: pokemonDetailsReducer,
-//   },
-//   middleware: (getDefaultMiddleware) =>
-//     getDefaultMiddleware().concat(api.middleware),
-// });
+import { Provider } from "react-redux";
 
 jest.mock("../store/apiSlice", () => ({
   ...jest.requireActual("../store/apiSlice"),
@@ -69,14 +53,6 @@ describe("PokemonCard component", () => {
       </RouterContext.Provider>,
     );
 
-    // render(
-    //   <Provider store={store}>
-    //     <RouterContext.Provider value={router}>
-    //       <PokemonCard pokemon={mockPokemon} />
-    //     </RouterContext.Provider>
-    //   </Provider>,
-    // );
-
     const titleElement = screen.getByText(mockPokemon.name);
     expect(titleElement).toBeInTheDocument();
   });
@@ -93,13 +69,6 @@ describe("PokemonCard component", () => {
       </RouterContext.Provider>,
       customInitialState,
     );
-    // render(
-    //   <Provider store={store}>
-    //     <RouterContext.Provider value={router}>
-    //       <PokemonCard pokemon={mockPokemon} />
-    //     </RouterContext.Provider>
-    //   </Provider>,
-    // );
 
     const pokemonCardElement = getByText(mockPokemon.name).closest(
       ".pokemon-card",
@@ -113,17 +82,9 @@ describe("PokemonCard component", () => {
         `/details/${mockPokemon.id}?page=1`,
       );
     });
-
-    // Optionally check if DetailedCard is rendered, if you have a way to verify that
   });
 
   test("Check that clicking on the card triggers an additional API call to fetch detailed information", async () => {
-    // store.dispatch(setPokemonDetails({
-    //   name: "123213",
-    //   description: "A yellow electric-type Pokemon",
-    //   imageUrl: "https://example.com/pikachu.png",
-    // }));
-
     const router = createMockRouter({
       asPath: `/details/${mockPokemon.id}`,
       query: { id: mockPokemon.id.toString() },
@@ -137,24 +98,6 @@ describe("PokemonCard component", () => {
       customInitialState,
     );
 
-    // renderWithStore(
-    //   <RouterContext.Provider value={router}>
-    //     <DetailedCard />
-    //   </RouterContext.Provider>, customInitialState
-
-    // );
-
-    // .dispatch(setPokemonDetails({
-    //   name: "123213",
-    //   description: "A yellow electric-type Pokemon",
-    //   imageUrl: "https://example.com/pikachu.png",
-    // }));
-
-    // const state = store.getState();
-    // const pokemonDetails = state.pokemonDetails; // Извлечение состояния pokemonDetails
-
-    // console.log("Pokemon Details in Store:", pokemonDetails);
-    // Wait for the API call to be triggered
     await waitFor(() => {
       // Проверка вызова API с ожидаемым id
       expect(useFetchPokemonDetailsQuery).toHaveBeenCalledWith(mockPokemon.id, {

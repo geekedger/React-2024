@@ -4,13 +4,13 @@ import { useFetchPokemonDetailsQuery } from "../../store/apiSlice";
 import useOutsideAlerter from "../../hooks/useOutsideAlerter";
 import sanitizeDescription from "../../utils/sanitizeText";
 import Loader from "../Loader/Loader";
-import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import {
   setPokemonDetails,
   clearPokemonDetails,
 } from "../../store/pokemonDetailsSlice";
 import styles from "./DetailedCard.module.css";
+import { useDispatch, useSelector } from "react-redux";
 
 interface DetailedCardProps {
   initialPokemonDetails?: {

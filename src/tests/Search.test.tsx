@@ -3,12 +3,11 @@ import "@testing-library/jest-dom";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import React from "react";
 import { ThemeProvider } from "../contexts/ThemeProvider";
-import { Provider } from "react-redux";
 import store from "../store/store";
-
 import MainPage from "../components/MainPage/MainPage";
 import { createMockRouter } from "./mocks/Router.mock"; // обновите путь, если нужно
 import { RouterContext } from "next/dist/shared/lib/router-context.shared-runtime";
+import { Provider } from "react-redux";
 
 // Mock useSearchQuery hook
 jest.mock("../hooks/useSearchQuery", () => {

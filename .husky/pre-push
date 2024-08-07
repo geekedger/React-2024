@@ -1,1 +1,1 @@
-npx test
+npm test

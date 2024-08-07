@@ -5,7 +5,6 @@ import {
   useFetchPokemonDetailsQuery,
   useFetchPokemonsQuery,
 } from "../store/apiSlice";
-import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit"; // Импортируем configureStore
 import { api } from "../store/apiSlice";
 import themeReducer from "../store/themeSlice";
@@ -17,6 +16,7 @@ import pokemonDetailsReducer from "../store/pokemonDetailsSlice";
 import fetchMock from "jest-fetch-mock";
 import { mockPokemonDetails } from "./mocks/PokemonCard.mock";
 import { mockPokemons } from "./mocks/CardList.mock";
+import { Provider } from "react-redux";
 
 fetchMock.enableMocks();
 

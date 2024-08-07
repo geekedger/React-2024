@@ -1,6 +1,5 @@
 import "@testing-library/jest-dom";
 import { fireEvent, render, screen } from "@testing-library/react";
-
 import Pagination from "../components/Pagination/Pagination";
 import { createMockRouter } from "./mocks/Router.mock"; // обновите путь, если нужно
 import { RouterContext } from "next/dist/shared/lib/router-context.shared-runtime";

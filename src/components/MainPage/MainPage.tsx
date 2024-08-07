@@ -8,12 +8,12 @@ import SearchComponent from "../SearchComponent/SearchComponent";
 import useSearchQuery from "../../hooks/useSearchQuery";
 import ThemeToggleButton from "../ThemeToggleButton/ThemeToggleButton";
 import FlyoutComponent from "../FlyoutComponent/FlyoutComponent";
-import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import { setCurrentPage, setPageItems } from "../../store/currentPageSlice";
 import { useTheme } from "../../hooks/useTheme";
 import styles from "../../styles/Home.module.css";
 import { Pokemon } from "../../Interfaces/IPokemon";
+import { useDispatch, useSelector } from "react-redux";
 
 // Определите тип пропсов
 export interface MainPageProps {
