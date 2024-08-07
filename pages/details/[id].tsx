@@ -36,4 +36,3 @@ const DetailPage: React.FC<DetailPageProps> = ({
 export { getServerSideProps };
 
 export default DetailPage;
-/* eslint-enable react-refresh/only-export-components */

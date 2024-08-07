@@ -10,6 +10,8 @@
 }
 
 .pagination button {
+  background-color: #216bf3;
+  color: #fff;
   border: none; /* Убираем стандартную границу */
   padding: 10px 15px; /* Отступы внутри кнопок */
   border-radius: 5px; /* Скругление углов кнопок */
@@ -23,9 +25,13 @@
 }
 
 .pagination button:hover:not(:disabled) {
-  background-color: #1976d2;
+  background-color: #1976d2bd;
 }
 
 .pagination span {
   font-size: 16px; /* Размер шрифта текста страницы */
+}
+
+.pagination.light button {
+  background-color: #21adee;
 }

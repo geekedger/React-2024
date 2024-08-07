@@ -1,5 +1,3 @@
-// components/DetailedCard/DetailedCard.tsx
-
 import React, { useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import { useFetchPokemonDetailsQuery } from "../../store/apiSlice";
@@ -26,28 +24,39 @@ const DetailedCard: React.FC<DetailedCardProps> = ({
   initialPokemonDetails,
 }) => {
   const router = useRouter();
-  const { id } = router.query;
+  const { id, page, search } = router.query;
   const cardRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
   const pokemonDetails = useSelector(
     (state: RootState) => state.pokemonDetails,
   );
-
-  // Используйте данные из props или загружайте через хук
-  const { data: fetchedPokemonDetails, isLoading } =
-    useFetchPokemonDetailsQuery(id ? parseInt(id as string, 10) : -1, {
-      skip: !!initialPokemonDetails, // Если начальные данные есть, пропускаем запрос
-    });
+  const {
+    data: fetchedPokemonDetails,
+    isLoading,
+    error,
+  } = useFetchPokemonDetailsQuery(id ? parseInt(id as string, 10) : -1, {
+    skip: !id,
+  });
 
   useOutsideAlerter(cardRef, () => {
-    router.back();
+    router.replace(
+      {
+        pathname: "/",
+        query: {
+          page: page || undefined,
+          search: search || undefined,
+        },
+      },
+      undefined,
+      { shallow: true },
+    );
     dispatch(clearPokemonDetails());
   });
 
   useEffect(() => {
     if (initialPokemonDetails) {
       dispatch(setPokemonDetails(initialPokemonDetails));
-    } else if (fetchedPokemonDetails) {
+    } else if (fetchedPokemonDetails && !isLoading) {
       const sanitizedDescription = sanitizeDescription(
         fetchedPokemonDetails.description,
       );
@@ -59,38 +68,34 @@ const DetailedCard: React.FC<DetailedCardProps> = ({
         }),
       );
     }
-  }, [initialPokemonDetails, fetchedPokemonDetails, dispatch]);
+  }, [initialPokemonDetails, fetchedPokemonDetails, isLoading, dispatch]);
 
-  let content;
+  if (error) {
+    return <div>Error loading data</div>;
+  }
 
   if (isLoading && !initialPokemonDetails) {
-    content = <Loader />;
-  } else {
-    const detailsToDisplay = initialPokemonDetails || pokemonDetails;
-    content = detailsToDisplay ? (
-      <div>
-        <h2>{detailsToDisplay.name}</h2>
-        <img
-          src={detailsToDisplay.imageUrl}
-          alt={detailsToDisplay.name}
-          className={styles["pokemon-image"]}
-        />
-        <p>{sanitizeDescription(detailsToDisplay.description)}</p>
-        <button
-          className={styles["close-button"]}
-          onClick={() => router.back()}
-        >
-          Close
-        </button>
-      </div>
-    ) : (
-      <p>No data available</p>
-    );
+    return <Loader />;
+  }
+
+  const detailsToDisplay = initialPokemonDetails || pokemonDetails;
+
+  if (!detailsToDisplay) {
+    return <p>No data available</p>;
   }
 
   return (
     <div ref={cardRef} className={styles["detailed-card"]}>
-      {content}
+      <h2>{detailsToDisplay.name}</h2>
+      <img
+        src={detailsToDisplay.imageUrl}
+        alt={detailsToDisplay.name}
+        className={styles["pokemon-image"]}
+      />
+      <p>{sanitizeDescription(detailsToDisplay.description)}</p>
+      <button className={styles["close-button"]} onClick={() => router.back()}>
+        Close
+      </button>
     </div>
   );
 };

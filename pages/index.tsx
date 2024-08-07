@@ -1,7 +1,8 @@
-import MainPage from "../src/components/MainPage/MainPage";
+import React from "react";
+import MainPage, { MainPageProps } from "../src/components/MainPage/MainPage";
 import getServerSideProps from "../src/server/getServerSideProps";
 
-const IndexPage = (props) => {
+const IndexPage: React.FC<MainPageProps> = (props) => {
   return <MainPage {...props} />;
 };
 

@@ -3,6 +3,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 import styles from "./Pagination.module.css";
+import { useTheme } from "../../hooks/useTheme";
 
 interface PaginationProps {
   next: boolean;
@@ -11,7 +12,7 @@ interface PaginationProps {
 const Pagination: React.FC<PaginationProps> = ({ next }) => {
   const router = useRouter();
   const { query } = router;
-
+  const { theme } = useTheme();
   const page = query.page ? parseInt(query.page as string, 10) : 1;
   const searchTerm = query.search as string | undefined;
 
@@ -31,7 +32,7 @@ const Pagination: React.FC<PaginationProps> = ({ next }) => {
   };
 
   return (
-    <div className={styles.pagination}>
+    <div className={`${styles["pagination"]} ${styles[theme]}`}>
       {page > 1 && (
         <button onClick={() => handlePagination(page - 1)}>Previous</button>
       )}

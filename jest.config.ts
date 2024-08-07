@@ -1,34 +1,39 @@
-export default {
+import type { Config } from "jest";
+import nextJest from "next/jest.js";
+
+const createJestConfig = nextJest({
+  dir: "./",
+});
+
+// Add any custom config to be passed to Jest
+const config: Config = {
+  coverageProvider: "v8",
   preset: "ts-jest",
-  testEnvironment: "jest-environment-jsdom",
+  testEnvironment: "jsdom",
   transform: {
-    "^.+\\.tsx?$": "ts-jest",
-    "^.+\\.jsx?$": "babel-jest",
+    "^.+\\.tsx?$": [
+      "ts-jest",
+      {
+        tsconfig: "tsconfig.test.json",
+      },
+    ],
   },
-  rootDir: "src",
   moduleNameMapper: {
-    "\\.(gif|ttf|eot|svg|png)$": "<rootDir>/tests/mocks/",
+    "\\.(gif|ttf|eot|svg|png)$": "<rootDir>/test/mocks/fileMock.js",
     "^@app/(.*)$": "<rootDir>/$1",
     "\\.(css)$": "identity-obj-proxy",
   },
-  testMatch: [
-    "**/tests/**/*.jsx",
-    "**/?(*.)+(spec|test).jsx",
-    "**/tests/**/*.tsx",
-    "**/?(*.)+(spec|test).tsx",
-  ],
-  moduleFileExtensions: ["js", "jsx", "ts", "tsx", "json", "node"],
-  collectCoverage: false,
-  silent: false,
-  detectOpenHandles: true,
-  coverageReporters: ["text", "text-summary"],
-  coverageDirectory: "coverage",
   coverageThreshold: {
     global: {
-      branches: 40,
+      branches: 60,
       functions: 60,
-      lines: 60,
+      lines: 80,
       statements: 80,
     },
   },
+  collectCoverage: false,
+  coverageReporters: ["text", "text-summary"],
+  transformIgnorePatterns: ["/node_modules/(?!(uuid)/)"],
 };
+
+export default createJestConfig(config);

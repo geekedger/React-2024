@@ -16,7 +16,7 @@ import styles from "../../styles/Home.module.css";
 import { Pokemon } from "../../Interfaces/IPokemon";
 
 // Определите тип пропсов
-interface MainPageProps {
+export interface MainPageProps {
   initialPokemons: Pokemon[];
   initialSearchTerm: string;
   initialPage: number;
@@ -35,8 +35,6 @@ const MainPage: React.FC<MainPageProps> = ({
     initialSearchTerm,
   );
   const [page, setPage] = useSearchQuery("page", (initialPage || 1).toString());
-  console.log(`Page from localStorage: ${page}`);
-  console.log(`SearchTerm from localStorage: ${searchTerm}`);
   const router = useRouter();
   const dispatch = useDispatch();
   const currentPage = useSelector((state: RootState) => state.currentPage.page);
@@ -44,7 +42,6 @@ const MainPage: React.FC<MainPageProps> = ({
   const currentPageNumber = isNaN(parseInt(page))
     ? currentPage
     : parseInt(page);
-  console.log("Current Page Number to Dispatch:", currentPageNumber);
 
   const {
     data,
