@@ -1,6 +1,13 @@
 import { NextRouter } from "next/router";
 
-export function createMockRouter(router: Partial<NextRouter>): NextRouter {
+// Определение расширенного типа с методом refresh
+type ExtendedNextRouter = NextRouter & {
+  refresh?: jest.Mock;
+};
+
+export function createMockRouter(
+  router: Partial<ExtendedNextRouter>,
+): ExtendedNextRouter {
   return {
     basePath: "",
     pathname: "/",
@@ -11,7 +18,7 @@ export function createMockRouter(router: Partial<NextRouter>): NextRouter {
     replace: jest.fn(),
     reload: jest.fn(),
     back: jest.fn(),
-    forward: jest.fn(), // Добавьте forward
+    forward: jest.fn(),
     prefetch: jest.fn().mockResolvedValue(undefined),
     beforePopState: jest.fn(),
     events: {
@@ -20,9 +27,9 @@ export function createMockRouter(router: Partial<NextRouter>): NextRouter {
       emit: jest.fn(),
     },
     isFallback: false,
-    isReady: true, // Добавьте isReady
-    isPreview: false, // Добавьте isPreview
-    isLocaleDomain: false, // Установите значение по умолчанию
+    isReady: true,
+    isPreview: false,
+    isLocaleDomain: false,
     ...router,
   };
 }

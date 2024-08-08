@@ -1,2 +1,2 @@
 self.__RSC_SERVER_MANIFEST =
-  '{"node":{},"edge":{},"encryptionKey":"Vpsc6ARttKptzBtj3TJxJn/dsLmerrJcier75dNptbU="}';
+  '{"node":{},"edge":{},"encryptionKey":"8pqV2IUtcC7QWnZj64B6P2SRvQHyOXikRfZF887X+Tc="}';

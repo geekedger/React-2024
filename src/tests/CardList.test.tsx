@@ -23,6 +23,25 @@ const initialState: Partial<RootState> = {
   },
 };
 
+jest.mock("next/navigation", () => ({
+  useRouter: jest.fn().mockReturnValue({
+    push: jest.fn(),
+    replace: jest.fn(),
+    reload: jest.fn(),
+    back: jest.fn(),
+    prefetch: jest.fn(),
+    beforePopState: jest.fn(),
+    events: {
+      on: jest.fn(),
+      off: jest.fn(),
+      emit: jest.fn(),
+    },
+  }),
+  useSearchParams: jest.fn().mockReturnValue({
+    get: jest.fn((key) => (key === "id" ? "25" : null)),
+  }),
+}));
+
 describe("ResultsComponent component", () => {
   afterEach(() => {
     cleanup();

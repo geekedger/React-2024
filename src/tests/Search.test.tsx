@@ -5,9 +5,14 @@ import React from "react";
 import { ThemeProvider } from "../contexts/ThemeProvider";
 import store from "../store/store";
 import MainPage from "../components/MainPage/MainPage";
-import { createMockRouter } from "./mocks/Router.mock"; // обновите путь, если нужно
-import { RouterContext } from "next/dist/shared/lib/router-context.shared-runtime";
 import { Provider } from "react-redux";
+import { useRouter, useSearchParams } from "next/navigation";
+
+// Mock useRouter and useSearchParams from next/navigation
+jest.mock("next/navigation", () => ({
+  useRouter: jest.fn(),
+  useSearchParams: jest.fn(),
+}));
 
 // Mock useSearchQuery hook
 jest.mock("../hooks/useSearchQuery", () => {
@@ -45,6 +50,18 @@ Object.defineProperty(window, "localStorage", { value: localStorageMock });
 describe("MainPage Component", () => {
   beforeEach(() => {
     localStorageMock.clear();
+
+    // Mocking useRouter to return necessary router functions
+    (useRouter as jest.Mock).mockReturnValue({
+      push: jest.fn(),
+      replace: jest.fn(),
+      query: {},
+    });
+
+    // Mocking useSearchParams to return necessary functions
+    (useSearchParams as jest.Mock).mockReturnValue({
+      get: jest.fn(),
+    });
   });
 
   afterEach(() => {
@@ -53,23 +70,18 @@ describe("MainPage Component", () => {
   });
 
   it("should save the search term to local storage on submit", async () => {
-    const mockRouter = createMockRouter({ query: { page: "1" } });
-
     render(
       <Provider store={store}>
         <ThemeProvider>
-          <RouterContext.Provider value={mockRouter}>
-            <MainPage
-              initialPokemons={[]}
-              initialSearchTerm={""}
-              initialPage={0}
-            />
-          </RouterContext.Provider>
+          <MainPage
+            initialPokemons={[]}
+            initialSearchTerm={""}
+            initialPage={0}
+          />
         </ThemeProvider>
       </Provider>,
     );
 
-    // Ensure that the form is rendered
     expect(screen.getByPlaceholderText(/Search Pokémon/i)).toBeInTheDocument();
     expect(screen.getByText(/Search/i)).toBeInTheDocument();
 
@@ -79,7 +91,6 @@ describe("MainPage Component", () => {
 
     fireEvent.click(screen.getByText(/Search/i));
 
-    // Wait for localStorage to be updated
     await waitFor(() =>
       expect(localStorage.getItem("searchTerm")).toBe("Pikachu"),
     );
@@ -87,23 +98,19 @@ describe("MainPage Component", () => {
 
   it("should retrieve the search term from local storage upon mounting", async () => {
     localStorage.setItem("searchTerm", "Pikachu");
-    const mockRouter = createMockRouter({ query: { page: "1" } });
 
     render(
       <Provider store={store}>
         <ThemeProvider>
-          <RouterContext.Provider value={mockRouter}>
-            <MainPage
-              initialPokemons={[]}
-              initialSearchTerm={""}
-              initialPage={0}
-            />
-          </RouterContext.Provider>
+          <MainPage
+            initialPokemons={[]}
+            initialSearchTerm={""}
+            initialPage={0}
+          />
         </ThemeProvider>
       </Provider>,
     );
 
-    // Ensure that the form is rendered
     expect(screen.getByPlaceholderText(/Search Pokémon/i)).toBeInTheDocument();
     expect(screen.getByText(/Search/i)).toBeInTheDocument();
 
@@ -111,7 +118,6 @@ describe("MainPage Component", () => {
       /Search Pokémon/i,
     ) as HTMLInputElement;
 
-    // Wait for the input value to be set from localStorage
     await waitFor(() => expect(input.value).toBe("Pikachu"));
   });
 });

@@ -11,6 +11,22 @@ import { RouterContext } from "next/dist/shared/lib/router-context.shared-runtim
 import { hideFlyout, showFlyout } from "../store/flyoutSlice";
 import { renderWithStore, store } from "./mocks/render-with-store.mock";
 import { Provider } from "react-redux";
+import { useRouter } from "next/navigation";
+
+jest.mock("next/navigation", () => ({
+  useRouter: jest.fn().mockReturnValue({
+    push: jest.fn(),
+    replace: jest.fn(),
+    reload: jest.fn(),
+    back: jest.fn(),
+    forward: jest.fn(),
+    prefetch: jest.fn(),
+    isReady: true,
+  }),
+  useSearchParams: jest.fn().mockReturnValue({
+    get: jest.fn((key) => (key === "id" ? "25" : null)),
+  }),
+}));
 
 jest.mock("../store/apiSlice", () => ({
   ...jest.requireActual("../store/apiSlice"),
@@ -58,21 +74,13 @@ describe("PokemonCard component", () => {
   });
 
   test("Validate that clicking on a card opens a detailed card component", async () => {
-    const router = createMockRouter({
-      push: jest.fn(),
-    });
+    const router = useRouter();
 
-    const { getByText } = renderWithStore(
-      <RouterContext.Provider value={router}>
-        {" "}
-        <PokemonCard pokemon={mockPokemon} />
-      </RouterContext.Provider>,
-      customInitialState,
-    );
+    renderWithStore(<PokemonCard pokemon={mockPokemon} />);
 
-    const pokemonCardElement = getByText(mockPokemon.name).closest(
-      ".pokemon-card",
-    );
+    const pokemonCardElement = screen
+      .getByText(mockPokemon.name)
+      .closest(".pokemon-card");
     expect(pokemonCardElement).toBeInTheDocument();
 
     fireEvent.click(pokemonCardElement!);
@@ -85,27 +93,26 @@ describe("PokemonCard component", () => {
   });
 
   test("Check that clicking on the card triggers an additional API call to fetch detailed information", async () => {
-    const router = createMockRouter({
-      asPath: `/details/${mockPokemon.id}`,
+    const mockPush = jest.fn();
+
+    (useRouter as jest.Mock).mockReturnValue({
+      push: mockPush,
       query: { id: mockPokemon.id.toString() },
+      asPath: `/details/${mockPokemon.id}`,
     });
 
-    const { getByText, getByAltText } = renderWithStore(
-      <RouterContext.Provider value={router}>
-        {" "}
-        <DetailedCard />
-      </RouterContext.Provider>,
-      customInitialState,
-    );
+    renderWithStore(<DetailedCard />, customInitialState);
 
     await waitFor(() => {
       // Проверка вызова API с ожидаемым id
       expect(useFetchPokemonDetailsQuery).toHaveBeenCalledWith(mockPokemon.id, {
-        skip: false,
+        skip: !mockPokemon.id,
       });
-      expect(getByText("Pikachu")).toBeInTheDocument();
-      expect(getByText("A yellow electric-type Pokemon")).toBeInTheDocument();
-      expect(getByAltText("Pikachu")).toHaveAttribute(
+      expect(screen.getByText("Pikachu")).toBeInTheDocument();
+      expect(
+        screen.getByText("A yellow electric-type Pokemon"),
+      ).toBeInTheDocument();
+      expect(screen.getByAltText("Pikachu")).toHaveAttribute(
         "src",
         "https://example.com/pikachu.png",
       );

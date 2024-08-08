@@ -16,8 +16,8 @@
     "../../../node_modules/next/package.json",
     "../../../package.json",
     "../../package.json",
+    "../chunks/309.js",
     "../chunks/386.js",
-    "../chunks/617.js",
     "../chunks/656.js",
     "../webpack-runtime.js",
     "page_client-reference-manifest.js"

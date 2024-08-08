@@ -7,10 +7,8 @@ const Page = async ({
 }: {
   searchParams: Record<string, string | string[] | undefined>;
 }) => {
-  // Вызов fetchData для получения данных
   const data = await fetchData({ searchParams });
 
-  // Возврат компонента с полученными данными
   return <MainPage {...data} />;
 };
 

@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useRef } from "react";
-import { useRouter, useSearchParams } from "next/navigation"; // Используйте useSearchParams из next/navigation
+import { useRouter, useSearchParams } from "next/navigation";
 import { useFetchPokemonDetailsQuery } from "../../store/apiSlice";
 import useOutsideAlerter from "../../hooks/useOutsideAlerter";
 import sanitizeDescription from "../../utils/sanitizeText";

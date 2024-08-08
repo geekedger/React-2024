@@ -49,10 +49,7 @@ const MainPage: React.FC<MainPageProps> = ({
     data,
     error: apiError,
     isLoading: apiLoading,
-  } = useFetchPokemonsQuery(
-    { searchTerm, page: currentPageNumber },
-    // { skip: !searchTerm || !page },
-  );
+  } = useFetchPokemonsQuery({ searchTerm, page: currentPageNumber });
 
   useEffect(() => {
     const pageQuery = searchParams.get("page");
