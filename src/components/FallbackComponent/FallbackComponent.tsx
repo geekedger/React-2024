@@ -1,20 +1,24 @@
+"use client";
+
 import React from "react";
 import styles from "./FallbackComponent.module.css";
 
-interface FallbackComponentProps {
-  onRetry: () => void;
-}
+const FallbackComponent: React.FC = () => {
+  const handleRetry = () => {
+    window.location.reload();
+  };
 
-const FallbackComponent: React.FC<FallbackComponentProps> = ({ onRetry }) => (
-  <div className={styles.fallback}>
-    <p>
-      🚀 Ta-da! This error was deliberately crafted just for you! Thanks for
-      testing!🎭
-    </p>
-    <button onClick={onRetry} className={styles.retryButton}>
-      Retry
-    </button>
-  </div>
-);
+  return (
+    <div className={styles.fallback}>
+      <p>
+        🚀 Ta-da! This error was deliberately crafted just for you! Thanks for
+        testing!🎭
+      </p>
+      <button onClick={handleRetry} className={styles.retryButton}>
+        Retry
+      </button>
+    </div>
+  );
+};
 
 export default FallbackComponent;

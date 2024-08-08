@@ -1,429 +1,200 @@
+"use strict";
 (() => {
   var e = {};
   (e.id = 888),
     (e.ids = [888]),
     (e.modules = {
-      5653: (e) => {
-        e.exports = {
-          fallback: "FallbackComponent_fallback__GK0Pt",
-          "retry-button": "FallbackComponent_retry-button__lvQ6b",
-        };
-      },
-      6814: (e, t, r) => {
-        "use strict";
-        r.a(e, async (e, a) => {
-          try {
-            r.r(t), r.d(t, { default: () => u });
-            var s = r(997);
-            r(6689);
-            var i = r(3291),
-              c = r(4091),
-              o = r(7815),
-              n = r(9900);
-            r(108);
-            var l = r(7464),
-              d = e([i, c]);
-            [i, c] = d.then ? (await d)() : d;
-            let u = ({ Component: e, ...t }) => {
-              let { store: r, props: a } = c.Y.useWrappedStore(t);
-              return s.jsx(i.Provider, {
-                store: r,
-                children: s.jsx(o.Z, {
-                  fallback: s.jsx(n.Z, { onRetry: () => {} }),
-                  children: s.jsx(l.f, {
-                    children: s.jsx(e, { ...a.pageProps }),
-                  }),
-                }),
-              });
-            };
-            a();
-          } catch (e) {
-            a(e);
-          }
-        });
-      },
-      7815: (e, t, r) => {
-        "use strict";
-        r.d(t, { Z: () => c });
-        var a = r(6689),
-          s = r.n(a);
-        class i extends a.Component {
-          constructor(e) {
-            super(e), (this.state = { hasError: !1 });
-          }
-          static getDerivedStateFromError() {
-            return { hasError: !0 };
-          }
-          componentDidCatch(e, t) {
-            console.error("ErrorBoundary caught an error", e, t);
-          }
-          handleRetry = () => {
-            this.setState({ hasError: !1 });
-          };
+      8141: (e, t, r) => {
+        Object.defineProperty(t, "__esModule", { value: !0 }),
+          Object.defineProperty(t, "default", {
+            enumerable: !0,
+            get: function () {
+              return a;
+            },
+          });
+        let n = r(167),
+          o = r(997),
+          i = n._(r(6689)),
+          u = r(5782);
+        async function s(e) {
+          let { Component: t, ctx: r } = e;
+          return { pageProps: await (0, u.loadGetInitialProps)(t, r) };
+        }
+        class a extends i.default.Component {
           render() {
-            let { hasError: e } = this.state,
-              { fallback: t, children: r } = this.props;
-            return e ? s().cloneElement(t, { onRetry: this.handleRetry }) : r;
+            let { Component: e, pageProps: t } = this.props;
+            return (0, o.jsx)(e, { ...t });
           }
         }
-        let c = i;
+        (a.origGetInitialProps = s),
+          (a.getInitialProps = s),
+          ("function" == typeof t.default ||
+            ("object" == typeof t.default && null !== t.default)) &&
+            void 0 === t.default.__esModule &&
+            (Object.defineProperty(t.default, "__esModule", { value: !0 }),
+            Object.assign(t.default, t),
+            (e.exports = t.default));
       },
-      9900: (e, t, r) => {
-        "use strict";
-        r.d(t, { Z: () => c });
-        var a = r(997);
-        r(6689);
-        var s = r(5653),
-          i = r.n(s);
-        let c = ({ onRetry: e }) =>
-          (0, a.jsxs)("div", {
-            className: i().fallback,
-            children: [
-              a.jsx("p", {
-                children:
-                  "\uD83D\uDE80 Ta-da! This error was deliberately crafted just for you! Thanks for testing!\uD83C\uDFAD",
-              }),
-              a.jsx("button", {
-                onClick: e,
-                className: i().retryButton,
-                children: "Retry",
-              }),
-            ],
+      5782: (e, t) => {
+        Object.defineProperty(t, "__esModule", { value: !0 }),
+          (function (e, t) {
+            for (var r in t)
+              Object.defineProperty(e, r, { enumerable: !0, get: t[r] });
+          })(t, {
+            DecodeError: function () {
+              return g;
+            },
+            MiddlewareNotFoundError: function () {
+              return E;
+            },
+            MissingStaticPage: function () {
+              return y;
+            },
+            NormalizeError: function () {
+              return m;
+            },
+            PageNotFoundError: function () {
+              return P;
+            },
+            SP: function () {
+              return d;
+            },
+            ST: function () {
+              return p;
+            },
+            WEB_VITALS: function () {
+              return r;
+            },
+            execOnce: function () {
+              return n;
+            },
+            getDisplayName: function () {
+              return a;
+            },
+            getLocationOrigin: function () {
+              return u;
+            },
+            getURL: function () {
+              return s;
+            },
+            isAbsoluteUrl: function () {
+              return i;
+            },
+            isResSent: function () {
+              return c;
+            },
+            loadGetInitialProps: function () {
+              return f;
+            },
+            normalizeRepeatedSlashes: function () {
+              return l;
+            },
+            stringifyError: function () {
+              return x;
+            },
           });
-      },
-      1503: (e, t, r) => {
-        "use strict";
-        r.d(t, { N: () => a });
-        let a = (0, r(6689).createContext)(void 0);
-      },
-      7464: (e, t, r) => {
-        "use strict";
-        r.d(t, { f: () => c });
-        var a = r(997),
-          s = r(6689),
-          i = r(1503);
-        let c = ({ children: e }) => {
-          let [t, r] = (0, s.useState)("light");
-          return a.jsx(i.N.Provider, {
-            value: { theme: t, setTheme: r },
-            children: e,
-          });
-        };
-      },
-      3986: (e, t, r) => {
-        "use strict";
-        r.a(e, async (e, a) => {
-          try {
-            r.d(t, { Of: () => l, hi: () => n, yQ: () => d });
-            var s = r(9943),
-              i = r(6270),
-              c = r(5172),
-              o = e([s, i, c]);
-            [s, i, c] = o.then ? (await o)() : o;
-            let n = (0, s.createApi)({
-                reducerPath: "api",
-                baseQuery: (0, s.fetchBaseQuery)({
-                  baseUrl: "https://pokeapi.co/api/v2",
-                }),
-                endpoints: (e) => ({
-                  fetchPokemons: e.query({
-                    query: ({ searchTerm: e = "", page: t = 1 }) =>
-                      e
-                        ? "/pokemon?limit=1000"
-                        : `/pokemon?limit=20&offset=${(t - 1) * 20}`,
-                    transformResponse: (e, t, { searchTerm: r = "" }) => (
-                      r &&
-                        (e.results = e.results.filter((e) =>
-                          e.name.toLowerCase().includes(r.toLowerCase()),
-                        )),
-                      e
-                    ),
-                    async onQueryStarted(
-                      e,
-                      { dispatch: t, queryFulfilled: r },
-                    ) {
-                      t((0, i.K)(!0));
-                      try {
-                        let { data: e } = await r;
-                        t((0, c.xE)(e.results));
-                      } catch (e) {
-                        console.error("Failed to fetch pokemons:", e);
-                      } finally {
-                        t((0, i.K)(!1));
-                      }
-                    },
-                  }),
-                  fetchPokemonDetails: e.query({
-                    query: (e) => `/pokemon-species/${e}`,
-                    transformResponse: (e) => {
-                      let t =
-                          e.flavor_text_entries.find(
-                            (e) => "en" === e.language.name,
-                          )?.flavor_text || "No description available",
-                        r = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${e.id}.png`;
-                      return { name: e.name, description: t, imageUrl: r };
-                    },
-                    async onQueryStarted(
-                      e,
-                      { dispatch: t, queryFulfilled: r },
-                    ) {
-                      t((0, i.K)(!0));
-                      try {
-                        await r;
-                      } catch (e) {
-                        console.error("Failed to fetch pokemon details:", e);
-                      } finally {
-                        t((0, i.K)(!1));
-                      }
-                    },
-                  }),
-                }),
-              }),
-              { useFetchPokemonsQuery: l, useFetchPokemonDetailsQuery: d } = n;
-            a();
-          } catch (e) {
-            a(e);
+        let r = ["CLS", "FCP", "FID", "INP", "LCP", "TTFB"];
+        function n(e) {
+          let t,
+            r = !1;
+          return function () {
+            for (var n = arguments.length, o = Array(n), i = 0; i < n; i++)
+              o[i] = arguments[i];
+            return r || ((r = !0), (t = e(...o))), t;
+          };
+        }
+        let o = /^[a-zA-Z][a-zA-Z\d+\-.]*?:/,
+          i = (e) => o.test(e);
+        function u() {
+          let { protocol: e, hostname: t, port: r } = window.location;
+          return e + "//" + t + (r ? ":" + r : "");
+        }
+        function s() {
+          let { href: e } = window.location,
+            t = u();
+          return e.substring(t.length);
+        }
+        function a(e) {
+          return "string" == typeof e
+            ? e
+            : e.displayName || e.name || "Unknown";
+        }
+        function c(e) {
+          return e.finished || e.headersSent;
+        }
+        function l(e) {
+          let t = e.split("?");
+          return (
+            t[0].replace(/\\/g, "/").replace(/\/\/+/g, "/") +
+            (t[1] ? "?" + t.slice(1).join("?") : "")
+          );
+        }
+        async function f(e, t) {
+          let r = t.res || (t.ctx && t.ctx.res);
+          if (!e.getInitialProps)
+            return t.ctx && t.Component
+              ? { pageProps: await f(t.Component, t.ctx) }
+              : {};
+          let n = await e.getInitialProps(t);
+          if (r && c(r)) return n;
+          if (!n)
+            throw Error(
+              '"' +
+                a(e) +
+                '.getInitialProps()" should resolve to an object. But found "' +
+                n +
+                '" instead.',
+            );
+          return n;
+        }
+        let d = "undefined" != typeof performance,
+          p =
+            d &&
+            ["mark", "measure", "getEntriesByName"].every(
+              (e) => "function" == typeof performance[e],
+            );
+        class g extends Error {}
+        class m extends Error {}
+        class P extends Error {
+          constructor(e) {
+            super(),
+              (this.code = "ENOENT"),
+              (this.name = "PageNotFoundError"),
+              (this.message = "Cannot find module for page: " + e);
           }
-        });
-      },
-      5172: (e, t, r) => {
-        "use strict";
-        r.a(e, async (e, a) => {
-          try {
-            r.d(t, { D4: () => o, ZP: () => l, xE: () => n });
-            var s = r(3258),
-              i = e([s]);
-            s = (i.then ? (await i)() : i)[0];
-            let c = (0, s.createSlice)({
-                name: "currentPage",
-                initialState: { page: 1, items: [] },
-                reducers: {
-                  setCurrentPage: (e, t) => {
-                    e.page = t.payload;
-                  },
-                  setPageItems: (e, t) => {
-                    e.items = t.payload;
-                  },
-                },
-              }),
-              { setCurrentPage: o, setPageItems: n } = c.actions,
-              l = c.reducer;
-            a();
-          } catch (e) {
-            a(e);
+        }
+        class y extends Error {
+          constructor(e, t) {
+            super(),
+              (this.message =
+                "Failed to load static file for page: " + e + " " + t);
           }
-        });
-      },
-      888: (e, t, r) => {
-        "use strict";
-        r.a(e, async (e, a) => {
-          try {
-            r.d(t, { ZP: () => l, er: () => n, m: () => o });
-            var s = r(3258),
-              i = e([s]);
-            s = (i.then ? (await i)() : i)[0];
-            let c = (0, s.createSlice)({
-                name: "flyout",
-                initialState: { isVisible: !1 },
-                reducers: {
-                  showFlyout: (e) => {
-                    e.isVisible = !0;
-                  },
-                  hideFlyout: (e) => {
-                    e.isVisible = !1;
-                  },
-                },
-              }),
-              { showFlyout: o, hideFlyout: n } = c.actions,
-              l = c.reducer;
-            a();
-          } catch (e) {
-            a(e);
+        }
+        class E extends Error {
+          constructor() {
+            super(),
+              (this.code = "ENOENT"),
+              (this.message = "Cannot find the middleware module");
           }
-        });
-      },
-      6270: (e, t, r) => {
-        "use strict";
-        r.a(e, async (e, a) => {
-          try {
-            r.d(t, { K: () => o, Z: () => n });
-            var s = r(3258),
-              i = e([s]);
-            s = (i.then ? (await i)() : i)[0];
-            let c = (0, s.createSlice)({
-                name: "loading",
-                initialState: { isLoading: !1 },
-                reducers: {
-                  setLoading(e, t) {
-                    e.isLoading = t.payload;
-                  },
-                },
-              }),
-              { setLoading: o } = c.actions,
-              n = c.reducer;
-            a();
-          } catch (e) {
-            a(e);
-          }
-        });
-      },
-      9343: (e, t, r) => {
-        "use strict";
-        r.a(e, async (e, a) => {
-          try {
-            r.d(t, { MV: () => o, ZP: () => l, nD: () => n });
-            var s = r(3258),
-              i = e([s]);
-            s = (i.then ? (await i)() : i)[0];
-            let c = (0, s.createSlice)({
-                name: "pokemonDetails",
-                initialState: { name: "", description: "", imageUrl: "" },
-                reducers: {
-                  setPokemonDetails: (e, t) => {
-                    (e.name = t.payload.name),
-                      (e.description = t.payload.description),
-                      (e.imageUrl = t.payload.imageUrl);
-                  },
-                  clearPokemonDetails: (e) => {
-                    (e.name = ""), (e.description = ""), (e.imageUrl = "");
-                  },
-                },
-              }),
-              { setPokemonDetails: o, clearPokemonDetails: n } = c.actions,
-              l = c.reducer;
-            a();
-          } catch (e) {
-            a(e);
-          }
-        });
-      },
-      9979: (e, t, r) => {
-        "use strict";
-        r.a(e, async (e, a) => {
-          try {
-            r.d(t, { Gh: () => o, Ve: () => l, ZP: () => d, a7: () => n });
-            var s = r(3258),
-              i = e([s]);
-            s = (i.then ? (await i)() : i)[0];
-            let c = (0, s.createSlice)({
-                name: "selectedItems",
-                initialState: { items: [] },
-                reducers: {
-                  selectItem: (e, t) => {
-                    e.items.push(t.payload);
-                  },
-                  unselectItem: (e, t) => {
-                    e.items = e.items.filter((e) => e.name !== t.payload.name);
-                  },
-                  clearSelectedItems: (e) => {
-                    e.items = [];
-                  },
-                },
-              }),
-              {
-                selectItem: o,
-                unselectItem: n,
-                clearSelectedItems: l,
-              } = c.actions,
-              d = c.reducer;
-            a();
-          } catch (e) {
-            a(e);
-          }
-        });
-      },
-      4091: (e, t, r) => {
-        "use strict";
-        r.a(e, async (e, a) => {
-          try {
-            r.d(t, { Y: () => y });
-            var s = r(3258),
-              i = r(5648),
-              c = r(3986),
-              o = r(4308),
-              n = r(5172),
-              l = r(9979),
-              d = r(888),
-              u = r(6270),
-              m = r(9343),
-              h = e([s, c, o, n, l, d, u, m]);
-            [s, c, o, n, l, d, u, m] = h.then ? (await h)() : h;
-            let p = () =>
-                (0, s.configureStore)({
-                  reducer: {
-                    [c.hi.reducerPath]: c.hi.reducer,
-                    theme: o.ZP,
-                    selectedItems: l.ZP,
-                    flyout: d.ZP,
-                    currentPage: n.ZP,
-                    loading: u.Z,
-                    pokemonDetails: m.ZP,
-                  },
-                  middleware: (e) => e().concat(c.hi.middleware),
-                }),
-              y = (0, i.createWrapper)(p);
-            p(), a();
-          } catch (e) {
-            a(e);
-          }
-        });
-      },
-      4308: (e, t, r) => {
-        "use strict";
-        r.a(e, async (e, a) => {
-          try {
-            r.d(t, { ZP: () => l });
-            var s = r(3258),
-              i = e([s]);
-            s = (i.then ? (await i)() : i)[0];
-            let c = (0, s.createSlice)({
-                name: "theme",
-                initialState: { theme: "light" },
-                reducers: {
-                  setTheme: (e, t) => {
-                    e.theme = t.payload;
-                  },
-                  toggleTheme: (e) => {
-                    e.theme = "light" === e.theme ? "dark" : "light";
-                  },
-                },
-              }),
-              { setTheme: o, toggleTheme: n } = c.actions,
-              l = c.reducer;
-            a();
-          } catch (e) {
-            a(e);
-          }
-        });
-      },
-      108: () => {},
-      5648: (e) => {
-        "use strict";
-        e.exports = require("next-redux-wrapper");
+        }
+        function x(e) {
+          return JSON.stringify({ message: e.message, stack: e.stack });
+        }
       },
       6689: (e) => {
-        "use strict";
         e.exports = require("react");
       },
       997: (e) => {
-        "use strict";
         e.exports = require("react/jsx-runtime");
       },
-      3258: (e) => {
-        "use strict";
-        e.exports = import("@reduxjs/toolkit");
-      },
-      9943: (e) => {
-        "use strict";
-        e.exports = import("@reduxjs/toolkit/query/react");
-      },
-      3291: (e) => {
-        "use strict";
-        e.exports = import("react-redux");
+      167: (e, t) => {
+        t._ = t._interop_require_default = function (e) {
+          return e && e.__esModule ? e : { default: e };
+        };
       },
     });
   var t = require("../webpack-runtime.js");
   t.C(e);
-  var r = t((t.s = 6814));
+  var r = t((t.s = 8141));
   module.exports = r;
 })();

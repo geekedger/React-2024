@@ -29,24 +29,13 @@
       "namedRegex": "^/(?:/)?$"
     },
     {
-      "page": "/404",
-      "regex": "^/404(?:/)?$",
+      "page": "/_not-found",
+      "regex": "^/_not\\-found(?:/)?$",
       "routeKeys": {},
-      "namedRegex": "^/404(?:/)?$"
+      "namedRegex": "^/_not\\-found(?:/)?$"
     }
   ],
-  "dataRoutes": [
-    {
-      "page": "/",
-      "dataRouteRegex": "^/_next/data/MFIGkYQXhCYCktmA4svoo/index.json$"
-    },
-    {
-      "page": "/details/[id]",
-      "routeKeys": { "nxtPid": "nxtPid" },
-      "dataRouteRegex": "^/_next/data/MFIGkYQXhCYCktmA4svoo/details/([^/]+?)\\.json$",
-      "namedDataRouteRegex": "^/_next/data/MFIGkYQXhCYCktmA4svoo/details/(?<nxtPid>[^/]+?)\\.json$"
-    }
-  ],
+  "dataRoutes": [],
   "rsc": {
     "header": "RSC",
     "varyHeader": "RSC, Next-Router-State-Tree, Next-Router-Prefetch",

@@ -1,5 +1,6 @@
+"use client";
 import React, { useEffect, useState, ReactNode } from "react";
-import { useRouter } from "next/router";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useFetchPokemonsQuery } from "../../store/apiSlice";
 import Loader from "../Loader/Loader";
 import Pagination from "../Pagination/Pagination";
@@ -36,6 +37,7 @@ const MainPage: React.FC<MainPageProps> = ({
   );
   const [page, setPage] = useSearchQuery("page", (initialPage || 1).toString());
   const router = useRouter();
+  const searchParams = useSearchParams();
   const dispatch = useDispatch();
   const currentPage = useSelector((state: RootState) => state.currentPage.page);
   const pokemons = useSelector((state: RootState) => state.currentPage.items);
@@ -49,26 +51,25 @@ const MainPage: React.FC<MainPageProps> = ({
     isLoading: apiLoading,
   } = useFetchPokemonsQuery(
     { searchTerm, page: currentPageNumber },
-    {
-      // skip: currentPageNumber === initialPage
-    },
+    // { skip: !searchTerm || !page },
   );
 
   useEffect(() => {
-    if (router.query.page) {
-      setPage(router.query.page as string);
+    const pageQuery = searchParams.get("page");
+    const searchQuery = searchParams.get("search");
+    if (pageQuery) {
+      setPage(pageQuery);
     }
-    if (router.query.search) {
-      setSearchTerm(router.query.search as string);
+    if (searchQuery) {
+      setSearchTerm(searchQuery);
     }
-  }, [router.query.page, router.query.search, setPage, setSearchTerm]);
+  }, [searchParams, setPage, setSearchTerm]);
 
   useEffect(() => {
     if (data?.results) {
       dispatch(setPageItems(data.results));
       dispatch(setCurrentPage(currentPageNumber));
     } else if (initialPokemons.length > 0) {
-      // setPokemons(initialPokemons);
       dispatch(setPageItems(initialPokemons));
       dispatch(setCurrentPage(currentPageNumber));
     }
@@ -84,7 +85,8 @@ const MainPage: React.FC<MainPageProps> = ({
 
   const handleSearch = (newSearchTerm: string) => {
     setSearchTerm(newSearchTerm);
-    router.push({ pathname: "/", query: { search: newSearchTerm, page: "1" } });
+    const url = `/?search=${encodeURIComponent(newSearchTerm)}&page=1`;
+    router.push(url);
   };
 
   const { theme } = useTheme();

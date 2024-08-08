@@ -1,9 +1,8 @@
-// components/Pagination/Pagination.tsx
-
 import React from "react";
-import { useRouter } from "next/router";
+import { useRouter, useSearchParams } from "next/navigation";
 import styles from "./Pagination.module.css";
 import { useTheme } from "../../hooks/useTheme";
+import { usePushStateListener } from "../../hooks/usePushStateListener"; // Adjust the path as needed
 
 interface PaginationProps {
   next: boolean;
@@ -11,25 +10,32 @@ interface PaginationProps {
 
 const Pagination: React.FC<PaginationProps> = ({ next }) => {
   const router = useRouter();
-  const { query } = router;
+  const searchParams = useSearchParams();
   const { theme } = useTheme();
-  const page = query.page ? parseInt(query.page as string, 10) : 1;
-  const searchTerm = query.search as string | undefined;
 
+  // Получение параметров из searchParams
+  const page = searchParams.get("page")
+    ? parseInt(searchParams.get("page") as string, 10)
+    : 1;
+  const searchTerm = searchParams.get("search") || "";
+
+  // Функция для обработки пагинации
   const handlePagination = (newPage: number) => {
-    // Используйте shallow навигацию для обновления URL
-    router.push(
-      {
-        pathname: "/",
-        query: {
-          page: newPage,
-          search: searchTerm || undefined,
-        },
-      },
-      undefined,
-      { shallow: true },
-    );
+    const newSearchParams = new URLSearchParams({
+      page: newPage.toString(),
+      search: searchTerm,
+    }).toString();
+
+    // Обновление URL без перезагрузки страницы
+    window.history.pushState({}, "", `/?${newSearchParams}`);
+    router.refresh(); // Обновление данных на странице при изменении URL
   };
+
+  // Использование хука для прослушивания изменений в URL
+  usePushStateListener((url) => {
+    // Вы можете обработать обновления URL здесь, если необходимо
+    console.log("URL updated:", url);
+  });
 
   return (
     <div className={`${styles["pagination"]} ${styles[theme]}`}>

@@ -1,5 +1,6 @@
+"use client";
 import React, { useEffect, useRef } from "react";
-import { useRouter } from "next/router";
+import { useRouter, useSearchParams } from "next/navigation"; // Используйте useSearchParams из next/navigation
 import { useFetchPokemonDetailsQuery } from "../../store/apiSlice";
 import useOutsideAlerter from "../../hooks/useOutsideAlerter";
 import sanitizeDescription from "../../utils/sanitizeText";
@@ -24,32 +25,27 @@ const DetailedCard: React.FC<DetailedCardProps> = ({
   initialPokemonDetails,
 }) => {
   const router = useRouter();
-  const { id, page, search } = router.query;
+  const searchParams = useSearchParams();
   const cardRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
   const pokemonDetails = useSelector(
     (state: RootState) => state.pokemonDetails,
   );
+
+  const id = searchParams.get("id"); // Получаем ID
   const {
     data: fetchedPokemonDetails,
     isLoading,
     error,
-  } = useFetchPokemonDetailsQuery(id ? parseInt(id as string, 10) : -1, {
+  } = useFetchPokemonDetailsQuery(id ? parseInt(id, 10) : -1, {
     skip: !id,
   });
 
+  // Формируем строку URL для замены
+  const newUrl = `/?page=${searchParams.get("page") || ""}&search=${searchParams.get("search") || ""}`;
+
   useOutsideAlerter(cardRef, () => {
-    router.replace(
-      {
-        pathname: "/",
-        query: {
-          page: page || undefined,
-          search: search || undefined,
-        },
-      },
-      undefined,
-      { shallow: true },
-    );
+    router.replace(newUrl);
     dispatch(clearPokemonDetails());
   });
 

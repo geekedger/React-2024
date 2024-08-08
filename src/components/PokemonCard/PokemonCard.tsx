@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useRouter } from "next/router";
+import { useRouter, useSearchParams } from "next/navigation"; // Используйте next/navigation в Next.js 13+
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import { selectItem, unselectItem } from "../../store/selectedItemsSlice";
@@ -17,32 +17,27 @@ interface PokemonCardProps {
 
 const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
   const router = useRouter();
-  const { query } = router;
-  const page = query.page || "1";
+  const searchParams = useSearchParams();
   const id = parseInt(pokemon.url.split("/").filter(Boolean).pop()!);
+  const page = searchParams.get("page") || "1"; // Извлекаем page из searchParams
+
   const { data: details, isFetching } = useFetchPokemonDetailsQuery(id);
   const dispatch = useDispatch();
   const selectedItems = useSelector(
     (state: RootState) => state.selectedItems.items,
   );
-
   const globalLoading = useSelector(
     (state: RootState) => state.loading.isLoading,
   );
 
   useEffect(() => {
-    if (isFetching) {
-      dispatch(setLoading(true));
-    } else {
-      dispatch(setLoading(false));
-    }
+    dispatch(setLoading(isFetching));
   }, [isFetching, dispatch]);
 
   const isSelected = selectedItems.some((item) => item.name === pokemon.name);
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.stopPropagation();
-
     if (details) {
       const pokemonDetails = {
         name: details.name,
@@ -51,17 +46,12 @@ const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
         details: `https://pokeapi.co/api/v2/pokemon/${id}`,
         imageUrl: details.imageUrl,
       };
-
       if (isSelected) {
         dispatch(unselectItem(pokemonDetails));
-        if (selectedItems.length === 1) {
-          dispatch(hideFlyout());
-        }
+        if (selectedItems.length === 1) dispatch(hideFlyout());
       } else {
         dispatch(selectItem(pokemonDetails));
-        if (selectedItems.length === 0) {
-          dispatch(showFlyout());
-        }
+        if (selectedItems.length === 0) dispatch(showFlyout());
       }
     }
   };
