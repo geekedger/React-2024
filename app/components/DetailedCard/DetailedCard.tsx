@@ -1,25 +1,24 @@
-import React, { useEffect, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { useFetchPokemonDetailsQuery } from "../../store/apiSlice";
-import useOutsideAlerter from "../../hooks/useOutsideAlerter";
-import sanitizeDescription from "../../utils/sanitizeText";
-import Loader from "../Loader/Loader";
+// app/components/DetailedCard/DetailedCard.tsx
+import React, { useRef } from "react";
+import { useNavigate } from "@remix-run/react";
 import { useDispatch } from "react-redux";
-import {
-  setPokemonDetails,
-  clearPokemonDetails,
-} from "../../store/pokemonDetailsSlice";
 import "./DetailedCard.css";
+import { clearPokemonDetails } from "../../store/pokemonDetailsSlice";
+import sanitizeDescription from "../../utils/sanitizeText";
+import useOutsideAlerter from "../../hooks/useOutsideAlerter";
 
-const DetailedCard: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+interface DetailedCardProps {
+  pokemonDetails: {
+    name: string;
+    description: string;
+    imageUrl: string;
+  };
+}
+
+const DetailedCard: React.FC<DetailedCardProps> = ({ pokemonDetails }) => {
   const navigate = useNavigate();
   const cardRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
-
-  const { data: pokemonDetails, isLoading } = useFetchPokemonDetailsQuery(
-    parseInt(id!, 10),
-  );
 
   const handleClose = () => {
     navigate(-1);
@@ -28,45 +27,20 @@ const DetailedCard: React.FC = () => {
 
   useOutsideAlerter(cardRef, handleClose);
 
-  useEffect(() => {
-    if (pokemonDetails) {
-      const sanitizedDescription = sanitizeDescription(
-        pokemonDetails.description,
-      );
-      dispatch(
-        setPokemonDetails({
-          name: pokemonDetails.name,
-          description: sanitizedDescription,
-          imageUrl: pokemonDetails.imageUrl,
-        }),
-      );
-    }
-  }, [pokemonDetails, dispatch]);
-
-  let content;
-
-  if (isLoading) {
-    content = <Loader />;
-  } else if (pokemonDetails) {
-    content = (
-      <div>
-        <h2>{pokemonDetails.name}</h2>
-        <img
-          src={pokemonDetails.imageUrl}
-          alt={pokemonDetails.name}
-          className="pokemon-image"
-        />
-        <p>{sanitizeDescription(pokemonDetails.description)}</p>
-        <button className="close-button" onClick={handleClose}>
-          Close
-        </button>
-      </div>
-    );
-  }
+  const sanitizedDescription = sanitizeDescription(pokemonDetails.description);
 
   return (
     <div ref={cardRef} className="detailed-card">
-      {content}
+      <h2>{pokemonDetails.name}</h2>
+      <img
+        src={pokemonDetails.imageUrl}
+        alt={pokemonDetails.name}
+        className="pokemon-image"
+      />
+      <p>{sanitizedDescription}</p>
+      <button className="close-button" onClick={handleClose}>
+        Close
+      </button>
     </div>
   );
 };

@@ -4,6 +4,7 @@ import { setPageItems } from "./currentPageSlice";
 import { Pokemon } from "../Interfaces/IPokemon";
 import { PokemonDetails } from "../Interfaces/IPokemondetails";
 
+
 export interface PokemonResponse {
   results: Pokemon[];
 }

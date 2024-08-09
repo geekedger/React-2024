@@ -1,16 +1,15 @@
-// src/components/ResultsComponent/ResultsComponent.tsx
 import React from "react";
 import PokemonCard from "../PokemonCard/PokemonCard";
-import "./ResultsComponent.css";
 import { Pokemon } from "../../Interfaces/IPokemon";
+import "./ResultsComponent.css";
 
 interface ResultsComponentProps {
-  pokemons: Pokemon[];
+  pokemons: Pokemon[];  // Make sure this is always an array
   error: string | null;
 }
 
 const ResultsComponent: React.FC<ResultsComponentProps> = ({
-  pokemons,
+  pokemons = [],  // Provide a default value to prevent undefined issues
   error,
 }) => {
   if (error) {

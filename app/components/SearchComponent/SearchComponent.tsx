@@ -13,6 +13,7 @@ const SearchComponent: React.FC<SearchComponentProps> = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
   const { theme } = useTheme();
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     setSearchTerm(initialSearchTerm);
@@ -27,18 +28,37 @@ const SearchComponent: React.FC<SearchComponentProps> = ({
     onSearch(searchTerm);
   };
 
+
+  const throwError = () => {
+    console.log("Throwing error");
+    setError(new Error("Simulated error."));
+  };
+
+  useEffect(() => {
+    if (error) {
+      throw error;
+    }
+  }, [error]);
+
   return (
     <form onSubmit={handleSubmit} className={`search-form ${theme}`}>
       <input
         type="text"
         value={searchTerm}
         onChange={handleChange}
-        placeholder="Search Pokémon"
+        placeholder="Search Pokemon"
         className={`search-input`}
       />
       <button type="submit" className={`search-button`}>
         Search
       </button>
+      <button
+        type="button"
+        onClick={throwError}
+        className="throw-error-button">
+        Throw Error
+      </button>
+
     </form>
   );
 };

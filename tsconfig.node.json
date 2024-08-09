@@ -5,20 +5,16 @@
     "esModuleInterop": true,
     "composite": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
-    "skipLibCheck": true,
-    "module": "ESNext",
-    "moduleResolution": "node",
     "jsx": "react-jsx",
     "allowSyntheticDefaultImports": true,
     "strict": true,
-    "noEmit": true
+    "noEmit": true,
+    "types": ["@remix-run/node", "vite/client"],
+    "skipLibCheck": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler"
   },
   "include": [
-    "src",
-    "app/components",
-    "app/tests",
-    "app/hooks",
-    "app/contexts",
-    "app/utils"
+    "src", "app"
   ]
 }

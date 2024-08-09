@@ -1,25 +1,76 @@
-// app/root.tsx
 import React from "react";
 import {
   Links,
   Meta,
-  Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
+  useNavigation,
 } from "@remix-run/react";
-import type { LinksFunction } from "@remix-run/node";
+import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
 import FallbackComponent from "./components/FallbackComponent/FallbackComponent";
 import { ThemeProvider } from "./contexts/ThemeProvider";
 import { Provider } from "react-redux";
-import store from "../src/store/store";
-import appStyles from "~/styles/App.css";
+import store from "./store/store";
+import MainPage from "./components/MainPage/MainPage";
+import { fetchData } from "./components/server/fetchData";
+import { Pokemon } from "./Interfaces/IPokemon";
+import { PokemonDetails } from "./Interfaces/IPokemondetails";
+import "./styles/global.css";
 
-export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: appStyles }];
+type LoaderData = {
+  initialPokemons: Pokemon[];
+  initialSearchTerm: string;
+  initialPage: number;
+  initialPokemonDetails: PokemonDetails | null;
+  success: boolean;
+  error: string | null;
 };
 
-export default function Root() {
+export const loader: LoaderFunction = async ({ request }) => {
+  const url = new URL(request.url);
+  const searchParams: Record<string, string | string[] | undefined> = {
+    search: url.searchParams.get("search") || undefined,
+    page: url.searchParams.get("page") || undefined,
+    id: url.searchParams.get("id") || undefined,
+  };
+
+  console.log("Loader SearchParams:", searchParams); // Логируем параметры запроса
+
+  try {
+    const data = await fetchData({ searchParams });
+    console.log("Fetched Data:", data); // Логируем ответ от fetchData
+
+    return {
+      initialPokemons: data.dataFromServer.initialPokemons,
+      initialSearchTerm: data.dataFromServer.initialSearchTerm,
+      initialPage: data.dataFromServer.initialPage,
+      initialPokemonDetails: data.dataFromServer.initialPokemonDetails,
+      success: data.success,
+      error: data.error,
+    };
+  } catch (error) {
+    console.error("Error in Loader:", error);
+    return {
+      initialPokemons: [],
+      initialSearchTerm: "",
+      initialPage: 1,
+      initialPokemonDetails: null,
+      success: false,
+      error: "Failed to fetch data",
+    };
+  }
+};
+
+export default function App() {
+  const loaderData = useLoaderData<LoaderData>();
+  const transition = useNavigation();
+  const isLoading = transition.state === "loading";
+
+  console.log("Loader Data in App:", loaderData); // Логируем данные, полученные из loader
+  console.log("Transition State:", transition.state); // Логируем состояние навигации
+
   return (
     <html lang="en">
       <head>
@@ -29,8 +80,18 @@ export default function Root() {
       <body>
         <Provider store={store}>
           <ThemeProvider>
-            <ErrorBoundary fallback={<FallbackComponent />}>
-              <Outlet />
+            <ErrorBoundary fallback={<FallbackComponent/>}>
+              <MainPage
+                data={{
+                  initialPokemons: loaderData.initialPokemons,
+                  initialSearchTerm: loaderData.initialSearchTerm,
+                  initialPage: loaderData.initialPage,
+                  initialPokemonDetails: loaderData.initialPokemonDetails,
+                  next: loaderData.success, 
+                  error: loaderData.error,
+                }}
+                isLoading={isLoading}
+              />
             </ErrorBoundary>
           </ThemeProvider>
         </Provider>
