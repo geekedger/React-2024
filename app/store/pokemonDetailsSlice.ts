@@ -1,5 +1,5 @@
 // src/store/pokemonDetailsSlice.ts
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface PokemonDetailsState {
   name: string;
@@ -8,13 +8,13 @@ interface PokemonDetailsState {
 }
 
 const initialState: PokemonDetailsState = {
-  name: '',
-  description: '',
-  imageUrl: ''
+  name: "",
+  description: "",
+  imageUrl: "",
 };
 
 const pokemonDetailsSlice = createSlice({
-  name: 'pokemonDetails',
+  name: "pokemonDetails",
   initialState,
   reducers: {
     setPokemonDetails: (state, action: PayloadAction<PokemonDetailsState>) => {
@@ -23,12 +23,13 @@ const pokemonDetailsSlice = createSlice({
       state.imageUrl = action.payload.imageUrl;
     },
     clearPokemonDetails: (state) => {
-      state.name = '';
-      state.description = '';
-      state.imageUrl = '';
-    }
-  }
+      state.name = "";
+      state.description = "";
+      state.imageUrl = "";
+    },
+  },
 });
 
-export const { setPokemonDetails, clearPokemonDetails } = pokemonDetailsSlice.actions;
+export const { setPokemonDetails, clearPokemonDetails } =
+  pokemonDetailsSlice.actions;
 export default pokemonDetailsSlice.reducer;

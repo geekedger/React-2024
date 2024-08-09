@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import App from "./App.tsx";
-import NotFound from "./components/NotFound/NotFound.tsx";
-import DetailedCard from "./components/DetailedCard/DetailedCard.tsx";
+import App from "./App";
+import NotFound from "../app/components/NotFound/NotFound";
+import DetailedCard from "../app/components/DetailedCard/DetailedCard";
 import "./index.css";
 
 const router = createBrowserRouter([

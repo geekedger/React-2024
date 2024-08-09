@@ -2,7 +2,7 @@ import "whatwg-fetch";
 import "@testing-library/jest-dom";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import React from "react";
-import App from "../App";
+import App from "../../src/App";
 import { ThemeProvider } from "../contexts/ThemeProvider";
 import { Provider } from "react-redux";
 import store from "../store/store";

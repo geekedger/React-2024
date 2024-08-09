@@ -1,23 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { Outlet, useNavigate, useSearchParams } from "react-router-dom";
-import { useFetchPokemonsQuery } from "./store/apiSlice";
-import ErrorBoundary from "../app/components/ErrorBoundary/ErrorBoundary";
-import FallbackComponent from "../app/components/FallbackComponent/FallbackComponent";
-import Loader from "../app/components/Loader/Loader";
-import Pagination from "../app/components/Pagination/Pagination";
-import ResultsComponent from "../app/components/ResultsComponent/ResultsComponent";
-import SearchComponent from "../app/components/SearchComponent/SearchComponent";
-import useSearchQuery from "../app/hooks/useSearchQuery";
-import { ThemeProvider } from "../app/contexts/ThemeProvider";
-import ThemeToggleButton from "../app/components/ThemeToggleButton/ThemeToggleButton";
-import { Provider, useDispatch, useSelector } from "react-redux";
-import store, { RootState } from "./store/store";
-import FlyoutComponent from "../app/components/FlyoutComponent/FlyoutComponent";
-import { setCurrentPage, setPageItems } from "./store/currentPageSlice";
-import { useTheme } from "../app/hooks/useTheme";
-import "./App.css";
+// app/routes/index.tsx
+import React from "react";
+import { useEffect, useState } from "react";
+import { Outlet, useNavigate, useSearchParams } from "@remix-run/react";
+import { useFetchPokemonsQuery } from "../store/apiSlice";
+import Loader from "../components/Loader/Loader";
+import Pagination from "../components/Pagination/Pagination";
+import ResultsComponent from "../components/ResultsComponent/ResultsComponent";
+import SearchComponent from "../components/SearchComponent/SearchComponent";
+import FlyoutComponent from "../components/FlyoutComponent/FlyoutComponent";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store/store";
+import { setCurrentPage, setPageItems } from "../store/currentPageSlice";
+import { useTheme } from "../hooks/useTheme";
+import useSearchQuery from "../hooks/useSearchQuery";
 
-const AppContent: React.FC = () => {
+export default function IndexRoute() {
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useSearchQuery("searchTerm", "");
   const [params] = useSearchParams();
@@ -63,7 +60,6 @@ const AppContent: React.FC = () => {
     <div className={`app ${theme}`}>
       <div className="app-left">
         <div className="app-top">
-          <ThemeToggleButton />
           <SearchComponent searchTerm={searchTerm} onSearch={handleSearch} />
           {apiLoading && <Loader />}
           {error && !apiLoading && <p className="error-message">{error}</p>}
@@ -83,16 +79,4 @@ const AppContent: React.FC = () => {
       </div>
     </div>
   );
-};
-
-const App: React.FC = () => (
-  <ErrorBoundary fallback={<FallbackComponent />}>
-    <Provider store={store}>
-      <ThemeProvider>
-        <AppContent />
-      </ThemeProvider>
-    </Provider>
-  </ErrorBoundary>
-);
-
-export default App;
+}

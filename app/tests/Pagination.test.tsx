@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import Pagination from "../components/Pagination/Pagination";
+import Pagination from "../../app/components/Pagination/Pagination";
 
 describe("Pagination Component", () => {
   it("should render Pagination component", () => {

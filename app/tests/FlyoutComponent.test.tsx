@@ -6,7 +6,7 @@ import selectedItemsReducer, {
   clearSelectedItems,
 } from "../store/selectedItemsSlice";
 import flyoutReducer, { hideFlyout } from "../store/flyoutSlice";
-import FlyoutComponent from "./../components/FlyoutComponent/FlyoutComponent";
+import FlyoutComponent from "../components/FlyoutComponent/FlyoutComponent";
 
 // Mock the dispatch function
 const mockDispatch = jest.fn();

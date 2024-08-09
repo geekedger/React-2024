@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 interface FlyoutState {
   isVisible: boolean;
@@ -9,7 +9,7 @@ const initialState: FlyoutState = {
 };
 
 const flyoutSlice = createSlice({
-  name: 'flyout',
+  name: "flyout",
   initialState,
   reducers: {
     showFlyout: (state) => {
