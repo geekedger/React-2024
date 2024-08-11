@@ -1,9 +1,12 @@
 // app/components/DetailedCard/DetailedCard.tsx
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useNavigate } from "@remix-run/react";
 import { useDispatch } from "react-redux";
 import "./DetailedCard.css";
-import { clearPokemonDetails } from "../../store/pokemonDetailsSlice";
+import {
+  clearPokemonDetails,
+  setPokemonDetails,
+} from "../../store/pokemonDetailsSlice";
 import sanitizeDescription from "../../utils/sanitizeText";
 import useOutsideAlerter from "../../hooks/useOutsideAlerter";
 
@@ -26,6 +29,21 @@ const DetailedCard: React.FC<DetailedCardProps> = ({ pokemonDetails }) => {
   };
 
   useOutsideAlerter(cardRef, handleClose);
+
+  useEffect(() => {
+    if (pokemonDetails) {
+      const sanitizedDescription = sanitizeDescription(
+        pokemonDetails.description,
+      );
+      dispatch(
+        setPokemonDetails({
+          name: pokemonDetails.name,
+          description: sanitizedDescription,
+          imageUrl: pokemonDetails.imageUrl,
+        }),
+      );
+    }
+  }, [pokemonDetails, dispatch]);
 
   const sanitizedDescription = sanitizeDescription(pokemonDetails.description);
 

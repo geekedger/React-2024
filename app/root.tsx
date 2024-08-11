@@ -7,7 +7,7 @@ import {
   useLoaderData,
   useNavigation,
 } from "@remix-run/react";
-import type { LinksFunction, LoaderFunction } from "@remix-run/node";
+import type { LoaderFunction } from "@remix-run/node";
 import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
 import FallbackComponent from "./components/FallbackComponent/FallbackComponent";
 import { ThemeProvider } from "./contexts/ThemeProvider";
@@ -36,11 +36,8 @@ export const loader: LoaderFunction = async ({ request }) => {
     id: url.searchParams.get("id") || undefined,
   };
 
-  console.log("Loader SearchParams:", searchParams); // Логируем параметры запроса
-
   try {
     const data = await fetchData({ searchParams });
-    console.log("Fetched Data:", data); // Логируем ответ от fetchData
 
     return {
       initialPokemons: data.dataFromServer.initialPokemons,
@@ -65,11 +62,8 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export default function App() {
   const loaderData = useLoaderData<LoaderData>();
-  const transition = useNavigation();
-  const isLoading = transition.state === "loading";
-
-  console.log("Loader Data in App:", loaderData); // Логируем данные, полученные из loader
-  console.log("Transition State:", transition.state); // Логируем состояние навигации
+  const navigation = useNavigation();
+  const isLoading = navigation.state === "loading" ? true : false;
 
   return (
     <html lang="en">
@@ -80,14 +74,14 @@ export default function App() {
       <body>
         <Provider store={store}>
           <ThemeProvider>
-            <ErrorBoundary fallback={<FallbackComponent/>}>
+            <ErrorBoundary fallback={<FallbackComponent />}>
               <MainPage
                 data={{
                   initialPokemons: loaderData.initialPokemons,
                   initialSearchTerm: loaderData.initialSearchTerm,
                   initialPage: loaderData.initialPage,
                   initialPokemonDetails: loaderData.initialPokemonDetails,
-                  next: loaderData.success, 
+                  next: loaderData.success,
                   error: loaderData.error,
                 }}
                 isLoading={isLoading}

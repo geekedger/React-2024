@@ -1,7 +1,5 @@
-"use client";
-
 import React from "react";
-import "./FallbackComponent.css"
+import "./FallbackComponent.css";
 
 const FallbackComponent: React.FC = () => {
   const handleRetry = () => {

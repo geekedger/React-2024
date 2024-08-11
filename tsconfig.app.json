@@ -31,5 +31,6 @@
     "app/hooks",
     "app/contexts",
     "app/utils"
-  ]
+  ],
+  "exclude": ["build"]
 }

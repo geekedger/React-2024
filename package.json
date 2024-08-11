@@ -7,10 +7,10 @@
     "dev": "remix vite:dev",
     "build": "remix vite:build",
     "start": "node build/index.js,remix dev",
-    "lint": "eslint --ext .js,.jsx,.ts,.tsx src/",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx app/",
     "test": "jest --coverage",
     "preview": "vite preview",
-    "format:fix": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
+    "format:fix": "prettier --write \"app/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
     "prepare": "husky"
   },
   "dependencies": {
@@ -67,6 +67,7 @@
     ],
     "*.{json,css,scss,md}": [
       "prettier --write"
-    ]
+    ],
+    "!build/**/*": []
   }
 }

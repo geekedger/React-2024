@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["empty-module:@remix-run/node", "../../../app/utils/sanitizeText.ts"],
-  "sourcesContent": ["module.exports = {};", "// REMIX HMR BEGIN\nimport * as __hmr__ from \"remix:hmr\";\nif (import.meta) {\nimport.meta.hot = __hmr__.createHotContext(\n//@ts-expect-error\n\"app\\\\utils\\\\sanitizeText.ts\"\n);\nimport.meta.hot.lastModified = \"1723180798416.578\";\n}\n// REMIX HMR END\n\nconst sanitizeDescription = (description: string): string => {\n  const cleanDescription = Array.from(description)\n    .filter((char) => {\n      const code = char.charCodeAt(0);\n      return code > 31 && code < 127;\n    })\n    .join(\"\");\n  const spacedDescription = cleanDescription.replace(/([.!?])(?=\\S)/g, \"$1 \");\n  return spacedDescription;\n};\nexport default sanitizeDescription;\n"],
-  "mappings": ";;;;;;;;AAAA;AAAA;AAAA,WAAO,UAAU,CAAC;AAAA;AAAA;;;ACElB,IAAI,aAAa;AACjB,cAAY,MAAc;AAAA;AAAA,IAE1B;AAAA,EACA;AACA,cAAY,IAAI,eAAe;AAC/B;AAGA,IAAM,sBAAsB,CAAC,gBAAgC;AAC3D,QAAM,mBAAmB,MAAM,KAAK,WAAW,EAC5C,OAAO,CAAC,SAAS;AAChB,UAAM,OAAO,KAAK,WAAW,CAAC;AAC9B,WAAO,OAAO,MAAM,OAAO;AAAA,EAC7B,CAAC,EACA,KAAK,EAAE;AACV,QAAM,oBAAoB,iBAAiB,QAAQ,kBAAkB,KAAK;AAC1E,SAAO;AACT;AACA,IAAO,uBAAQ;",
-  "names": []
-}

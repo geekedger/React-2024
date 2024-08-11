@@ -5,7 +5,7 @@ export default {
     "^.+\\.tsx?$": "ts-jest",
     "^.+\\.jsx?$": "babel-jest",
   },
-  rootDir: "src",
+  rootDir: "app",
   moduleNameMapper: {
     "\\.(gif|ttf|eot|svg|png)$": "<rootDir>/tests/mocks/",
     "^@app/(.*)$": "<rootDir>/$1",

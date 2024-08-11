@@ -1,6 +1,4 @@
-// app/routes/_index.tsx
 import React, { useEffect } from "react";
-import type { LinksFunction } from "@remix-run/node";
 import { Outlet, useSearchParams, useNavigate } from "@remix-run/react";
 import { Pokemon } from "../../Interfaces/IPokemon";
 import { useTheme } from "../../hooks/useTheme";
@@ -12,8 +10,9 @@ import { PokemonDetails } from "../../Interfaces/IPokemondetails";
 import "../../styles/App.css";
 import ThemeToggleButton from "../ThemeToggleButton/ThemeToggleButton";
 import useSearchQuery from "../../hooks/useSearchQuery";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store/store";
+import { useDispatch } from "react-redux";
+import { setCurrentPage, setPageItems } from "../../store/currentPageSlice";
+import Loader from "../Loader/Loader";
 
 // Типы для пропсов MainPage
 interface MainPageProps {
@@ -30,15 +29,14 @@ interface MainPageProps {
 
 const MainPage: React.FC<MainPageProps> = ({ data, isLoading }) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [searchTerm, setSearchTerm] = useSearchQuery("searchTerm", data.initialSearchTerm);
+  const [, setSearchTerm] = useSearchQuery(
+    "searchTerm",
+    data.initialSearchTerm,
+  );
   const [page, setPage] = useSearchQuery("page", String(data.initialPage));
-  const [params] = useSearchParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { theme } = useTheme();
-  const currentPage = useSelector((state: RootState) => state.currentPage.page);
-  const pokemons = useSelector((state: RootState) => state.currentPage.items);
-  console.log(data);
 
   useEffect(() => {
     // Инициализируем состояние searchTerm и page при монтировании компонента
@@ -49,7 +47,15 @@ const MainPage: React.FC<MainPageProps> = ({ data, isLoading }) => {
       setPage(searchParams.get("page") || "1");
     }
   }, [searchParams, setSearchTerm, setPage]);
-  
+
+  useEffect(() => {
+    if (data && data.initialPokemons) {
+      // Используем page для установки текущей страницы
+      dispatch(setPageItems(data.initialPokemons));
+      dispatch(setCurrentPage(parseInt(page))); // Параметр page будет строкой, поэтому преобразуем в число
+    }
+  }, [data, dispatch, page]); // Убираем currentPage из зависимостей, заменяя его page
+
   const handleSearch = (newSearchTerm: string) => {
     searchParams.set("search", newSearchTerm);
     searchParams.set("page", "1");
@@ -60,28 +66,38 @@ const MainPage: React.FC<MainPageProps> = ({ data, isLoading }) => {
   return (
     <div className={`app ${theme}`}>
       <div className="app-left">
-     
         <div className="app-top">
-        <ThemeToggleButton />
-          <SearchComponent searchTerm={searchParams.get("search") || ""} onSearch={handleSearch} />
+          <ThemeToggleButton />
+          <SearchComponent
+            searchTerm={searchParams.get("search") || ""}
+            onSearch={handleSearch}
+          />
           {data.error && !data.initialPokemons.length && (
             <p className="error-message">{data.error}</p>
           )}
         </div>
         <div className="app-bottom">
-          {!data.error && (
-            <>
-              <ResultsComponent pokemons={data.initialPokemons} error={null} />
-              <Pagination next={data.next} />
-              <FlyoutComponent /> {/* Pass details */}
-            </>
+          {isLoading ? (
+            <Loader /> // Показать лоадер, если идет загрузка
+          ) : (
+            !data.error && (
+              <>
+                <ResultsComponent
+                  pokemons={data.initialPokemons}
+                  error={null}
+                />
+                <Pagination
+                  next={data.initialPokemons.length === 20 && data.next}
+                />
+                <FlyoutComponent />
+              </>
+            )
           )}
         </div>
       </div>
       <div className="app-right">
         <Outlet />
       </div>
-      {isLoading && <p>Loading...</p>} {/* Loading state display */}
     </div>
   );
 };

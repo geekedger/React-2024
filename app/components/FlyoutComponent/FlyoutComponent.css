@@ -1,4 +1,4 @@
-src/components/FlyoutComponent.css .flyout {
+.flyout {
   position: fixed;
   bottom: 0;
   right: 0;
