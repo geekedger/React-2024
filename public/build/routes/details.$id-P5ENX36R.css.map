@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["css-side-effects-plugin-ns:app\\components\\DetailedCard\\DetailedCard.css"],
-  "sourcesContent": [".detailed-card {\n  /* background-color: #ffffff; */\n  padding: 20px;\n  border-radius: 10px;\n  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);\n  overflow-y: auto;\n  max-height: calc(100vh - 40px);\n  transition:\n    opacity 0.3s ease,\n    transform 0.3s ease;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  gap: 16px;\n}\n\n.detailed-card h2 {\n  margin: 0;\n  font-size: 28px;\n  color: #333333;\n}\n\n.pokemon-image {\n  max-width: 250px;\n  height: auto;\n  display: block;\n  margin: 10px 0;\n}\n\n.detailed-card p {\n  margin: 0;\n  font-size: 18px;\n  /* color: #666666; */\n  text-align: center;\n}\n\n.close-button {\n  background: #ff0000;\n  color: #ffffff;\n  border: none;\n  padding: 10px 15px;\n  cursor: pointer;\n  border-radius: 5px;\n  margin-top: 10px;\n  transition: background-color 0.3s ease;\n}\n\n.close-button:hover {\n  background: #cc0000;\n}\n\n.error-message {\n  color: #ff0000;\n  font-weight: bold;\n  text-align: center;\n  margin: 0 0 10px;\n}\n"],
-  "mappings": ";AAAA;AAEE;AACA;AACA;AACA;AACA;AACA;AAGA;AACA;AACA;AACA;AACA;AAAA;AAGF;AACE;AACA;AACA;AAAA;AAGF;AACE;AACA;AACA;AACA;AAAA;AAGF;AACE;AACA;AAEA;AAAA;AAGF;AACE;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AAAA;AAGF;AACE;AAAA;AAGF;AACE;AACA;AACA;AACA;AAAA;",
-  "names": []
-}

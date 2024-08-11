@@ -16,6 +16,12 @@ import DetailedCard from "../components/DetailedCard/DetailedCard";
 import { hideFlyout, showFlyout } from "../store/flyoutSlice";
 import { mockPokemon } from "./mocks/Pokemon.mock";
 
+const mockedUsedNavigate = jest.fn();
+
+jest.mock("@remix-run/react", () => ({
+  useNavigate: () => mockedUsedNavigate,
+}));
+
 const store = configureStore({
   reducer: {
     [api.reducerPath]: api.reducer,
@@ -70,7 +76,18 @@ describe("PokemonCard component", () => {
         <MemoryRouter>
           <Routes>
             <Route path="/" element={<PokemonCard pokemon={mockPokemon} />} />
-            <Route path="/details/:id" element={<DetailedCard />} />
+            <Route
+              path="/details/:id"
+              element={
+                <DetailedCard
+                  pokemonDetails={{
+                    name: "Pikachu",
+                    description: "A yellow electric-type Pokemon",
+                    imageUrl: "https://example.com/pikachu.png",
+                  }}
+                />
+              }
+            />
           </Routes>
         </MemoryRouter>
       </Provider>,
@@ -101,7 +118,18 @@ describe("PokemonCard component", () => {
         <MemoryRouter>
           <Routes>
             <Route path="/" element={<PokemonCard pokemon={mockPokemon} />} />
-            <Route path="/details/:id" element={<DetailedCard />} />
+            <Route
+              path="/details/:id"
+              element={
+                <DetailedCard
+                  pokemonDetails={{
+                    name: "Pikachu",
+                    description: "A yellow electric-type Pokemon",
+                    imageUrl: "https://example.com/pikachu.png",
+                  }}
+                />
+              }
+            />
           </Routes>
         </MemoryRouter>
       </Provider>,

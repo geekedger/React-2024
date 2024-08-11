@@ -2,13 +2,13 @@
 import React, { useEffect, useRef } from "react";
 import { useNavigate } from "@remix-run/react";
 import { useDispatch } from "react-redux";
-import "./DetailedCard.css";
 import {
   clearPokemonDetails,
   setPokemonDetails,
 } from "../../store/pokemonDetailsSlice";
 import sanitizeDescription from "../../utils/sanitizeText";
 import useOutsideAlerter from "../../hooks/useOutsideAlerter";
+import "./DetailedCard.css";
 
 interface DetailedCardProps {
   pokemonDetails: {

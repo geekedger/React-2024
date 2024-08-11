@@ -1,12 +1,34 @@
 import "whatwg-fetch";
 import "@testing-library/jest-dom";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import React from "react";
-import App from "../../src/App";
+import { render, fireEvent } from "@testing-library/react";
+import React, { useState } from "react";
+
 import { ThemeProvider } from "../contexts/ThemeProvider";
-import { Provider } from "react-redux";
-import store from "../store/store";
-import { MemoryRouter } from "react-router-dom";
+import SearchComponent from "../components/SearchComponent/SearchComponent";
+
+let mockSearchParam = "page=1";
+
+jest.mock("@remix-run/react", () => ({
+  Link: ({ children, ...props }: { children: React.ReactNode }) => (
+    <a {...props}>{children}</a>
+  ),
+  useSearchParams: () => {
+    const [params, setParams] = useState(new URLSearchParams(mockSearchParam));
+    return [
+      params,
+      (newParams: string) => {
+        mockSearchParam = newParams;
+        setParams(new URLSearchParams(newParams));
+      },
+    ];
+  },
+}));
+
+const mockedUsedNavigate = jest.fn();
+
+jest.mock("@remix-run/react", () => ({
+  useNavigate: () => mockedUsedNavigate,
+}));
 
 // Mock useSearchQuery hook
 jest.mock("../hooks/useSearchQuery", () => {
@@ -51,55 +73,59 @@ describe("App", () => {
     jest.clearAllTimers();
   });
 
-  it("should save the search term to local storage on submit", async () => {
-    render(
-      <Provider store={store}>
-        <ThemeProvider>
-          <MemoryRouter>
-            <App />
-          </MemoryRouter>
-        </ThemeProvider>
-      </Provider>,
-    );
-
-    // Ensure that the form is rendered
-    expect(screen.getByPlaceholderText(/Search Pokémon/i)).toBeInTheDocument();
-    expect(screen.getByText(/Search/i)).toBeInTheDocument();
-
-    fireEvent.change(screen.getByPlaceholderText(/Search Pokémon/i), {
-      target: { value: "Pikachu" },
-    });
-
-    fireEvent.click(screen.getByText(/Search/i));
-
-    // Wait for localStorage to be updated
-    await waitFor(() =>
-      expect(localStorage.getItem("searchTerm")).toBe("Pikachu"),
-    );
+  test("renders without error", () => {
+    <ThemeProvider>
+      render(
+      <SearchComponent searchTerm="" onSearch={() => {}} />
+      );
+    </ThemeProvider>;
   });
 
-  it("should retrieve the search term from local storage upon mounting", async () => {
-    localStorage.setItem("searchTerm", "Pikachu");
-
-    render(
-      <Provider store={store}>
-        <ThemeProvider>
-          <MemoryRouter>
-            <App />
-          </MemoryRouter>
-        </ThemeProvider>
-      </Provider>,
+  test("calls onSearch with correct search term on form submit", () => {
+    const onSearchMock = jest.fn();
+    const { getByPlaceholderText, getByText } = render(
+      <ThemeProvider>
+        <SearchComponent searchTerm="" onSearch={onSearchMock} />
+      </ThemeProvider>,
     );
 
-    // Ensure that the form is rendered
-    expect(screen.getByPlaceholderText(/Search Pokémon/i)).toBeInTheDocument();
-    expect(screen.getByText(/Search/i)).toBeInTheDocument();
+    const inputElement = getByPlaceholderText("Search Pokemon");
+    const submitButton = getByText("Search");
 
-    const input = screen.getByPlaceholderText(
-      /Search Pokémon/i,
-    ) as HTMLInputElement;
+    fireEvent.change(inputElement, { target: { value: "pikachu" } });
+    fireEvent.click(submitButton);
 
-    // Wait for the input value to be set from localStorage
-    await waitFor(() => expect(input.value).toBe("Pikachu"));
+    expect(onSearchMock).toHaveBeenCalledWith("pikachu");
+  });
+
+  test("throws error on button click", () => {
+    const { getByText } = render(
+      <ThemeProvider>
+        <SearchComponent searchTerm="" onSearch={() => {}} />
+      </ThemeProvider>,
+    );
+
+    const throwErrorButton = getByText("Throw Error");
+
+    expect(() => {
+      fireEvent.click(throwErrorButton);
+    }).toThrow("Simulated error.");
+  });
+
+  test("calls onSearch with empty search term on form submit if input is cleared", () => {
+    const onSearchMock = jest.fn();
+    const { getByPlaceholderText, getByText } = render(
+      <ThemeProvider>
+        <SearchComponent searchTerm="pikachu" onSearch={onSearchMock} />
+      </ThemeProvider>,
+    );
+
+    const inputElement = getByPlaceholderText("Search Pokemon");
+    const submitButton = getByText("Search");
+
+    fireEvent.change(inputElement, { target: { value: "" } });
+    fireEvent.click(submitButton);
+
+    expect(onSearchMock).toHaveBeenCalledWith("");
   });
 });

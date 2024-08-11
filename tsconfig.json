@@ -13,5 +13,5 @@
       "path": "./tsconfig.node.json"
     }
   ],
-  "exclude": ["src/**/__ mocks __/*.mock.tsx", "build"]
+  "exclude": ["app/**/mocks/*.mock.tsx", "build"]
 }

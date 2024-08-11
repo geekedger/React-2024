@@ -5,6 +5,7 @@ export default {
     "^.+\\.tsx?$": "ts-jest",
     "^.+\\.jsx?$": "babel-jest",
   },
+  transformIgnorePatterns: ["/node_modules/(?!(@remix-run|@web3-storage)/)"],
   rootDir: "app",
   moduleNameMapper: {
     "\\.(gif|ttf|eot|svg|png)$": "<rootDir>/tests/mocks/",
@@ -25,7 +26,7 @@ export default {
   coverageDirectory: "coverage",
   coverageThreshold: {
     global: {
-      branches: 40,
+      branches: 60,
       functions: 60,
       lines: 60,
       statements: 80,

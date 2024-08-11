@@ -6,6 +6,40 @@ import ResultsComponent from "../components/ResultsComponent/ResultsComponent";
 import { mockPokemons } from "./mocks/CardList.mock";
 import { Provider } from "react-redux";
 import store from "../store/store";
+import React, { useState } from "react";
+
+let mockSearchParam = "page=1";
+
+jest.mock("@remix-run/react", () => ({
+  Link: ({ children, ...props }: { children: React.ReactNode }) => (
+    <a {...props}>{children}</a>
+  ),
+  useSearchParams: () => {
+    const [params, setParams] = useState(new URLSearchParams(mockSearchParam));
+    return [
+      params,
+      (newParams: string) => {
+        mockSearchParam = newParams;
+        setParams(new URLSearchParams(newParams));
+      },
+    ];
+  },
+}));
+
+// Mock useSearchQuery hook
+jest.mock("../hooks/useSearchQuery", () => {
+  return jest.fn((key: string, defaultValue: string = "") => {
+    const [value, setValue] = React.useState(
+      () => localStorage.getItem(key) || defaultValue,
+    );
+
+    React.useEffect(() => {
+      localStorage.setItem(key, value);
+    }, [key, value]);
+
+    return [value, setValue] as const;
+  });
+});
 
 describe("ResultsComponent component", () => {
   afterEach(() => {
