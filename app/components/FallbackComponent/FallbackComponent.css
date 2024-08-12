@@ -1,0 +1,45 @@
+.fallback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: #e0f7fa;
+  border: 2px solid #00bcd4;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  color: #00796b;
+  font-family: "Roboto", sans-serif;
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 30px;
+}
+
+.fallback p {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.retry-button {
+  background-color: #2196f3;
+  color: #fff;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 18px;
+  transition:
+    background-color 0.3s ease,
+    transform 0.3s ease;
+}
+
+.retry-button:hover {
+  background-color: #1976d2;
+  transform: scale(1.05);
+}
+
+.retry-button:active {
+  background-color: #0d47a1;
+  transform: scale(0.98);
+}

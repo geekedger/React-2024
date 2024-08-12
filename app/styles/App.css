@@ -1,0 +1,73 @@
+.app {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+.app.light {
+  background-color: #fff;
+  color: #333;
+}
+
+.app.dark {
+  background-color: #333;
+  color: #fff;
+}
+
+.app-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-top {
+  padding: 16px;
+}
+
+.app-bottom {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+.app-right {
+  flex: 0 0 auto;
+  border-left: 1px solid #ddd;
+  padding: 0;
+  box-sizing: border-box;
+  overflow-y: auto;
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease;
+  max-width: 20vw;
+}
+
+.app-bottom.empty {
+  background-color: transparent;
+}
+
+.app.light .button {
+  background-color: #000000ef;
+  color: #fff;
+}
+.app.app.dark .button {
+  background-color: #fff;
+  color: #333;
+}
+
+.loading {
+  font-size: 18px;
+  color: #666;
+  font-style: italic;
+  margin: 20px;
+}
+
+.error-message {
+  color: #000;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  margin: 20px;
+  padding: 10px;
+  background-color: #f4f4f4;
+}
